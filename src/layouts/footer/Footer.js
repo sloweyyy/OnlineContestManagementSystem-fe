@@ -121,8 +121,8 @@ const Footer = () => {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    backgroundColor: white[50],
-                    color: black[900],
+                    backgroundColor: black[900],
+                    color: white[50],
                     paddingX: 12,
                 }}
             >

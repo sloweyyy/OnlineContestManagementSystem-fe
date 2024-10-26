@@ -34,7 +34,7 @@ const ReviewsSection = () => {
     ];
     return (
         <>
-            <Typography variant='h2' fontWeight={600} color={red[500]} textAlign={'center'}>
+            <Typography fontSize={50} fontWeight={600} color={red[500]} textAlign={'center'}>
                 Được tin tưởng bởi hàng trăm <br />khách hàng vui vẻ
             </Typography>
             <Typography fontSize={16} fontWeight={400} color={gray[400]} marginTop={2} marginBottom={6} textAlign={'center'}>
@@ -61,7 +61,7 @@ const ReviewsSection = () => {
             >
                 <Box display="flex" flexDirection="row">
                     <IconButton sx={{ color: gray[400], ":hover": { color: red[500] } }}>
-                        <Circle sx={{ fontSize: 16 }} />
+                        <Circle sx={{ fontSize: 16, }} />
                     </IconButton>
                     <IconButton sx={{ color: gray[400], ":hover": { color: red[500] } }}>
                         <Circle sx={{ fontSize: 16 }} />

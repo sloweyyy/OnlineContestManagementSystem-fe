@@ -1,7 +1,7 @@
 import { Star } from '@mui/icons-material'
 import { Avatar, Box, Typography } from '@mui/material'
 import React from 'react'
-import { red, yellow } from '../../config/theme/themePrintives'
+import { gray, red, yellow } from '../../config/theme/themePrintives'
 
 const ReviewCard = ({ review }) => {
     return (
@@ -13,12 +13,12 @@ const ReviewCard = ({ review }) => {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                border: '2px solid #f0f0f0',
+                border: `2px solid ${gray[100]}`,
                 borderRadius: 1,
                 padding: 4,
                 ":hover": {
                     borderColor: 'transparent',
-                    boxShadow: `0 0 2px 2px ${red[100]}`,
+                    boxShadow: `0 0 4px 4px ${red[100]}`,
                     transition: 'all 0.3s ease'
                 }
             }}
