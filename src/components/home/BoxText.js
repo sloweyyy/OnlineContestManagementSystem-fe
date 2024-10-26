@@ -1,7 +1,7 @@
 import { CheckCircleRounded } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
-import { red } from '../../../../config/theme/themePrintives';
+import { red } from '../../config/theme/themePrintives';
 
 const BoxText = ({ text }) => {
     return (
@@ -9,7 +9,7 @@ const BoxText = ({ text }) => {
             sx={{
                 display: 'flex',
                 flexDirection: 'row',
-                justifyContent: 'center',
+                justifyContent: 'space-between',
                 alignItems: 'center',
                 flexWrap: 'wrap',
                 marginY: '5px',

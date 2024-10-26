@@ -1,23 +1,21 @@
-import { Box, Typography } from '@mui/material'
-import React from 'react'
-import { black, gray } from '../../../../config/theme/themePrintives'
+import { Box, Typography } from '@mui/material';
+import React from 'react';
+import CountUp from 'react-countup'; // Import CountUp
+import { black, gray } from '../../config/theme/themePrintives';
 
-//countup
-const AnalysisCard = ({ title, count, icon }) => {
+const AnalysisCard = ({ title, count, icon, isContest = false }) => {
     return (
         <Box
             sx={{
+                flex: 1,
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                width: '300px',
-                height: '80px',
                 backgroundColor: 'white',
                 borderRadius: '10px',
                 boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-                padding: '20px',
-                margin: '10px'
+                padding: 4,
             }}
         >
             <Box
@@ -27,17 +25,19 @@ const AnalysisCard = ({ title, count, icon }) => {
                     justifyContent: 'center',
                     alignItems: 'flex-start',
                     flex: 1,
-                    gap: 1
+                    gap: 1,
                 }}
             >
                 <Typography sx={{ fontSize: 14, fontWeight: 400, color: gray[500] }}>{title}</Typography>
-                <Typography sx={{ fontSize: 18, fontWeight: 600, color: black[900] }}>{count} Cuộc thi</Typography>
+                <Typography sx={{ fontSize: 18, fontWeight: 600, color: black[900] }}>
+                    <CountUp end={count} duration={2} /> {isContest ? 'Cuộc thi' : 'Thí sinh'}
+                </Typography>
             </Box>
             <Box>
                 {icon}
             </Box>
         </Box>
-    )
-}
+    );
+};
 
-export default AnalysisCard
+export default AnalysisCard;

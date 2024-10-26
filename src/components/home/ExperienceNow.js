@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import BoxText from './BoxText'; // Adjust the import path as needed
 import { AutoAwesomeRounded } from '@mui/icons-material';
-import { red } from '../../../../config/theme/themePrintives';
+import { red } from '../../config/theme/themePrintives';
 
 const ExperienceNow = () => {
     return (
@@ -12,17 +12,17 @@ const ExperienceNow = () => {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'flex-start',
-                width: '50%',
                 padding: '24px',
                 borderRadius: '12px',
                 boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+                height: '300px',
             }}
         >
             <Typography
                 sx={{
-                    fontSize: 22,
+                    fontSize: 20,
                     fontWeight: 700,
-                    marginBottom: 2,
+                    marginBottom: 3,
                     lineHeight: 1.4
                 }}
             >
@@ -34,7 +34,7 @@ const ExperienceNow = () => {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'flex-start',
-                mb: 2
+                mb: 3
             }}>
                 <BoxText text="Thao tác đơn giản, tiết kiệm thời gian tạo cuộc thi" />
                 <BoxText text="Nộp bài dự thi và tham gia bình chọn dễ dàng" />
@@ -46,22 +46,23 @@ const ExperienceNow = () => {
             <Button
                 variant="contained"
                 sx={{
-                    width: '50%',
                     backgroundColor: red[500],
                     color: 'white',
                     fontWeight: 600,
-                    padding: '12px',
+                    paddingY: 1,
+                    paddingX: 4,
                     fontSize: 16,
                     display: 'flex',
-                    justifyContent: 'center',
+                    justifyContent: 'flex-start',
                     alignItems: 'center',
                     textTransform: 'none',
                     "&:hover": {
                         backgroundColor: red[700],
-                    }
+                    },
+                    borderRadius: 8
                 }}
             >
-                <AutoAwesomeRounded sx={{ marginRight: '8px', fontSize: 22 }} />
+                <AutoAwesomeRounded sx={{ marginRight: 2, fontSize: 22 }} />
                 Tạo cuộc thi
             </Button>
         </Box>

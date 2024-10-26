@@ -121,6 +121,19 @@ export const white = {
     900: "#585858",
 };
 
+export const brown = {
+    50: "#F9F6F4",
+    100: "#F1E0D9",
+    200: "#E8C8BE",
+    300: "#DEB09F",
+    400: "#D69A85",
+    500: "#CD846B",
+    600: "#B46D57",
+    700: "#8F5447",
+    800: "#6A3C37",
+    900: "#4A2829",
+};
+
 export const getDesignTokens = (mode) => {
     customShadows[1] =
         "hsla(220, 30%, 5%, 0.07) 0px 4px 16px 0px, hsla(220, 25%, 10%, 0.07) 0px 8px 16px -5px";

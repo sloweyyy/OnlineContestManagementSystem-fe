@@ -14,14 +14,14 @@ import {
     KeyboardDoubleArrowRight,
     KeyboardDoubleArrowLeft,
     Home,
-    VideoCameraBack,
+    EmojiEvents,
     AddCircle,
     Phone,
     FileDownloadOutlined,
     AccountCircleRounded,
 } from "@mui/icons-material";
 import { red, white, dark, black } from "../../config/theme/themePrintives";
-import { Link } from "react-router-dom"; // Import from react-router-dom
+import { Link } from "react-router-dom";
 
 const Sidebar = () => {
     const [openSideBar, setOpenSideBar] = useState(true);
@@ -91,8 +91,8 @@ const Sidebar = () => {
 
                     <Link to="/contest" style={{ textDecoration: 'none' }}>
                         <Box onClick={() => setActiveItem("video")} sx={itemStyles(activeItem === "video")}>
-                            <VideoCameraBack />
-                            {openSideBar && <Typography variant="subtitle2" ml={2}>Cuộc thi ảnh - video</Typography>}
+                            <EmojiEvents />
+                            {openSideBar && <Typography variant="subtitle2" ml={2}>Danh sách cuộc thi</Typography>}
                         </Box>
                     </Link>
 
@@ -119,34 +119,32 @@ const Sidebar = () => {
                 </Box>
 
                 <Box>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: openSideBar ? "flex-start" : "center",
-                            mb: 2,
-                            justifyContent: "center",
-                            borderRadius: "8px",
-                            backgroundColor: red[500],
-                            color: white[50],
-                            padding: openSideBar ? "1rem" : "0.5rem",
-                            gap: 1,
-                        }}
-                    >
-                        <Phone sx={{ fontSize: 24, backgroundColor: openSideBar ? white[50] : red[500], color: openSideBar ? red[500] : white[50], padding: 1, borderRadius: 1 }} />
-                        {openSideBar && (
-                            <>
-                                <Typography variant="h6">Chăm sóc khách hàng</Typography>
-                                <Typography variant="body2">
-                                    Ngày làm việc trong tuần <br />
-                                    8:00 đến 17h:30
-                                </Typography>
-                                <Box sx={{ backgroundColor: white[50], p: "4px", borderRadius: 1, display: "flex", justifyContent: "center", width: "96%" }}>
-                                    <Typography variant="h6" color={red[500]}>0968.68.68.68</Typography>
-                                </Box>
-                            </>
-                        )}
-                    </Box>
+                    {openSideBar && (
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: openSideBar ? "flex-start" : "center",
+                                mb: 2,
+                                justifyContent: "center",
+                                borderRadius: "8px",
+                                backgroundColor: red[500],
+                                color: white[50],
+                                padding: openSideBar ? "1rem" : "0.5rem",
+                                gap: 1,
+                            }}
+                        >
+                            <Phone sx={{ fontSize: 24, backgroundColor: openSideBar ? white[50] : red[500], color: openSideBar ? red[500] : white[50], padding: 1, borderRadius: 1 }} />
+                            <Typography variant="h6">Chăm sóc khách hàng</Typography>
+                            <Typography variant="body2">
+                                Ngày làm việc trong tuần <br />
+                                8:00 đến 17h:30
+                            </Typography>
+                            <Box sx={{ backgroundColor: white[50], p: "4px", borderRadius: 1, display: "flex", justifyContent: "center", width: "96%" }}>
+                                <Typography variant="h6" color={red[500]}>0968.68.68.68</Typography>
+                            </Box>
+                        </Box>
+                    )}
 
                     <Box
                         sx={{

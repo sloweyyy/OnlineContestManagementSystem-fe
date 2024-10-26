@@ -22,8 +22,8 @@ const routes = [
         authRequired: false,
     },
     {
-        path: '*',
-        element: lazy(() => import('../pages/notfound/NotFound')),
+        path: '/not-found',
+        element: lazy(() => import('../pages/static-pages/NotFoundPage')),
     },
 ];
 
