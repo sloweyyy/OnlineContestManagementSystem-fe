@@ -39,7 +39,7 @@ const ClientCard = ({ image, name, description, reverse }) => {
                     ml: reverse ? 5 : 0,
                 }}
             >
-                <Typography variant="h2" fontWeight="bold" color={red[500]}>
+                <Typography variant="h3" fontWeight="bold" color={red[500]}>
                     {name}
                 </Typography>
                 <Typography variant="body1" color={gray[400]} sx={{ mt: 2 }}>

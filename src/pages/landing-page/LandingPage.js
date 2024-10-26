@@ -10,7 +10,7 @@ import { Circle } from '@mui/icons-material';
 const LandingPage = () => {
     return (
         <Box flex={1}>
-            <Box display="flex" flexDirection={'row'} justifyContent="center" alignItems="center" height="50vh" padding={10}>
+            <Box display="flex" flexDirection={'row'} justifyContent="center" alignItems="center" height="90vh" paddingX={10}>
                 {/* Text Section */}
                 <Box flex={1} display="flex" flexDirection={'column'} justifyContent="center" alignItems="flex-start" height='100%'>
                     <Typography variant="h1">Kontest</Typography>
@@ -27,8 +27,10 @@ const LandingPage = () => {
                                 backgroundColor: red[300],
                             },
                             fontWeight: 'bold',
-                            fontSize: 16
+                            fontSize: 16,
+                            boxShadow: `0px 6px 6px ${gray[300]}`,
                         }}
+                        href='/sign-up'
                     >
                         Trãi nghiệm ngay
                     </Button>
@@ -44,7 +46,7 @@ const LandingPage = () => {
             </Box>
 
             <Box flex={1} display="flex" flexDirection={'column'} justifyContent="center" alignItems="center" marginBottom={6}>
-                <Typography flex={1} variant='h2' fontWeight={600} color={red[500]}>
+                <Typography flex={1} fontSize={50} fontWeight={600} color={red[500]}>
                     Khách hàng của chúng tôi
                 </Typography>
                 <Typography flex={1} fontSize={16} fontWeight={400} color={gray[400]} marginTop={2}>
@@ -76,7 +78,7 @@ const LandingPage = () => {
 
             {/* Customer Section */}
             <Box flex={1} display="flex" flexDirection={'column'} justifyContent="center" alignItems="center" padding={6}>
-                <Typography variant='h2' fontWeight={600} color={red[500]}>
+                <Typography fontSize={50} fontWeight={600} color={red[500]}>
                     Tạo cuộc thi trực tuyến
                 </Typography>
                 <Typography fontSize={16} fontWeight={400} color={gray[400]} marginTop={2} marginBottom={6}>
@@ -108,7 +110,7 @@ const LandingPage = () => {
                 <FAQ />
             </Box>
             {/* Reiviews Section */}
-            <Box flex={1} display="flex" flexDirection={'column'} justifyContent="flex-start" alignItems="center" padding={6} marginBottom={18} height={'75vh'}>
+            <Box flex={1} display="flex" flexDirection={'column'} justifyContent="flex-start" alignItems="center" padding={6} marginBottom={18} height={'85vh'}>
                 <ReviewsSection />
                 <SubscribeSection />
             </Box>

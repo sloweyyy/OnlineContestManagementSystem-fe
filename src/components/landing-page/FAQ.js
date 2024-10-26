@@ -47,7 +47,7 @@ const FAQ = () => {
                 {questions.map((question, index) => (
                     <React.Fragment key={index}>
                         <ListItem button onClick={() => toggleExpand(index)} sx={{ "&:hover": { backgroundColor: "transparent" } }}>
-                            <ListItemText primary={question} primaryTypographyProps={{ fontSize: 18, fontWeight: 600, color: white[50] }} sx={{ cursor: "default" }} />
+                            <ListItemText primary={question} primaryTypographyProps={{ fontSize: 22, fontWeight: 600, color: white[50] }} sx={{ cursor: "default" }} />
                             <IconButton>
                                 {expandedIndex === index ? <ExpandLessRounded sx={{ color: white[50] }} /> : <ExpandMoreRounded sx={{ color: white[50] }} />}
                             </IconButton>

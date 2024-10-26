@@ -47,8 +47,10 @@ const SubscribeSection = () => (
                     backgroundColor: red[300],
                 },
                 fontWeight: 'bold',
-                fontSize: 16
+                fontSize: 16,
+                boxShadow: `0px 6px 6px ${gray[300]}`,
             }}
+            href='/sign-up'
         >
             Đăng ký ngay
         </Button>
