@@ -274,7 +274,7 @@ const SignUp = () => {
                 >
                     <Typography sx={{ color: gray[400], fontSize: 16 }}>
                         Bạn đã có tài khoản?{' '}
-                        <Link href="/sign-in" variant="body2" sx={{ color: red[500], fontWeight: 500, cursor: 'pointer' }}>
+                        <Link href="/sign-in" variant="body2" sx={{ color: red[500], fontWeight: 500, cursor: 'pointer', textDecoration: 'none' }}>
                             Đăng nhập
                         </Link>
                     </Typography>

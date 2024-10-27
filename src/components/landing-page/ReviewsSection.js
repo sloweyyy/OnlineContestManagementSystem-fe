@@ -1,15 +1,14 @@
-import { Box, Button, IconButton, Typography } from '@mui/material'
+import { Box, IconButton, Typography } from '@mui/material'
 import React from 'react'
-import { black, gray, red, white } from '../../config/theme/themePrintives'
+import { gray, red, white } from '../../config/theme/themePrintives'
 import ReviewCard from './ReviewCard';
 import { ArrowBackRounded, ArrowForwardRounded, Circle } from '@mui/icons-material';
-import SubscribeSection from './SubscribeSection';
 
 const ReviewsSection = () => {
     const reviews = [
         {
             user: {
-                name: 'Nguyễn Văn A',
+                name: 'Nguyễn Quốc Thắng',
                 address: 'Hà Nội',
                 avatar: ''
             },
@@ -17,21 +16,22 @@ const ReviewsSection = () => {
         },
         {
             user: {
-                name: 'Nguyễn Văn A',
-                address: 'Hà Nội',
+                name: 'Trương Lê Vĩnh Phúc',
+                address: 'Thành phố Hồ Chí Minh',
                 avatar: ''
             },
-            review: 'Dịch vụ tuyệt vời, rất hài lòng với chất lượng và giá cả.'
+            review: 'Dịch vụ rất tốt, nhân viên thân thiện, giá cả hợp lý.'
         },
         {
             user: {
-                name: 'Nguyễn Văn A',
-                address: 'Hà Nội',
+                name: 'Nguyễn Việt Khoa',
+                address: 'Bình Dương',
                 avatar: ''
             },
-            review: 'Dịch vụ tuyệt vời, rất hài lòng với chất lượng và giá cả.'
+            review: 'Dịch vụ chuyên nghiệp, giá cả phải chăng, rất hài lòng.'
         },
     ];
+
     return (
         <>
             <Typography fontSize={50} fontWeight={600} color={red[500]} textAlign={'center'}>

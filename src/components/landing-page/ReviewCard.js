@@ -71,6 +71,7 @@ const ReviewCard = ({ review }) => {
                 justifyContent="flex-start"
                 alignItems="center"
                 paddingY={4}
+                color={gray[500]}
             >
                 <Box fontSize={16} textAlign="left">{review.review}</Box>
             </Box>
