@@ -82,7 +82,7 @@ const Sidebar = () => {
                 </Box>
 
                 <Box flex={1}>
-                    <Link to="/" style={{ textDecoration: 'none' }}>
+                    <Link to="/home" style={{ textDecoration: 'none' }}>
                         <Box onClick={() => setActiveItem("home")} sx={itemStyles(activeItem === "home")}>
                             <Home />
                             {openSideBar && <Typography variant="subtitle2" ml={2}>Trang chủ</Typography>}

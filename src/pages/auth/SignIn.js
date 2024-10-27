@@ -131,7 +131,7 @@ const SignIn = () => {
                                 </Typography>
                             }
                         />
-                        <Link variant="body2" role="link" sx={{ cursor: 'pointer', color: red[500] }}>
+                        <Link href='/forgot-password' sx={{ cursor: 'pointer', color: red[500], textDecoration: 'none' }}>
                             Quên mật khẩu?
                         </Link>
                     </Box>
@@ -212,7 +212,7 @@ const SignIn = () => {
                 >
                     <Typography sx={{ color: gray[400], fontSize: 16 }}>
                         Bạn chưa có tài khoản?{' '}
-                        <Link href="/sign-up" variant="body2" sx={{ color: red[500], fontWeight: 500, cursor: 'pointer' }}>
+                        <Link href="/sign-up" variant="body2" sx={{ color: red[500], fontWeight: 500, cursor: 'pointer', textDecoration: 'none' }}>
                             Đăng ký
                         </Link>
                     </Typography>

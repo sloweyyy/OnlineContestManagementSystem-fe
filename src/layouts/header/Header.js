@@ -113,13 +113,19 @@ const Header = () => {
                                 </Link>
                             ))}
                             <MenuItem
-                                onClick={() => { window.location.href = "/signin"; handleMenuClose(); }}
+                                onClick={() => { window.location.href = "/guide"; handleMenuClose(); }}
+                                sx={{ fontSize: 14, fontWeight: "600" }}
+                            >
+                                Hướng dẫn
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() => { window.location.href = "/sign-in"; handleMenuClose(); }}
                                 sx={{ fontSize: 14, fontWeight: "600", color: red[500] }}
                             >
                                 Đăng nhập
                             </MenuItem>
                             <MenuItem
-                                onClick={() => { window.location.href = "/signup"; handleMenuClose(); }}
+                                onClick={() => { window.location.href = "/sign-up"; handleMenuClose(); }}
                                 sx={{ fontSize: 14, fontWeight: "600", color: red[500] }}
                             >
                                 Đăng ký
@@ -147,7 +153,7 @@ const Header = () => {
                                     </Typography>
                                 </Link>
                             ))}
-                            <Link href="/" underline="none">
+                            <Link href="/guide" underline="none">
                                 <Typography
                                     variant="body4"
                                     color={white[50]}
