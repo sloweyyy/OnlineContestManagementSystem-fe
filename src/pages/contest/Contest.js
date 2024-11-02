@@ -1,20 +1,20 @@
 import { Box, Button, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import ContestTable from '../../components/contest/ContestTable';
-import { black, gray, red, white } from '../../config/theme/themePrintives';
+import { gray, red, white } from '../../config/theme/themePrintives';
 import { Add, Delete } from '@mui/icons-material';
 
 const Contest = () => {
     const [searchTerm, setSearchTerm] = useState('');
-
-    const contests = [
+    const [contests, setContests] = useState([
         { id: 1, name: 'Cuộc thi số 1', dateStart: '2021-10-10', dateEnd: '2021-10-20', contestantNumber: 10, status: 'Đang diễn ra' },
         { id: 2, name: 'Cuộc thi số 2', dateStart: '2021-10-10', dateEnd: '2021-10-20', contestantNumber: 15, status: 'Đã kết thúc' },
         { id: 3, name: 'Cuộc thi số 3', dateStart: '2021-10-10', dateEnd: '2021-10-20', contestantNumber: 20, status: 'Sắp diễn ra' },
         { id: 4, name: 'Cuộc thi số 4', dateStart: '2021-10-10', dateEnd: '2021-10-20', contestantNumber: 5, status: 'Sắp diễn ra' },
         { id: 5, name: 'Cuộc thi số 5', dateStart: '2021-10-10', dateEnd: '2021-10-20', contestantNumber: 8, status: 'Sắp diễn ra' },
         { id: 6, name: 'Cuộc thi số 6', dateStart: '2021-10-10', dateEnd: '2021-10-20', contestantNumber: 12, status: 'Sắp diễn ra' }
-    ];
+    ]);
+    const [selectedRows, setSelectedRows] = useState([]);
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
@@ -23,6 +23,11 @@ const Contest = () => {
     const filteredContests = contests.filter(contest =>
         contest.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const handleDeleteSelected = () => {
+        setContests(prevContests => prevContests.filter(contest => !selectedRows.includes(contest.id)));
+        setSelectedRows([]);
+    };
 
     return (
         <Box
@@ -79,6 +84,8 @@ const Contest = () => {
                                 justifyContent: 'center',
                                 alignItems: 'center',
                             }}
+                            onClick={handleDeleteSelected}
+                            disabled={selectedRows.length === 0}
                         >
                             <Delete />
                             Xóa
@@ -148,7 +155,7 @@ const Contest = () => {
                 </Box>
 
                 {/* Pass filtered contests to ContestTable */}
-                <ContestTable contests={filteredContests} />
+                <ContestTable contests={filteredContests} setSelectedRows={setSelectedRows} />
             </Box>
         </Box>
     );

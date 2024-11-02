@@ -97,7 +97,7 @@ const RecentContestsCard = ({ contest }) => {
             >
                 {/* Main Card */}
                 <Card sx={{ flex: 1, backgroundColor: 'transparent', boxShadow: 'none' }}>
-                    <CardActionArea disableRipple>
+                    <CardActionArea disableRipple href='/detail-contest'>
                         <CardMedia
                             component="img"
                             height="200"
@@ -167,6 +167,7 @@ const RecentContestsCard = ({ contest }) => {
                                     justifyContent: 'flex-start',
                                     gap: 2,
                                 }}
+                                href='/detail-contest'
                             >
                                 <CardMedia
                                     component="img"
@@ -181,10 +182,10 @@ const RecentContestsCard = ({ contest }) => {
                                 <CardContent
                                     sx={{
                                         flex: 1,
-                                        padding: '8px 0px', // Adjust padding as needed
+                                        padding: '8px 0px',
                                         display: 'flex',
                                         flexDirection: 'column',
-                                        justifyContent: 'flex-start', // Aligns content to the top inside CardContent
+                                        justifyContent: 'flex-start',
                                     }}
                                 >
                                     <Typography

@@ -90,7 +90,7 @@ const ContestCreating = () => {
                         <CustomTextField label="Tên cuộc thi" placeholder="Tên cuộc thi" />
 
                         {/* Contest Description */}
-                        <CustomTextField label="Mô tả cuộc thi" placeholder="Mô tả cuộc thi" multiline rows={4} />
+                        <CustomTextField label="Thể lệ cuộc thi" placeholder="Thể lệ cuộc thi" multiline rows={4} />
 
                         {/* Start Date and Ending Date */}
                         <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
@@ -100,9 +100,25 @@ const ContestCreating = () => {
                     </Box>
                 </Box>
             </Box>
+            {/* Organiser Section */}
+            <Typography sx={{ fontSize: 18, fontWeight: 'bold', color: gray[500], marginBottom: 2 }}>
+                Thông tin ban tổ chức
+            </Typography>
+
+            {/* Organiser Name */}
+            <CustomTextField label="Tên ban tổ chức" placeholder="Tên ban tổ chức" />
+
+            {/* Phone Number and Email */}
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, marginY: 2 }}>
+                <CustomTextField label="Số điện thoại" placeholder="Số điện thoại" type='tel' />
+                <CustomTextField label="Email" placeholder="Email" type='email' />
+            </Box>
+
+            {/* Organiser Address */}
+            <CustomTextField label="Địa chỉ" placeholder="Địa chỉ" />
 
             {/* Participant Section */}
-            <Typography sx={{ fontSize: 18, fontWeight: 'bold', color: gray[500], marginBottom: 2 }}>
+            <Typography sx={{ fontSize: 18, fontWeight: 'bold', color: gray[500], marginY: 2 }}>
                 Thông tin thí sinh
             </Typography>
 

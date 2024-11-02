@@ -42,7 +42,7 @@ const NotFoundPage = () => {
                         Page<br />Not Found
                     </Typography>
                     <Typography sx={{ fontSize: 16, fontWeight: 400, color: gray[400] }}>
-                        Lorem ipsum dolor sit amet, consectetur<br />adipiscing elit. Nulla nec dui eget est fringilla
+                        Không tìm thấy trang bạn đang tìm kiếm.<br />Vui lòng kiểm tra lại đường dẫn hoặc trở về trang chủ.
                     </Typography>
                 </Box>
                 <Button
