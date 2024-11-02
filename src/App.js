@@ -15,15 +15,20 @@ const SignIn = lazy(() => import('./pages/auth/SignIn'));
 const SignUp = lazy(() => import('./pages/auth/SignUp'));
 const LandingPage = lazy(() => import('./pages/landing-page/LandingPage'));
 const NotFoundPage = lazy(() => import('./pages/static-pages/NotFoundPage'));
-const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword'));
 const Contact = lazy(() => import('./pages/landing-page/Contact'));
 const About = lazy(() => import('./pages/landing-page/About'));
 const Guide = lazy(() => import('./pages/landing-page/Guide'));
+const ForgotPassword = lazy(() => import('./pages/auth/ForgotPasswordCard'));
+const OTP = lazy(() => import('./pages/auth/OTP'));
+const ConfirmPasswordCard = lazy(() => import('./pages/auth/ConfirmPasswordCard'));
+const SuccessfullyCard = lazy(() => import('./pages/auth/SuccessfullyCard'));
+const DetailContest = lazy(() => import('./pages/home/DetailContest'));
+
 
 function AppContent() {
   const location = useLocation();
-  const hideLayout = location.pathname === '/sign-in' || location.pathname === '/sign-up' || location.pathname === '/forgot-password';
-  const isAuthenticate = false;
+  const hideLayout = location.pathname === '/sign-in' || location.pathname === '/sign-up' || location.pathname === '/forgot-password' || location.pathname === '/otp' || location.pathname === '/confirm-password' || location.pathname === '/successfully' || location.pathname === '/not-found' || location.pathname === '/detail-contest';
+  const isAuthenticate = true;
 
   return (
     <Box display={'flex'}>
@@ -41,10 +46,14 @@ function AppContent() {
               <Route path="/sign-in" element={<SignIn />} />
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/not-found" element={<NotFoundPage />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/about" element={<About />} />
               <Route path="/guide" element={<Guide />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/otp" element={<OTP />} />
+              <Route path="/confirm-password" element={<ConfirmPasswordCard />} />
+              <Route path="/successfully" element={<SuccessfullyCard />} />
+              <Route path="/detail-contest" element={<DetailContest />} />
             </Routes>
           </Box>
         </Box>

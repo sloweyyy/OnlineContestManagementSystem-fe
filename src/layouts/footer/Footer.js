@@ -59,16 +59,16 @@ const Footer = () => {
                             Sản phẩm
                         </Typography>
                         <Box sx={{ ml: 2 }} color={gray[500]}>
-                            <Link href="#" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
                                 Kontest là gì?
                             </Link>
-                            <Link href="#" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
                                 Các tính năng
                             </Link>
-                            <Link href="#" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
                                 Đối tác
                             </Link>
-                            <Link href="#" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
                                 Tại sao chọn Kontest?
                             </Link>
                         </Box>
@@ -79,16 +79,16 @@ const Footer = () => {
                             Khám phá
                         </Typography>
                         <Box sx={{ ml: 2, color: gray[500] }}>
-                            <Link href="#" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
                                 Trang chủ
                             </Link>
-                            <Link href="#" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
                                 Giới thiệu
                             </Link>
-                            <Link href="#" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
                                 Liên hệ
                             </Link>
-                            <Link href="#" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
                                 Hướng dẫn
                             </Link>
                         </Box>
@@ -99,16 +99,16 @@ const Footer = () => {
                             About
                         </Typography>
                         <Box sx={{ ml: 2, color: gray[500] }}>
-                            <Link href="#" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
                                 Community
                             </Link>
-                            <Link href="#" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
                                 Designers
                             </Link>
-                            <Link href="#" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
                                 Support
                             </Link>
-                            <Link href="#" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
                                 Terms of service
                             </Link>
                         </Box>

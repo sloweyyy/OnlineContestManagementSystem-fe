@@ -61,6 +61,7 @@ const ExperienceNow = () => {
                     },
                     borderRadius: 8
                 }}
+                href='/contest-creating'
             >
                 <AutoAwesomeRounded sx={{ marginRight: 2, fontSize: 22 }} />
                 Tạo cuộc thi

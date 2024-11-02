@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material'
 import React from 'react'
 import AnalysisCard from '../../components/home/AnalysisCard'
-import { CalendarMonth, CheckCircleRounded, SignalCellularAltRounded } from '@mui/icons-material'
+import { CalendarMonth, SignalCellularAltRounded } from '@mui/icons-material'
 import { red, white } from '../../config/theme/themePrintives'
 import ExperienceNow from '../../components/home/ExperienceNow'
 import ReactPlayer from 'react-player'

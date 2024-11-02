@@ -2,8 +2,7 @@ import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { black, gray } from '../../config/theme/themePrintives';
 
-const ContestTable = ({ contests }) => {
-
+const ContestTable = ({ contests, setSelectedRows }) => {
     const columns = [
         { field: 'id', headerName: '#', flex: 0.5 },
         { field: 'name', headerName: 'Tên cuộc thi', flex: 1.5 },
@@ -23,6 +22,9 @@ const ContestTable = ({ contests }) => {
             pageSizeOptions={[5, 10]}
             checkboxSelection
             disableColumnMenu={true}
+            onRowSelectionModelChange={(newSelection) => {
+                setSelectedRows(newSelection);
+            }}
             localeText={{
                 MuiTablePagination: {
                     labelRowsPerPage: 'Số hàng mỗi bảng',
