@@ -19,13 +19,16 @@ import {
     Phone,
     FileDownloadOutlined,
     AccountCircleRounded,
+    Logout,
 } from "@mui/icons-material";
 import { red, white, dark, black } from "../../config/theme/themePrintives";
 import { Link } from "react-router-dom";
+import { useSelector } from 'react-redux';
 
 const Sidebar = () => {
     const [openSideBar, setOpenSideBar] = useState(true);
     const [activeItem, setActiveItem] = useState("home");
+    const { user } = useSelector((state) => state.user);
 
     const drawerWidth = openSideBar ? "18rem" : "5rem";
     const drawerTransition = "0.2s ease";
@@ -196,12 +199,12 @@ const Sidebar = () => {
                             {openSideBar && (
                                 <Box>
                                     <ListItemText
-                                        primary="Nguyễn Quốc Thắng"
+                                        primary={user?.fullName}
                                         sx={{ "& .MuiListItemText-primary": { fontSize: "16px", whiteSpace: "nowrap", color: black[900], fontWeight: 600 } }}
                                     />
                                     <ListItemText
-                                        primary="0346129897"
-                                        sx={{ "& .MuiListItemText-primary": { fontSize: "14px", whiteSpace: "nowrap", color: black[900], fontWeight: 400 } }}
+                                        primary={user?.email}
+                                        sx={{ "& .MuiListItemText-primary": { fontSize: "12px", whiteSpace: "nowrap", color: black[900], fontWeight: 400 } }}
                                     />
                                 </Box>
                             )}

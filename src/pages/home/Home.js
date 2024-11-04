@@ -85,7 +85,7 @@ const Home = () => {
                     gap: 2,
                 }}
             >
-                <RecentContestsCard />
+                <RecentContestsCard contests={[]} />
                 <Box
                     sx={{
                         display: 'flex',

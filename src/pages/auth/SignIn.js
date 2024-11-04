@@ -1,9 +1,25 @@
 import { Box, Button, Divider, FormControlLabel, Link, TextField, Typography } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import { black, gray, red, white } from '../../config/theme/themePrintives';
 import { CheckBox, Google } from '@mui/icons-material';
+import AuthServices from '../../services/auth.service';
 
 const SignIn = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleSignIn = async () => {
+        try {
+            const response = await AuthServices.signin(email, password);
+
+            if (response.status === 200) {
+                window.location.href = '/home';
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <Box
             display="flex"
@@ -34,7 +50,7 @@ const SignIn = () => {
                     mb={4}
                 >
                     <Typography sx={{ color: black[900], fontSize: 32, fontWeight: 'bold' }}>
-                        Chào mừng bạn đến với <Typography component="span" sx={{ color: red[500], fontSize: 38, fontWeight: 'bold' }}>Kontest</Typography>
+                        Chào mừng bạn đến với <Typography component="span" sx={{ color: red[500], fontSize: 38, fontWeight: 'bold' }}>Kontext</Typography>
                     </Typography>
                 </Box>
 
@@ -60,6 +76,8 @@ const SignIn = () => {
                             type='email'
                             fullWidth
                             variant={'outlined'}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             sx={{
                                 '& .MuiOutlinedInput-root': {
                                     height: '50px',
@@ -93,6 +111,8 @@ const SignIn = () => {
                             type='password'
                             fullWidth
                             variant={'outlined'}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             sx={{
                                 '& .MuiOutlinedInput-root': {
                                     height: '50px',
@@ -150,6 +170,7 @@ const SignIn = () => {
                             textTransform: 'none',
                             fontSize: 18
                         }}
+                        onClick={handleSignIn}
                     >
                         Đăng nhập
                     </Button>

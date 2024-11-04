@@ -22,11 +22,11 @@ const Footer = () => {
             >
                 <Box sx={{ mb: { xs: 4, md: 0 }, ml: { sx: 0, md: 12 } }}>
                     <Typography variant="h2" sx={{ fontWeight: 'bold', mb: 2, color: red[500] }}>
-                        Kontest
+                        Kontext
                     </Typography>
                     <Typography variant="body1" sx={{ mb: 2, maxWidth: 400, color: gray[500] }}>
                         <Box component="span" fontWeight="bold" color={black[900]}>
-                            Kontest
+                            Kontext
                         </Box>{" "}
                         cung cấp nền tảng tạo các cuộc thi trực tuyến dễ dàng và nhanh chóng, giúp người dùng có thể tổ chức và tham gia các cuộc thi trên mọi lĩnh vực.
                     </Typography>
@@ -60,7 +60,7 @@ const Footer = () => {
                         </Typography>
                         <Box sx={{ ml: 2 }} color={gray[500]}>
                             <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
-                                Kontest là gì?
+                                Kontext là gì?
                             </Link>
                             <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
                                 Các tính năng
@@ -69,7 +69,7 @@ const Footer = () => {
                                 Đối tác
                             </Link>
                             <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
-                                Tại sao chọn Kontest?
+                                Tại sao chọn Kontext?
                             </Link>
                         </Box>
                     </Box>
@@ -127,7 +127,7 @@ const Footer = () => {
                 }}
             >
                 <Typography variant="body2" fontSize={16} fontWeight={600}>
-                    © 2024 Kontest. All rights reserved.
+                    © 2024 Kontext. All rights reserved.
                 </Typography>
             </Box>
         </Box>
