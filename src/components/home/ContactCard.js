@@ -23,7 +23,6 @@ const ContactCard = () => {
                 paddingX: 2,
                 paddingY: 4,
                 overflow: 'hidden',
-                width: '20vw',
                 gap: 2
             }}
         >

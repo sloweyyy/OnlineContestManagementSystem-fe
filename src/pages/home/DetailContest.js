@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-    Avatar, Box, Button, Typography
+    Avatar, Box, Button, Divider, Menu, MenuItem, Typography
 } from '@mui/material';
 import { black, gray, red, white, yellow } from '../../config/theme/themePrintives';
 
@@ -153,6 +153,16 @@ const DetailContest = () => {
         };
     };
 
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <Box display="flex" flexDirection="column" alignItems="center" width="100%">
             <Box
@@ -191,7 +201,29 @@ const DetailContest = () => {
                                 </Button>
                             ))}
                         </Box>
-                        <Avatar />
+                        <Button onClick={handleClick}>
+                            <Avatar />
+                        </Button>
+                        <Menu
+                            anchorEl={anchorEl}
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                        >
+                            <MenuItem sx={{ fontSize: 16, fontWeight: 600, ":hover": { bgcolor: 'transparent' }, ":focus": { bgcolor: 'transparent' }, ":active": { bgcolor: 'transparent' } }} disableTouchRipple>
+                                Nguyễn Quốc Thắng
+                            </MenuItem>
+                            <Divider />
+                            <MenuItem onClick={handleClose} sx={{ fontSize: 16, fontWeight: 600 }}>
+                                Tài khoản
+                            </MenuItem>
+                            <MenuItem onClick={handleClose} sx={{ fontSize: 16, fontWeight: 600 }}>
+                                Lịch sử làm bài
+                            </MenuItem>
+                            <Divider />
+                            <MenuItem onClick={handleClose} sx={{ fontSize: 16, fontWeight: 600, color: red[500] }}>
+                                Đăng xuất
+                            </MenuItem>
+                        </Menu>
                     </Box>
                 </Box>
 
@@ -203,7 +235,7 @@ const DetailContest = () => {
                     width="100%"
                     height="20vh"
                     bgcolor="rgba(139, 0, 0, 0.5)"
-                    mt={4}
+                    mt={8}
                 >
                     <Typography
                         fontWeight={600}
@@ -227,14 +259,14 @@ const DetailContest = () => {
                 </Box>
             </Box>
 
-            <Box display="flex" gap={4} mt={8} mb={8}>
+            <Box display="flex" gap={4} mt={6} mb={8}>
                 {['Tham gia', 'Thể lệ'].map((text, index) => (
                     <Button
                         key={text}
                         variant="contained"
                         sx={{
                             backgroundColor: index === 0 ? red[500] : white[50],
-                            borderRadius: 2,
+                            borderRadius: 10,
                             px: 4,
                             py: 1,
                             boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
@@ -251,7 +283,7 @@ const DetailContest = () => {
                 ))}
             </Box>
 
-            <Box id='rankingTable' display="flex" justifyContent="center" alignItems="center" width="100%" gap={4} py={4}>
+            <Box id='rankingTable' display="flex" justifyContent="center" alignItems="flex-start" width="100%" gap={4} py={4}>
                 <Box
                     sx={{
                         backgroundImage: `url(${require("../../assets/Rank-card.png")})`,
@@ -376,7 +408,7 @@ const DetailContest = () => {
                         Đơn vị lập trình
                     </Typography>
                     <Typography fontWeight={600} fontSize={22} color={white[50]} textTransform={'capitalize'}>
-                        Công ty Cổ phần Kontest
+                        Công ty Cổ phần Kontext
                     </Typography>
                     <Typography fontWeight={400} fontSize={18} color={white[50]}>
                         Địa chỉ: 144 Xuân Thủy, Cầu Giấy, Hà Nội
@@ -385,7 +417,7 @@ const DetailContest = () => {
                         Điện thoại: 024.3754.6183
                     </Typography>
                     <Typography fontWeight={400} fontSize={18} color={white[50]}>
-                        Email: kontest@gmail.com
+                        Email: Kontext@gmail.com
                     </Typography>
                 </Box>
             </Box>
@@ -399,7 +431,7 @@ const DetailContest = () => {
                 bgcolor={gray[100]}
             >
                 <Typography fontWeight={600} fontSize={18} color={black[700]}>
-                    © 2021 Kontest. All rights reserved.
+                    © 2021 Kontext. All rights reserved.
                 </Typography>
             </Box>
         </Box>

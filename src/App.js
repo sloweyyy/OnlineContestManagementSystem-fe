@@ -5,7 +5,8 @@ import Header from './layouts/header/Header';
 import Footer from './layouts/footer/Footer';
 import { Box, createTheme, ThemeProvider } from '@mui/material';
 import getDesignTokens from './config/theme/themePrintives';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Home = lazy(() => import('./pages/home/Home'));
 const Contest = lazy(() => import('./pages/contest/Contest'));
@@ -23,18 +24,21 @@ const OTP = lazy(() => import('./pages/auth/OTP'));
 const ConfirmPasswordCard = lazy(() => import('./pages/auth/ConfirmPasswordCard'));
 const SuccessfullyCard = lazy(() => import('./pages/auth/SuccessfullyCard'));
 const DetailContest = lazy(() => import('./pages/home/DetailContest'));
-
+const Search = lazy(() => import('./pages/home/Search'));
 
 function AppContent() {
   const location = useLocation();
   const hideLayout = location.pathname === '/sign-in' || location.pathname === '/sign-up' || location.pathname === '/forgot-password' || location.pathname === '/otp' || location.pathname === '/confirm-password' || location.pathname === '/successfully' || location.pathname === '/not-found' || location.pathname === '/detail-contest';
-  const isAuthenticate = true;
+
+  // const isAuthenticated = useSelector((state) => state.auth);
+
+  const isAuthenticated = false;
 
   return (
     <Box display={'flex'}>
-      {!hideLayout && isAuthenticate && <Sidebar />}
+      {!hideLayout && isAuthenticated && <Sidebar />}
       <Box flex={1}>
-        {!hideLayout && !isAuthenticate && <Header />}
+        {!hideLayout && !isAuthenticated && <Header />}
         <Box display={'flex'}>
           <Box flex={1}>
             <Routes>
@@ -54,10 +58,11 @@ function AppContent() {
               <Route path="/confirm-password" element={<ConfirmPasswordCard />} />
               <Route path="/successfully" element={<SuccessfullyCard />} />
               <Route path="/detail-contest" element={<DetailContest />} />
+              <Route path="/search" element={<Search />} />
             </Routes>
           </Box>
         </Box>
-        {!hideLayout && !isAuthenticate && <Footer />}
+        {!hideLayout && !isAuthenticated && <Footer />}
       </Box>
     </Box>
   );
@@ -69,9 +74,7 @@ function App() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <ThemeProvider theme={theme}>
-        <Router>
-          <AppContent />
-        </Router>
+        <AppContent />
       </ThemeProvider>
     </Suspense>
   );

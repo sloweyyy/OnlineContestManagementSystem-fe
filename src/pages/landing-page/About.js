@@ -75,7 +75,7 @@ const About = () => {
                         width: '60%',
                     }}
                 >
-                    Kontest
+                    Kontext
                     <Box component="span" color={red[500]}>
                         .
                     </Box>
@@ -88,7 +88,7 @@ const About = () => {
                         width: '60%',
                     }}
                 >
-                    Kontest là nền tảng dành cho các cuộc thi trực tuyến, cho phép người dùng tham gia và tổ chức cuộc thi một cách đơn giản và dễ dàng. Sứ mệnh của chúng tôi là tạo ra một không gian để mọi người có thể phát triển kỹ năng, thể hiện tài năng và kết nối cộng đồng.
+                    Kontext là nền tảng dành cho các cuộc thi trực tuyến, cho phép người dùng tham gia và tổ chức cuộc thi một cách đơn giản và dễ dàng. Sứ mệnh của chúng tôi là tạo ra một không gian để mọi người có thể phát triển kỹ năng, thể hiện tài năng và kết nối cộng đồng.
                 </Typography>
             </Box>
 
@@ -145,7 +145,7 @@ const About = () => {
                             fontWeight: 400,
                         }}
                     >
-                        Được thành lập từ năm 2023, Kontest đã nhanh chóng trở thành một trong những nền tảng hàng đầu cho các cuộc thi trực tuyến. Với sự tin tưởng của hàng ngàn người dùng, chúng tôi không ngừng phát triển và cải tiến để mang đến trải nghiệm tốt nhất cho cộng đồng.
+                        Được thành lập từ năm 2023, Kontext đã nhanh chóng trở thành một trong những nền tảng hàng đầu cho các cuộc thi trực tuyến. Với sự tin tưởng của hàng ngàn người dùng, chúng tôi không ngừng phát triển và cải tiến để mang đến trải nghiệm tốt nhất cho cộng đồng.
                     </Typography>
                 </Box>
             </Box>
@@ -181,7 +181,7 @@ const About = () => {
                         marginBottom: 10,
                     }}
                 >
-                    Chúng tôi cam kết đem đến sự minh bạch, công bằng và cơ hội cho tất cả mọi người. Kontest không chỉ là một nền tảng mà còn là cầu nối giúp mọi người hiện thực hóa đam mê và khám phá tiềm năng của mình.
+                    Chúng tôi cam kết đem đến sự minh bạch, công bằng và cơ hội cho tất cả mọi người. Kontext không chỉ là một nền tảng mà còn là cầu nối giúp mọi người hiện thực hóa đam mê và khám phá tiềm năng của mình.
                 </Typography>
 
                 <img

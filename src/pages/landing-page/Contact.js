@@ -102,7 +102,7 @@ const Contact = () => {
                         >
                             <Email sx={{ color: white[50], fontSize: 20 }} />
                             <Typography fontSize={18} fontWeight={400} color={white[50]}>
-                                kontest@gmail.com
+                                Kontext@gmail.com
                             </Typography>
                         </Box>
 

@@ -1,9 +1,27 @@
 import { Box, Button, Divider, FormControlLabel, Link, TextField, Typography } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import { black, gray, red, white } from '../../config/theme/themePrintives';
 import { CheckBox, Google } from '@mui/icons-material';
+import AuthServices from '../../services/auth.service';
 
 const SignUp = () => {
+    const [fullName, setFullName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const handleRegister = async () => {
+        try {
+            const response = await AuthServices.register(email, password, confirmPassword, fullName);
+            console.log('response: ', response);
+            if (response) {
+                window.location.href = '/sign-in';
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     return (
         <Box
             display="flex"
@@ -33,7 +51,7 @@ const SignUp = () => {
                     mb={4}
                 >
                     <Typography sx={{ color: black[900], fontSize: 32, fontWeight: 'bold' }}>
-                        Tạo tài khoản mới trên <Typography component="span" sx={{ color: red[500], fontSize: 38, fontWeight: 'bold' }}>Kontest</Typography>
+                        Tạo tài khoản mới trên <Typography component="span" sx={{ color: red[500], fontSize: 38, fontWeight: 'bold' }}>Kontext</Typography>
                     </Typography>
                 </Box>
 
@@ -59,6 +77,8 @@ const SignUp = () => {
                             type='text'
                             fullWidth
                             variant={'outlined'}
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
                             sx={{
                                 '& .MuiOutlinedInput-root': {
                                     height: '50px',
@@ -92,6 +112,8 @@ const SignUp = () => {
                             type='email'
                             fullWidth
                             variant={'outlined'}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             sx={{
                                 '& .MuiOutlinedInput-root': {
                                     height: '50px',
@@ -125,6 +147,8 @@ const SignUp = () => {
                             type='password'
                             fullWidth
                             variant={'outlined'}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             sx={{
                                 '& .MuiOutlinedInput-root': {
                                     height: '50px',
@@ -158,6 +182,8 @@ const SignUp = () => {
                             type='password'
                             fullWidth
                             variant={'outlined'}
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
                             sx={{
                                 '& .MuiOutlinedInput-root': {
                                     height: '50px',
@@ -212,6 +238,7 @@ const SignUp = () => {
                             textTransform: 'none',
                             fontSize: 18
                         }}
+                        onClick={handleRegister}
                     >
                         Đăng ký
                     </Button>

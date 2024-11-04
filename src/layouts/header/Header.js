@@ -74,7 +74,7 @@ const Header = () => {
                 >
                     <img src={require("../../assets/ASE-light.png")} alt="logo" width={'32.8px'} height={'38.4px'} />
                     <Typography variant="h5" color={white[50]} sx={{ ml: 2 }}>
-                        KONTEST
+                        Kontext
                     </Typography>
                 </Button>
 

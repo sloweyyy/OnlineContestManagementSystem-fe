@@ -3,8 +3,8 @@ import { Box, Button, Card, CardActionArea, CardContent, CardMedia, Typography }
 import React from 'react';
 import { black, gray, red, white } from '../../config/theme/themePrintives';
 
-const RecentContestsCard = ({ contest }) => {
-    const contestData = contest || [
+const RecentContestsCard = ({ contests }) => {
+    const contestData = [
         {
             title: 'Cuộc thi video clip “Việt Nam hạnh phúc - Happy Vietnam 2024" 1',
             time: '10:00 ngày 10/10/2021',
@@ -79,6 +79,7 @@ const RecentContestsCard = ({ contest }) => {
                         textTransform: 'none',
                         gap: 1,
                     }}
+                    href='/search'
                 >
                     <Typography sx={{ fontSize: 14 }}>Xem tất cả</Typography>
                     <ArrowForwardIosRounded sx={{ fontSize: 14 }} />

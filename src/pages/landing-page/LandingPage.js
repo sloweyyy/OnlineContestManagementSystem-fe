@@ -13,7 +13,7 @@ const LandingPage = () => {
             <Box display="flex" flexDirection={'row'} justifyContent="center" alignItems="center" height="90vh" paddingX={10}>
                 {/* Text Section */}
                 <Box flex={1} display="flex" flexDirection={'column'} justifyContent="center" alignItems="flex-start" height='100%'>
-                    <Typography variant="h1">Kontest</Typography>
+                    <Typography variant="h1">Kontext</Typography>
                     <Typography variant="h1" color={red[500]}>Cuộc thi trực tuyến</Typography>
                     <Button
                         sx={{
@@ -82,7 +82,7 @@ const LandingPage = () => {
                     Tạo cuộc thi trực tuyến
                 </Typography>
                 <Typography fontSize={16} fontWeight={400} color={gray[400]} marginTop={2} marginBottom={6}>
-                    Cá nhân và tổ chức có thể tạo cuộc thi trực tuyến một cách dễ dàng và nhanh chóng với Kontest
+                    Cá nhân và tổ chức có thể tạo cuộc thi trực tuyến một cách dễ dàng và nhanh chóng với Kontext
                 </Typography>
 
                 {/* Client Cards */}
