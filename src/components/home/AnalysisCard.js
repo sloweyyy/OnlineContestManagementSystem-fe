@@ -30,7 +30,7 @@ const AnalysisCard = ({ title, count, icon, isContest = false }) => {
             >
                 <Typography sx={{ fontSize: 14, fontWeight: 400, color: gray[500] }}>{title}</Typography>
                 <Typography sx={{ fontSize: 18, fontWeight: 600, color: black[900] }}>
-                    <CountUp end={count} duration={2} /> {isContest ? 'Cuộc thi' : 'Thí sinh'}
+                    <CountUp end={count} duration={2} /> {isContest ? 'Cuộc thi' : 'Lượt thi'}
                 </Typography>
             </Box>
             <Box>

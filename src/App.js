@@ -7,6 +7,8 @@ import { Box, createTheme, ThemeProvider } from '@mui/material';
 import getDesignTokens from './config/theme/themePrintives';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Home = lazy(() => import('./pages/home/Home'));
 const Contest = lazy(() => import('./pages/contest/Contest'));
@@ -23,7 +25,7 @@ const ForgotPassword = lazy(() => import('./pages/auth/ForgotPasswordCard'));
 const OTP = lazy(() => import('./pages/auth/OTP'));
 const ConfirmPasswordCard = lazy(() => import('./pages/auth/ConfirmPasswordCard'));
 const SuccessfullyCard = lazy(() => import('./pages/auth/SuccessfullyCard'));
-const DetailContest = lazy(() => import('./pages/home/DetailContest'));
+const DetailContest = lazy(() => import('./pages/contest/DetailContest'));
 const Search = lazy(() => import('./pages/home/Search'));
 
 function AppContent() {
@@ -32,7 +34,7 @@ function AppContent() {
 
   // const isAuthenticated = useSelector((state) => state.auth);
 
-  const isAuthenticated = false;
+  const isAuthenticated = true;
 
   return (
     <Box display={'flex'}>
@@ -76,6 +78,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <AppContent />
       </ThemeProvider>
+      <ToastContainer position="bottom-left" autoClose={1000} />
     </Suspense>
   );
 }

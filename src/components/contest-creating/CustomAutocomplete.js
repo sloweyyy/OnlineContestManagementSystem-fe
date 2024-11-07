@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, Autocomplete, TextField } from '@mui/material';
 import { black, gray } from '../../config/theme/themePrintives';
 
-const CustomAutocomplete = ({ label, value, onChange, options, placeholder = 'Chọn kỹ năng cần thiết', ...props }) => {
-    const limitedOptions = options.slice(0, 5);
+const CustomAutocomplete = ({ label, value, onChange, options, placeholder = 'Chọn thông tin cần thiết', ...props }) => {
+    const [inputValue, setInputValue] = useState('');
+
+    const filteredOptions = inputValue
+        ? options.filter((option) => option.label.toLowerCase().includes(inputValue.toLowerCase()))
+        : options.slice(0, 5);
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
@@ -23,8 +27,12 @@ const CustomAutocomplete = ({ label, value, onChange, options, placeholder = 'Ch
                 freeSolo
                 value={value}
                 onChange={onChange}
-                options={limitedOptions.map(option => option.label)}
-                size='small'
+                options={filteredOptions.map(option => option.label)}
+                size="small"
+                inputValue={inputValue}
+                onInputChange={(event, newInputValue) => {
+                    setInputValue(newInputValue);
+                }}
                 renderInput={(params) => (
                     <TextField
                         {...params}

@@ -3,6 +3,7 @@ import {
     Avatar, Box, Button, Divider, Menu, MenuItem, Typography
 } from '@mui/material';
 import { black, gray, red, white, yellow } from '../../config/theme/themePrintives';
+import PaticipatingModal from '../../components/contest/PaticipatingModal';
 
 const CountdownBox = ({ value, index }) => (
     <Box
@@ -163,6 +164,12 @@ const DetailContest = () => {
         setAnchorEl(null);
     };
 
+    const [opened, setOpened] = useState(false);
+
+    const handleOnClose = () => {
+        setOpened(false);
+    }
+
     return (
         <Box display="flex" flexDirection="column" alignItems="center" width="100%">
             <Box
@@ -260,27 +267,44 @@ const DetailContest = () => {
             </Box>
 
             <Box display="flex" gap={4} mt={6} mb={8}>
-                {['Tham gia', 'Thể lệ'].map((text, index) => (
-                    <Button
-                        key={text}
-                        variant="contained"
-                        sx={{
-                            backgroundColor: index === 0 ? red[500] : white[50],
-                            borderRadius: 10,
-                            px: 4,
-                            py: 1,
-                            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-                            '&:hover': {
-                                backgroundColor: index === 0 ? red[600] : gray[200],
-                            },
-                            textTransform: 'none',
-                        }}
-                    >
-                        <Typography fontWeight={600} fontSize={24} color={index === 0 ? white[50] : red[500]}>
-                            {text}
-                        </Typography>
-                    </Button>
-                ))}
+                <Button
+                    variant="contained"
+                    sx={{
+                        backgroundColor: red[500],
+                        borderRadius: 10,
+                        px: 4,
+                        py: 1,
+                        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+                        '&:hover': {
+                            backgroundColor: red[600],
+                        },
+                        textTransform: 'none',
+                    }}
+                    onClick={() => setOpened(true)}
+                >
+                    <Typography fontWeight={600} fontSize={24} color={white[50]}>
+                        Tham gia
+                    </Typography>
+                </Button>
+
+                <Button
+                    variant="contained"
+                    sx={{
+                        backgroundColor: white[50],
+                        borderRadius: 10,
+                        px: 4,
+                        py: 1,
+                        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+                        '&:hover': {
+                            backgroundColor: gray[200],
+                        },
+                        textTransform: 'none',
+                    }}
+                >
+                    <Typography fontWeight={600} fontSize={24} color={red[500]}>
+                        Thể lệ
+                    </Typography>
+                </Button>
             </Box>
 
             <Box id='rankingTable' display="flex" justifyContent="center" alignItems="flex-start" width="100%" gap={4} py={4}>
@@ -434,6 +458,8 @@ const DetailContest = () => {
                     © 2021 Kontext. All rights reserved.
                 </Typography>
             </Box>
+
+            <PaticipatingModal open={opened} onClose={handleOnClose} />
         </Box>
     );
 }
