@@ -19,7 +19,7 @@ const SearchingContestCard = ({ contest }) => {
                 />
             </CardActionArea>
 
-            <CardContent sx={{ width: '60%', paddingLeft: 2, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
+            <CardContent sx={{ width: '60%', paddingLeft: 2, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', bgcolor: gray[100] }}>
                 {/* Title */}
                 <Typography
                     variant="h6"

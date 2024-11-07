@@ -11,16 +11,17 @@ const ContestCreating = () => {
     const [image, setImage] = useState(null);
 
     const [options, setOptions] = useState([
-        { value: 'programming', label: 'Lập trình' },
-        { value: 'design', label: 'Thiết kế' },
-        { value: 'writing', label: 'Viết lách' },
-        { value: 'marketing', label: 'Marketing' },
-        { value: 'communication', label: 'Giao tiếp' },
-        { value: 'teamwork', label: 'Làm việc nhóm' },
-        { value: 'problem-solving', label: 'Giải quyết vấn đề' },
+        { value: 'name', label: 'Họ và Tên' },
+        { value: 'email', label: 'Email' },
+        { value: 'phone', label: 'Số điện thoại' },
+        { value: 'address', label: 'Địa chỉ' },
+        { value: 'dob', label: 'Ngày sinh' },
+        { value: 'job', label: 'Nghề nghiệp' },
+        { value: 'unit', label: 'Đơn vị công tác' },
+        { value: 'identify', label: 'CMND/CCCD' }
     ]);
 
-    const handleSkillsRequirementChange = (event, newValue) => {
+    const handleInformationsRequirementChange = (event, newValue) => {
         const newOptions = newValue.filter((option) =>
             typeof option === 'string' && !options.some(opt => opt.label === option)
         ).map(option => ({ value: option.toLowerCase(), label: option }));
@@ -127,12 +128,12 @@ const ContestCreating = () => {
                 <CustomTextField label="Số lượng thí sinh tối đa" placeholder="Số lượng thí sinh tối đa" type="number" />
             </Box>
 
-            {/* Skills Requirement Section */}
+            {/* Information Requirement Section */}
             <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', gap: 2 }}>
                 <CustomAutocomplete
-                    label="Kỹ năng cần thiết"
+                    label="Thông tin cần thiết"
                     value={skillsRequirement}
-                    onChange={handleSkillsRequirementChange}
+                    onChange={handleInformationsRequirementChange}
                     options={options}
                 />
             </Box>

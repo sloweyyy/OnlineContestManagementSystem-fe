@@ -1,14 +1,16 @@
 import { Box, Button, IconButton, TextField, Typography } from '@mui/material'
 import React from 'react'
-import { black, gray, red, white } from '../../config/theme/themePrintives'
+import { gray, red, white } from '../../config/theme/themePrintives'
 import { Email, Facebook, Instagram, LocationOn, Phone, Twitter } from '@mui/icons-material'
+
 const inputStyle = {
     '& .MuiInput-underline': {
-        '&:before': { borderBottomColor: gray[400] },
-        '&:hover:not(.Mui-disabled):before': { borderBottomColor: black[900] },
-        '&:after': { borderBottomColor: black[900] },
+        '&:before': { borderBottomColor: gray[200] },
+        '&:hover:not(.Mui-disabled):before': { borderBottomColor: gray[400] },
+        '&:after': { borderBottomColor: gray[400] },
     },
 };
+
 const Contact = () => {
     return (
         <Box
@@ -34,10 +36,10 @@ const Contact = () => {
                 alignItems="center"
                 width={'80vw'}
                 padding={1}
-                boxShadow={1}
                 borderRadius={2}
                 bgcolor={gray[100]}
                 marginTop={10}
+                border={`2px solid ${gray[200]}`}
             >
                 {/* Card */}
                 <Box
@@ -275,8 +277,11 @@ const Contact = () => {
                             borderRadius: 1,
                             padding: '10px 40px',
                             marginTop: 4,
+                            border: `2px solid ${red[500]}`,
                             '&:hover': {
-                                backgroundColor: red[300],
+                                backgroundColor: white[50],
+                                color: red[500],
+                                boxShadow: 'none',
                             },
                             fontWeight: 'bold',
                             fontSize: 16,
@@ -284,6 +289,7 @@ const Contact = () => {
                             alignSelf: 'flex-end',
                             textTransform: 'none',
                             color: white[50],
+                            padding: '4px 20px',
                         }}
                     >
                         Gửi tin nhắn

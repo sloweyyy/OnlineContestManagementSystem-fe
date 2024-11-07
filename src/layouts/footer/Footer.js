@@ -2,6 +2,28 @@ import { Box, Typography, Link, IconButton } from '@mui/material';
 import { Instagram, Facebook, Twitter } from '@mui/icons-material';
 import { black, gray, red, white } from "../../config/theme/themePrintives";
 
+const linkStyle = {
+    display: 'block',
+    mb: 2,
+    position: 'relative',
+    color: 'inherit',
+    textDecoration: 'none',
+    '&::after': {
+        content: '""',
+        position: 'absolute',
+        width: '0',
+        height: '1.5px',
+        bottom: '-4px',
+        left: '0',
+        backgroundColor: gray[300],
+        transition: 'width 0.3s ease',
+    },
+    '&:hover::after': {
+        width: '100%',
+    },
+    width: "fit-content",
+};
+
 const Footer = () => {
     return (
         <Box
@@ -59,16 +81,16 @@ const Footer = () => {
                             Sản phẩm
                         </Typography>
                         <Box sx={{ ml: 2 }} color={gray[500]}>
-                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" sx={linkStyle}>
                                 Kontext là gì?
                             </Link>
-                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" sx={linkStyle}>
                                 Các tính năng
                             </Link>
-                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" sx={linkStyle}>
                                 Đối tác
                             </Link>
-                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" sx={linkStyle}>
                                 Tại sao chọn Kontext?
                             </Link>
                         </Box>
@@ -79,16 +101,16 @@ const Footer = () => {
                             Khám phá
                         </Typography>
                         <Box sx={{ ml: 2, color: gray[500] }}>
-                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="/" sx={linkStyle}>
                                 Trang chủ
                             </Link>
-                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="/about" sx={linkStyle}>
                                 Giới thiệu
                             </Link>
-                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="/contact" sx={linkStyle}>
                                 Liên hệ
                             </Link>
-                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="/guide" sx={linkStyle}>
                                 Hướng dẫn
                             </Link>
                         </Box>
@@ -99,16 +121,16 @@ const Footer = () => {
                             About
                         </Typography>
                         <Box sx={{ ml: 2, color: gray[500] }}>
-                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" sx={linkStyle}>
                                 Community
                             </Link>
-                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" sx={linkStyle}>
                                 Designers
                             </Link>
-                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" sx={linkStyle}>
                                 Support
                             </Link>
-                            <Link href="not-found" color="inherit" underline="none" sx={{ display: 'block', mb: 1 }}>
+                            <Link href="not-found" sx={linkStyle}>
                                 Terms of service
                             </Link>
                         </Box>

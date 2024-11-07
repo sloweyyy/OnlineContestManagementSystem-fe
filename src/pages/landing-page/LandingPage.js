@@ -13,8 +13,8 @@ const LandingPage = () => {
             <Box display="flex" flexDirection={'row'} justifyContent="center" alignItems="center" height="90vh" paddingX={10}>
                 {/* Text Section */}
                 <Box flex={1} display="flex" flexDirection={'column'} justifyContent="center" alignItems="flex-start" height='100%'>
-                    <Typography variant="h1">Kontext</Typography>
-                    <Typography variant="h1" color={red[500]}>Cuộc thi trực tuyến</Typography>
+                    <Typography variant='h1'>Kontext</Typography>
+                    <Typography variant='h1' color={red[500]}>Cuộc thi trực tuyến</Typography>
                     <Button
                         sx={{
                             textTransform: 'none',
@@ -23,12 +23,15 @@ const LandingPage = () => {
                             borderRadius: 20,
                             padding: '10px 20px',
                             marginTop: 6,
+                            border: `2px solid ${red[500]}`,
                             '&:hover': {
-                                backgroundColor: red[300],
+                                backgroundColor: white[50],
+                                color: red[500],
+                                boxShadow: 'none',
                             },
                             fontWeight: 'bold',
                             fontSize: 16,
-                            boxShadow: `0px 6px 6px ${gray[300]}`,
+                            boxShadow: `0px 4px 4px ${gray[200]}`,
                         }}
                         href='/sign-up'
                     >

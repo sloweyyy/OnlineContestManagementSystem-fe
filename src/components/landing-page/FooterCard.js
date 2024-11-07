@@ -1,7 +1,7 @@
 import { Box, Button, Paper, Typography } from '@mui/material'
 import React from 'react'
 import { useInView } from 'react-intersection-observer'
-import { gray, red } from '../../config/theme/themePrintives';
+import { gray, red, white } from '../../config/theme/themePrintives';
 
 const FooterCard = () => {
     const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 });
@@ -40,11 +40,10 @@ const FooterCard = () => {
                 }}
             >
                 <Typography fontSize={'32px'} color={red[500]} fontWeight={'800'} marginBottom={1}>
-                    Tạo hồ sơ công chứng ngay hôm nay
+                    Tạo cuộc thi trực tuyến ngay
                 </Typography>
                 <Typography fontSize={'16px'} color={gray[500]} textAlign={'center'} marginBottom={4}>
-                    Dịch vụ công chứng trực tuyến của chúng tôi cung cấp giải pháp nhanh chóng và tiện lợi cho mọi nhu cầu công chứng của bạn.
-                    Hãy bắt đầu ngay hôm nay và trải nghiệm sự khác biệt!
+                    Dịch vụ tạo cuộc thi trực tuyến của chúng tôi cung cấp giải pháp nhanh chóng và tiện lợi bạn.<br />Hãy bắt đầu ngay hôm nay và trải nghiệm sự khác biệt!
                 </Typography>
                 <Button
                     sx={{
@@ -56,13 +55,15 @@ const FooterCard = () => {
                         fontWeight: 600,
                         color: "white",
                         background: red[500],
+                        border: `2px solid ${red[500]}`,
                         '&:hover': {
-                            background: red[600],
+                            backgroundColor: white[50],
+                            color: red[500],
                         },
                     }}
                     href="/sign-up"
                 >
-                    Tạo hồ sơ công chứng
+                    Tạo cuộc thi trực tuyến
                 </Button>
             </Box>
         </Paper >

@@ -43,12 +43,15 @@ const SubscribeSection = () => (
                 color: 'white',
                 borderRadius: 1,
                 padding: '10px 50px',
+                border: `2px solid ${red[500]}`,
                 '&:hover': {
-                    backgroundColor: red[300],
+                    backgroundColor: white[50],
+                    color: red[500],
+                    boxShadow: 'none',
                 },
                 fontWeight: 'bold',
                 fontSize: 16,
-                boxShadow: `0px 6px 6px ${gray[300]}`,
+                boxShadow: `0px 4px 4px ${gray[200]}`,
             }}
             href='/sign-up'
         >

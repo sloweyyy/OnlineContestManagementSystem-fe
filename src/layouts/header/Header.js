@@ -178,6 +178,10 @@ const Header = () => {
                                     border: `1px solid ${white[50]}`,
                                     color: white[50],
                                     paddingX: 2,
+                                    ":hover": {
+                                        backgroundColor: white[50],
+                                        color: red[500],
+                                    },
                                 }}
                                 href="/sign-in"
                                 startIcon={<Key />}
@@ -194,6 +198,11 @@ const Header = () => {
                                     backgroundColor: white[50],
                                     color: red[500],
                                     paddingX: 2,
+                                    border: `1px solid ${white[50]}`,
+                                    ":hover": {
+                                        backgroundColor: red[500],
+                                        color: white[50],
+                                    },
                                 }}
                                 href="/sign-up"
                                 startIcon={<Login />}
