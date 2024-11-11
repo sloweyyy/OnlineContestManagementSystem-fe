@@ -1,16 +1,61 @@
-import { Box, Button, Divider, FormControlLabel, Link, TextField, Typography } from '@mui/material';
+import { Box, Button, Divider, FormControlLabel, Link, TextField, Typography, Checkbox } from '@mui/material';
 import React, { useState } from 'react';
 import { black, gray, red, white } from '../../config/theme/themePrintives';
-import { CheckBox, Google } from '@mui/icons-material';
+import { Google } from '@mui/icons-material';
 import AuthServices from '../../services/auth.service';
+import { toast } from 'react-toastify';
+
+const textFieldStyle = {
+    '& .MuiOutlinedInput-root': {
+        height: '48px',
+        borderRadius: '12px',
+        fontSize: 16,
+        '& fieldset': {
+            borderColor: gray[200],
+            borderWidth: 1,
+        },
+        '&:hover fieldset': {
+            borderColor: gray[400],
+            borderWidth: 1.5,
+        },
+        '&.Mui-focused fieldset': {
+            borderColor: gray[400],
+            borderWidth: 1.5,
+        },
+    }
+};
+
+const boxStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    width: '100%',
+    gap: 1
+};
+
+const typographyStyle = {
+    color: gray[400],
+    fontSize: 16,
+    fontWeight: 400
+};
 
 const SignUp = () => {
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [termsAccepted, setTermsAccepted] = useState(false);
 
     const handleRegister = async () => {
+        if (!fullName || !email || !password || !confirmPassword) {
+            toast.error('Vui lòng nhập đầy đủ thông tin');
+            return;
+        }
+        if (password !== confirmPassword) {
+            toast.error('Mật khẩu không khớp');
+            return;
+        }
         try {
             const response = await AuthServices.register(email, password, confirmPassword, fullName);
             console.log('response: ', response);
@@ -60,17 +105,10 @@ const SignUp = () => {
                     display="flex"
                     flexDirection="column"
                     width="85%"
-                    gap={2}
+                    gap={1.5}
                 >
-                    <Box
-                        display={'flex'}
-                        flexDirection={'column'}
-                        justifyContent={'center'}
-                        alignItems={'flex-start'}
-                        width={'100%'}
-                        gap={1}
-                    >
-                        <Typography sx={{ color: gray[400], fontSize: 18, fontWeight: 600 }}>
+                    <Box sx={boxStyle}>
+                        <Typography sx={typographyStyle}>
                             Họ và tên
                         </Typography>
                         <TextField
@@ -79,33 +117,11 @@ const SignUp = () => {
                             variant={'outlined'}
                             value={fullName}
                             onChange={(e) => setFullName(e.target.value)}
-                            sx={{
-                                '& .MuiOutlinedInput-root': {
-                                    height: '50px',
-                                    borderRadius: '12px',
-                                    '& fieldset': {
-                                        borderColor: gray[200],
-                                        borderWidth: 2,
-                                    },
-                                    '&:hover fieldset': {
-                                        borderColor: gray[400],
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: gray[400],
-                                    },
-                                }
-                            }}
+                            sx={textFieldStyle}
                         />
                     </Box>
-                    <Box
-                        display={'flex'}
-                        flexDirection={'column'}
-                        justifyContent={'center'}
-                        alignItems={'flex-start'}
-                        width={'100%'}
-                        gap={1}
-                    >
-                        <Typography sx={{ color: gray[400], fontSize: 18, fontWeight: 600 }}>
+                    <Box sx={boxStyle}>
+                        <Typography sx={typographyStyle}>
                             Email
                         </Typography>
                         <TextField
@@ -114,33 +130,11 @@ const SignUp = () => {
                             variant={'outlined'}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            sx={{
-                                '& .MuiOutlinedInput-root': {
-                                    height: '50px',
-                                    borderRadius: '12px',
-                                    '& fieldset': {
-                                        borderColor: gray[200],
-                                        borderWidth: 2,
-                                    },
-                                    '&:hover fieldset': {
-                                        borderColor: gray[400],
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: gray[400],
-                                    },
-                                }
-                            }}
+                            sx={textFieldStyle}
                         />
                     </Box>
-                    <Box
-                        display={'flex'}
-                        flexDirection={'column'}
-                        justifyContent={'center'}
-                        alignItems={'flex-start'}
-                        width={'100%'}
-                        gap={1}
-                    >
-                        <Typography sx={{ color: gray[400], fontSize: 18, fontWeight: 600 }}>
+                    <Box sx={boxStyle}>
+                        <Typography sx={typographyStyle}>
                             Mật khẩu
                         </Typography>
                         <TextField
@@ -149,33 +143,11 @@ const SignUp = () => {
                             variant={'outlined'}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            sx={{
-                                '& .MuiOutlinedInput-root': {
-                                    height: '50px',
-                                    borderRadius: '12px',
-                                    '& fieldset': {
-                                        borderColor: gray[200],
-                                        borderWidth: 2,
-                                    },
-                                    '&:hover fieldset': {
-                                        borderColor: gray[400],
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: gray[400],
-                                    },
-                                }
-                            }}
+                            sx={textFieldStyle}
                         />
                     </Box>
-                    <Box
-                        display={'flex'}
-                        flexDirection={'column'}
-                        justifyContent={'center'}
-                        alignItems={'flex-start'}
-                        width={'100%'}
-                        gap={1}
-                    >
-                        <Typography sx={{ color: gray[400], fontSize: 18, fontWeight: 600 }}>
+                    <Box sx={boxStyle}>
+                        <Typography sx={typographyStyle}>
                             Xác nhận mật khẩu
                         </Typography>
                         <TextField
@@ -184,22 +156,7 @@ const SignUp = () => {
                             variant={'outlined'}
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            sx={{
-                                '& .MuiOutlinedInput-root': {
-                                    height: '50px',
-                                    borderRadius: '12px',
-                                    '& fieldset': {
-                                        borderColor: gray[200],
-                                        borderWidth: 2,
-                                    },
-                                    '&:hover fieldset': {
-                                        borderColor: gray[400],
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: gray[400],
-                                    },
-                                }
-                            }}
+                            sx={textFieldStyle}
                         />
                     </Box>
 
@@ -209,15 +166,20 @@ const SignUp = () => {
                             justifyContent: 'space-between',
                             display: 'flex',
                             alignItems: 'center',
-                            marginBottom: '40px',
+                            marginBottom: '20px',
                             marginTop: '10px',
                         }}
                     >
                         <FormControlLabel
-                            control={<CheckBox sx={{ color: red[500] }} />}
-                            value={'agreeTerms'}
+                            control={
+                                <Checkbox
+                                    checked={termsAccepted}
+                                    onChange={(e) => setTermsAccepted(e.target.checked)}
+                                    sx={{ color: red[500], '&.Mui-checked': { color: red[500] } }}
+                                />
+                            }
                             label={
-                                <Typography sx={{ color: gray[500], fontSize: 16, marginLeft: '10px' }}>
+                                <Typography sx={{ color: gray[500], fontSize: 16, marginLeft: '10px', cursor: 'pointer' }}>
                                     Tôi đồng ý với các điều khoản dịch vụ
                                 </Typography>
                             }
@@ -239,6 +201,7 @@ const SignUp = () => {
                             fontSize: 18
                         }}
                         onClick={handleRegister}
+                        disabled={!termsAccepted}
                     >
                         Đăng ký
                     </Button>
@@ -250,7 +213,7 @@ const SignUp = () => {
                     flexDirection="column"
                     alignItems="center"
                     width="85%"
-                    mt={3}
+                    mt={'20px'}
                 >
                     <Box
                         display="flex"

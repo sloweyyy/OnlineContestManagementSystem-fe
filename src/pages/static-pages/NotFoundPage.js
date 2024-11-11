@@ -10,7 +10,7 @@ const NotFoundPage = () => {
 
     const handleNavigateHome = () => {
         startTransition(() => {
-            navigate("/");
+            navigate("/participant/home");
         });
     };
 

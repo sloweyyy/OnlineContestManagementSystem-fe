@@ -8,7 +8,7 @@ const PrizeCard = ({
     index,
     name,
     value,
-    number,
+    amount,
     description,
     onChange,
     onDelete,
@@ -92,14 +92,16 @@ const PrizeCard = ({
                             value={value}
                             onChange={(e) => onChange('value', e.target.value)}
                             fullWidth
+                            type='number'
                         />
                         {/* Prize Number */}
                         <CustomTextField
                             label='Số lượng giải'
                             placeholder='Số lượng giải'
                             type='number'
-                            value={number}
+                            value={amount}
                             onChange={(e) => onChange('number', e.target.value)}
+                            fullWidth
                         />
                     </Box>
                     {/* Prize Description */}
@@ -110,6 +112,8 @@ const PrizeCard = ({
                         onChange={(e) => onChange('description', e.target.value)}
                         multiline
                         rows={4}
+                        fullWidth
+                        type='text'
                     />
                 </Box>
             </Box>

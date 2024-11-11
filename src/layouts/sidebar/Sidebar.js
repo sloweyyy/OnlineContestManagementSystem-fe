@@ -8,6 +8,7 @@ import {
     ListItem,
     ListItemIcon,
     ListItemText,
+    Tooltip,
 } from "@mui/material";
 import React, { useState } from "react";
 import {
@@ -21,17 +22,32 @@ import {
     AccountCircleRounded,
     Logout,
 } from "@mui/icons-material";
-import { red, white, dark, black } from "../../config/theme/themePrintives";
-import { Link } from "react-router-dom";
-import { useSelector } from 'react-redux';
+import { red, white, dark, black, gray } from "../../config/theme/themePrintives";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { userLogout } from "../../stores/actions/AuthAction";
+import { YesNoModal } from "../../components/custom-components/CustomModal";
+import CustomTooltip from "../../components/custom-components/CustomTooltip";
 
 const Sidebar = () => {
     const [openSideBar, setOpenSideBar] = useState(true);
     const [activeItem, setActiveItem] = useState("home");
     const { user } = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [openModal, setOpenModal] = useState(false);
 
     const drawerWidth = openSideBar ? "18rem" : "5rem";
     const drawerTransition = "0.2s ease";
+
+    const handleSignOut = async () => {
+        try {
+            const resultAction = await dispatch(userLogout()).unwrap();
+            if (resultAction) navigate('/sign-in');
+        } catch (error) {
+            console.error('Lỗi khi đăng xuất:', error);
+        }
+    };
 
     const itemStyles = (isActive) => ({
         mb: 2,
@@ -85,39 +101,45 @@ const Sidebar = () => {
                 </Box>
 
                 <Box flex={1}>
-                    <Link to="/home" style={{ textDecoration: 'none' }}>
-                        <Box onClick={() => setActiveItem("home")} sx={itemStyles(activeItem === "home")}>
-                            <Home />
-                            {openSideBar && <Typography variant="subtitle2" ml={2}>Trang chủ</Typography>}
-                        </Box>
+                    <Link to="/participant/home" style={{ textDecoration: 'none' }}>
+                        <CustomTooltip title={'Trang chủ'} disableHoverListener={openSideBar}>
+                            <Box onClick={() => setActiveItem("home")} sx={itemStyles(activeItem === "home")}>
+                                <Home />
+                                {openSideBar && <Typography variant="subtitle2" ml={2}>Trang chủ</Typography>}
+                            </Box>
+                        </CustomTooltip>
                     </Link>
 
-                    <Link to="/contest" style={{ textDecoration: 'none' }}>
-                        <Box onClick={() => setActiveItem("video")} sx={itemStyles(activeItem === "video")}>
-                            <EmojiEvents />
-                            {openSideBar && <Typography variant="subtitle2" ml={2}>Danh sách cuộc thi</Typography>}
-                        </Box>
+                    <Link to="/participant/contest" style={{ textDecoration: 'none' }}>
+                        <CustomTooltip title={'Danh sách cuộc thi'} disableHoverListener={openSideBar}>
+                            <Box onClick={() => setActiveItem("video")} sx={itemStyles(activeItem === "video")}>
+                                <EmojiEvents />
+                                {openSideBar && <Typography variant="subtitle2" ml={2}>Danh sách cuộc thi</Typography>}
+                            </Box>
+                        </CustomTooltip>
                     </Link>
 
-                    <Link to="/contest-creating" style={{ textDecoration: 'none' }}>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                mb: 2,
-                                justifyContent: "center",
-                                borderRadius: "8px",
-                                padding: openSideBar ? "0.5rem 1rem" : "0.5rem",
-                                border: "1px dashed",
-                                color: red[500],
-                                borderColor: red[500],
-                                backgroundColor: red[50],
-                                ":hover": { backgroundColor: white[50] },
-                            }}
-                        >
-                            <AddCircle />
-                            {openSideBar && <Typography variant="h6" ml={2}>Tạo cuộc thi</Typography>}
-                        </Box>
+                    <Link to="/participant/contest-creating" style={{ textDecoration: 'none' }}>
+                        <CustomTooltip title={'Tạo cuộc thi'} disableHoverListener={openSideBar}>
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    mb: 2,
+                                    justifyContent: "center",
+                                    borderRadius: "8px",
+                                    padding: openSideBar ? "0.5rem 1rem" : "0.5rem",
+                                    border: "1px dashed",
+                                    color: red[500],
+                                    borderColor: red[500],
+                                    backgroundColor: red[50],
+                                    ":hover": { backgroundColor: white[50] },
+                                }}
+                            >
+                                <AddCircle />
+                                {openSideBar && <Typography variant="h6" ml={2}>Tạo cuộc thi</Typography>}
+                            </Box>
+                        </CustomTooltip>
                     </Link>
                 </Box>
 
@@ -148,70 +170,90 @@ const Sidebar = () => {
                             </Box>
                         </Box>
                     )}
-
-                    <Box
-                        sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            mb: 2,
-                            justifyContent: "center",
-                            borderRadius: "8px",
-                            backgroundColor: red[500],
-                            color: white[50],
-                            padding: openSideBar ? "0.5rem 1rem" : "0.5rem",
-                        }}
-                    >
-                        {openSideBar && <Typography variant="h6">Mẫu kế hoạch</Typography>}
-                        <FileDownloadOutlined sx={{ ml: openSideBar ? 2 : 0 }} />
-                    </Box>
+                    <CustomTooltip title={'Đăng xuất'} disableHoverListener={openSideBar}>
+                        <IconButton
+                            disableRipple
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                mb: 2,
+                                borderRadius: "8px",
+                                backgroundColor: red[500],
+                                color: white[50],
+                                width: "100%",
+                                border: `2px solid ${red[500]}`,
+                                "&:hover": {
+                                    backgroundColor: white[50],
+                                    color: red[500],
+                                    "& .MuiSvgIcon-root": { color: red[500] },
+                                    "& .MuiTypography-root": { color: red[500] },
+                                },
+                            }}
+                            onClick={() => setOpenModal(true)}
+                        >
+                            {openSideBar && <Typography variant="h6">Đăng xuất</Typography>}
+                            <Logout sx={{ ml: openSideBar ? 2 : 0 }} />
+                        </IconButton>
+                    </CustomTooltip>
                 </Box>
 
                 <Divider sx={{ my: 2 }} />
 
                 <List>
-                    <Link to="/profile" style={{ textDecoration: 'none' }}>
-                        <ListItem
-                            button
-                            disablePadding
-                            onClick={() => setActiveItem("profile")}
-                            sx={{
-                                mb: 1,
-                                justifyContent: openSideBar ? "flex-start" : "center",
-                                borderRadius: "8px",
-                                padding: openSideBar ? "0.5rem 1rem" : "0.5rem",
-                                backgroundColor: "transparent",
-                                "&:hover": {
-                                    backgroundColor: red[500],
-                                    "& .MuiListItemText-primary": { color: white[50] },
-                                    "& .MuiSvgIcon-root": { color: white[50] },
-                                },
-                                "& .MuiListItemText-primary": {
-                                    color: activeItem === "profile" ? red[500] : black[900],
-                                },
-                                "& .MuiSvgIcon-root": {
-                                    color: activeItem === "profile" ? red[500] : black[900],
-                                },
-                            }}
-                        >
-                            <ListItemIcon sx={{ minWidth: 0, mr: openSideBar ? 2 : 0, justifyContent: "center", fontSize: 20, color: black[900] }}>
-                                <AccountCircleRounded fontSize="large" />
-                            </ListItemIcon>
-                            {openSideBar && (
-                                <Box>
-                                    <ListItemText
-                                        primary={user?.fullName}
-                                        sx={{ "& .MuiListItemText-primary": { fontSize: "16px", whiteSpace: "nowrap", color: black[900], fontWeight: 600 } }}
-                                    />
-                                    <ListItemText
-                                        primary={user?.email}
-                                        sx={{ "& .MuiListItemText-primary": { fontSize: "12px", whiteSpace: "nowrap", color: black[900], fontWeight: 400 } }}
-                                    />
-                                </Box>
-                            )}
-                        </ListItem>
-                    </Link>
+                    <CustomTooltip title={'Thông tin tài khoản'} disableHoverListener={openSideBar}>
+                        <Link to="/participant/profile" style={{ textDecoration: 'none' }}>
+                            <ListItem
+                                button
+                                disablePadding
+                                onClick={() => setActiveItem("profile")}
+                                sx={{
+                                    mb: 1,
+                                    justifyContent: openSideBar ? "flex-start" : "center",
+                                    borderRadius: "8px",
+                                    padding: openSideBar ? "0.5rem 1rem" : "0.5rem",
+                                    backgroundColor: "transparent",
+                                    "&:hover": {
+                                        backgroundColor: red[500],
+                                        "& .MuiListItemText-primary": { color: white[50] },
+                                        "& .MuiSvgIcon-root": { color: white[50] },
+                                    },
+                                    "& .MuiListItemText-primary": {
+                                        color: activeItem === "profile" ? red[500] : black[900],
+                                    },
+                                    "& .MuiSvgIcon-root": {
+                                        color: activeItem === "profile" ? red[500] : black[900],
+                                    },
+                                }}
+                            >
+                                <ListItemIcon sx={{ minWidth: 0, mr: openSideBar ? 2 : 0, justifyContent: "center", fontSize: 20, color: black[900] }}>
+                                    <AccountCircleRounded fontSize="large" />
+                                </ListItemIcon>
+                                {openSideBar && (
+                                    <Box>
+                                        <ListItemText
+                                            primary={user?.fullName}
+                                            sx={{ "& .MuiListItemText-primary": { fontSize: "16px", whiteSpace: "nowrap", color: black[900], fontWeight: 600 } }}
+                                        />
+                                        <ListItemText
+                                            primary={user?.email}
+                                            sx={{ "& .MuiListItemText-primary": { fontSize: "12px", whiteSpace: "nowrap", color: black[900], fontWeight: 400 } }}
+                                        />
+                                    </Box>
+                                )}
+                            </ListItem>
+                        </Link>
+                    </CustomTooltip>
                 </List>
             </Box>
+
+            <YesNoModal
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                onConfirm={handleSignOut}
+                title="Xác nhận"
+                message="Bạn có chắc chắn muốn đăng xuất không?"
+            />
         </Drawer>
     );
 };

@@ -1,14 +1,8 @@
-import React, { useState } from 'react';
-import { Box, Typography, Autocomplete, TextField } from '@mui/material';
-import { black, gray } from '../../config/theme/themePrintives';
+import { Box, Typography, Autocomplete, TextField } from '@mui/material'
+import React from 'react'
+import { gray, black } from '../../config/theme/themePrintives'
 
-const CustomAutocomplete = ({ label, value, onChange, options, placeholder = 'Chọn thông tin cần thiết', ...props }) => {
-    const [inputValue, setInputValue] = useState('');
-
-    const filteredOptions = inputValue
-        ? options.filter((option) => option.toLowerCase().includes(inputValue.toLowerCase()))
-        : options.slice(0, 5);
-
+const CustomSelectorAddressAutocomplete = ({ label, value, onChange, options, ...props }) => {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             <Typography
@@ -21,21 +15,16 @@ const CustomAutocomplete = ({ label, value, onChange, options, placeholder = 'Ch
             >
                 {label}
             </Typography>
-
             <Autocomplete
-                multiple
                 freeSolo
                 onChange={onChange}
-                options={filteredOptions}
+                options={options}
                 size="small"
-                inputValue={inputValue}
-                onInputChange={(event, newInputValue) => {
-                    setInputValue(newInputValue);
-                }}
+                value={value}
                 renderInput={(params) => (
                     <TextField
                         {...params}
-                        placeholder={placeholder}
+                        placeholder={label}
                         sx={{
                             '& .MuiInputBase-root': {
                                 '& fieldset': {
@@ -49,26 +38,20 @@ const CustomAutocomplete = ({ label, value, onChange, options, placeholder = 'Ch
                                     borderWidth: 1,
                                 },
                             },
-                            '& .MuiAutocomplete-tag': {
-                                backgroundColor: gray[200],
-                                color: black[900],
-                            },
                         }}
                     />
                 )}
                 sx={{
                     '& .MuiAutocomplete-inputRoot': {
-                        fontSize: 18,
-                        color: value.length ? black[900] : gray[400],
-                    },
-                    '& .MuiAutocomplete-input::placeholder': {
-                        color: gray[700],
+                        '& .MuiAutocomplete-endAdornment': {
+                            display: 'none',
+                        },
                     },
                 }}
                 {...props}
             />
         </Box>
-    );
-};
+    )
+}
 
-export default CustomAutocomplete;
+export default CustomSelectorAddressAutocomplete
