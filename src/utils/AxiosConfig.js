@@ -4,11 +4,11 @@ import Cookies from 'js-cookie';
 import AuthService from '../services/auth.service';
 import { toast } from 'react-toastify';
 
-const axiosConfig = axios.create({
+const AxiosConfig = axios.create({
     baseURL: API_BASE_URL,
 });
 
-axiosConfig.interceptors.request.use(
+AxiosConfig.interceptors.request.use(
     (config) => {
         const accessToken = Cookies.get('accessToken');
         if (accessToken) {
@@ -21,36 +21,33 @@ axiosConfig.interceptors.request.use(
 
 let refreshTokenPromise = null;
 
-axiosConfig.interceptors.response.use(
+AxiosConfig.interceptors.response.use(
     (response) => {
         return response;
     },
     async (error) => {
-        if (error.response?.status === 401) {
-            const refreshToken = Cookies.get('refreshToken');
-            await AuthService.logout(refreshToken).then(() => {
-                window.location.href = '/sign-in';
-            });
-        }
-
-        if (error.response?.status !== 410) {
-            toast.error(error.response?.data?.message || error?.message);
-        }
-
         const originalRequest = error.config;
-        if (error.response && error.response.status === 401 && originalRequest) {
-            if (!refreshTokenPromise) {
-                const refreshToken = Cookies.get('refreshToken');
 
-                refreshTokenPromise = await AuthService.refreshAccessToken(refreshToken)
+        if (error.response && error.response.status === 401) {
+            const refreshToken = Cookies.get('refreshToken');
+
+            if (originalRequest.url === '/sign-in' || !refreshToken) {
+                toast.error('Thông tin đăng nhập không chính xác');
+                return Promise.reject(error);
+            }
+
+            if (!refreshTokenPromise) {
+                refreshTokenPromise = AuthService.refreshToken(refreshToken)
                     .then((response) => {
                         const newAccessToken = response.tokens.access.token;
                         Cookies.set('accessToken', newAccessToken);
-                        axiosConfig.defaults.headers.Authorization = `Bearer ${newAccessToken}`;
-                        return axiosConfig(originalRequest);
+                        AxiosConfig.defaults.headers.Authorization = `Bearer ${newAccessToken}`;
+                        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                        return AxiosConfig(originalRequest);
                     })
                     .catch((error) => {
-                        AuthService.logout(refreshToken).then(() => {
+                        AuthService.signout(refreshToken).then(() => {
+                            toast.error('Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại');
                             window.location.href = '/sign-in';
                         });
                     })
@@ -59,11 +56,15 @@ axiosConfig.interceptors.response.use(
                     });
             }
 
-            return refreshTokenPromise.then(() => axiosConfig(originalRequest));
+            return refreshTokenPromise;
+        }
+
+        if (error.response?.status !== 410) {
+            toast.error(error.response?.data?.message || error?.message);
         }
 
         return Promise.reject(error);
     },
 );
 
-export default axiosConfig;
+export default AxiosConfig;

@@ -6,7 +6,7 @@ const SearchingContestCard = ({ contest }) => {
     return (
         <Card sx={{ width: '49%', display: 'flex', flexDirection: 'row' }}>
             {/* Image Section (40%) */}
-            <CardActionArea disableRipple href='/detail-contest' sx={{ width: '40%', height: 200 }}>
+            <CardActionArea disableRipple href='/participant/detail-contest' sx={{ width: '40%', height: 200 }}>
                 <CardMedia
                     component="img"
                     image={contest.image}

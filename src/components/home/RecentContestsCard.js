@@ -79,7 +79,7 @@ const RecentContestsCard = ({ contests }) => {
                         textTransform: 'none',
                         gap: 1,
                     }}
-                    href='/search'
+                    href='/participant/search'
                 >
                     <Typography sx={{ fontSize: 14 }}>Xem tất cả</Typography>
                     <ArrowForwardIosRounded sx={{ fontSize: 14 }} />
@@ -98,7 +98,7 @@ const RecentContestsCard = ({ contests }) => {
             >
                 {/* Main Card */}
                 <Card sx={{ flex: 1, backgroundColor: 'transparent', boxShadow: 'none' }}>
-                    <CardActionArea disableRipple href='/detail-contest'>
+                    <CardActionArea disableRipple href='/participant/detail-contest'>
                         <CardMedia
                             component="img"
                             height="200"
@@ -168,7 +168,7 @@ const RecentContestsCard = ({ contests }) => {
                                     justifyContent: 'flex-start',
                                     gap: 2,
                                 }}
-                                href='/detail-contest'
+                                href='/participant/detail-contest'
                             >
                                 <CardMedia
                                     component="img"
