@@ -8,6 +8,7 @@ import CustomSelectorAddressAutocomplete from '../../components/contest-creating
 import { getProvinces, getDistrictsByProvinceCode, getWardsByDistrictCode } from 'vn-provinces';
 import ContestService from '../../services/contest.service';
 import { toast } from 'react-toastify';
+import CloudinaryService from '../../services/cloudinary.service';
 
 const ContestCreating = () => {
     const [selectedInformationsRequirement, setSelectedInformationsRequirement] = useState([]);
@@ -65,27 +66,23 @@ const ContestCreating = () => {
 
     const handleSubmitContest = async () => {
         if (validateContestData()) {
-            const response = await ContestService.createContest({
-                ...contest,
-                minimumParticipant: parseInt(contest.minimumParticipant, 10),
-                maximumParticipant: parseInt(contest.maximumParticipant, 10),
-                participantInformationRequirements: selectedInformationsRequirement,
-                organizationInformation: {
-                    ...contest.organizationInformation,
-                    orgAddress: orgAddress
-                },
-                prizes: prizes.map(prize => ({
-                    ...prize,
-                    value: parseInt(prize.value, 10),
-                    amount: parseInt(prize.amount, 10)
-                })),
-                endDate: new Date(contest.endDate).toISOString(),
-                startDate: new Date(contest.startDate).toISOString()
-            });
-            response.success ? toast.success('Tạo cuộc thi thành công') : toast.error('Tạo cuộc thi thất bại');
+          const response = await ContestService.createContest({
+            ...contest,
+            imageUrl: contest.imageUrl, 
+            minimumParticipant: parseInt(contest.minimumParticipant, 10),
+            maximumParticipant: parseInt(contest.maximumParticipant, 10),
+            prizes: prizes.map(prize => ({
+              ...prize,
+              value: parseInt(prize.value, 10),
+              amount: parseInt(prize.amount, 10)
+            })),
+            endDate: new Date(contest.endDate).toISOString(),
+            startDate: new Date(contest.startDate).toISOString()
+          });
+          response.success ? toast.success('Tạo cuộc thi thành công') : toast.error('Tạo cuộc thi thất bại');
         }
-    };
-
+      };
+      
     const validateContestData = () => {
         const { name, ruleDescription, startDate, endDate, organizationInformation } = contest;
         if (!name || !ruleDescription || !startDate || !endDate || !organizationInformation.orgName || !organizationInformation.orgEmail) {
@@ -132,15 +129,20 @@ const ContestCreating = () => {
         setPrizes(updatedPrizes);
     };
 
-    const handleImageChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImage(reader.result);
-            };
-            reader.readAsDataURL(file);
+
+    const handleImageChange = async (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const uploadedImageUrl = await CloudinaryService.uploadImage(file);
+        if (uploadedImageUrl) {
+            console.log(uploadedImageUrl);
+          setImage(uploadedImageUrl);
+          setContest((prev) => ({
+            ...prev,
+            imageUrl: uploadedImageUrl,
+          }));
         }
+      }
     };
 
     useEffect(() => {
