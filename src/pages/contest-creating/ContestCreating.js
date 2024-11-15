@@ -12,8 +12,8 @@ import CloudinaryService from '../../services/cloudinary.service';
 
 const ContestCreating = () => {
     const [selectedInformationsRequirement, setSelectedInformationsRequirement] = useState([]);
-    const [prizes, setPrizes] = useState([{ name: 'Giải nhất', description: '', value: 0, imageUrl: '', amount: 1 }]);
-    const [image, setImage] = useState(null);
+    const [prizes, setPrizes] = useState([{ name: 'Giải nhất', description: null, value: null, imageUrl: null, amount: null }]);
+    const [imageUrl, setImageUrl] = useState(null);
     const [provinces, setProvinces] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [communes, setCommunes] = useState([]);
@@ -21,77 +21,80 @@ const ContestCreating = () => {
     const [province, setProvince] = useState(null);
     const [district, setDistrict] = useState(null);
     const [commune, setCommune] = useState(null);
-    const [detailAddress, setDetailAddress] = useState('');
-    const [orgAddress, setOrgAddress] = useState('');
-
-    const handleConbineAddress = () => {
-        if (province && district && commune && detailAddress) {
-            setOrgAddress(`${detailAddress}, ${commune.name}, ${district.name}, ${province.name}`);
-        }
-    }
+    const [detailAddress, setDetailAddress] = useState(null);
+    const [orgAddress, setOrgAddress] = useState(null);
 
     useEffect(() => {
         setContest((prev) => ({ ...prev, prizes }));
     }, [prizes]);
 
     useEffect(() => {
-        handleConbineAddress();
-    }, [province, district, commune, detailAddress]);
+        if (province && district && commune && detailAddress) {
+            const newOrgAddress = `${detailAddress}, ${commune.name}, ${district.name}, ${province.name}`;
+            setOrgAddress(newOrgAddress);
+
+            setContest(prev => ({
+                ...prev,
+                organizationInformation: {
+                    ...prev.organizationInformation,
+                    orgAddress: newOrgAddress,
+                },
+            }));
+        }
+    }, [detailAddress]);
+
 
     const [contest, setContest] = useState({
-        name: '',
-        ruleDescription: '',
-        startDate: new Date().toISOString().slice(0, 16),
-        endDate: new Date().toISOString().slice(0, 16),
-        minimumParticipant: 0,
-        maximumParticipant: 0,
+        name: null,
+        ruleDescription: null,
+        startDate: null,
+        endDate: null,
+        minimumParticipant: null,
+        maximumParticipant: null,
         prizes: [
             {
-                name: '',
-                description: '',
-                value: 0,
-                imageUrl: '',
-                amount: 0
+                name: null,
+                description: null,
+                value: null,
+                imageUrl: null,
+                amount: null
             }
         ],
         participantInformationRequirements: selectedInformationsRequirement,
         organizationInformation: {
-            orgName: '',
-            orgPhoneNumber: '',
-            orgEmail: '',
+            orgName: null,
+            orgPhoneNumber: null,
+            orgEmail: null,
             orgAddress: orgAddress,
         },
-        imageUrl: '',
+        imageUrl: null,
     });
 
     const handleSubmitContest = async () => {
         if (validateContestData()) {
-          const response = await ContestService.createContest({
-            ...contest,
-            imageUrl: contest.imageUrl, 
-            minimumParticipant: parseInt(contest.minimumParticipant, 10),
-            maximumParticipant: parseInt(contest.maximumParticipant, 10),
-            prizes: prizes.map(prize => ({
-              ...prize,
-              value: parseInt(prize.value, 10),
-              amount: parseInt(prize.amount, 10)
-            })),
-            endDate: new Date(contest.endDate).toISOString(),
-            startDate: new Date(contest.startDate).toISOString()
-          });
-          response.success ? toast.success('Tạo cuộc thi thành công') : toast.error('Tạo cuộc thi thất bại');
+            try {
+                const response = await ContestService.createContest({
+                    ...contest,
+                    imageUrl: contest.imageUrl,
+                    minimumParticipant: parseInt(contest.minimumParticipant, 10),
+                    maximumParticipant: parseInt(contest.maximumParticipant, 10),
+                    prizes: prizes.map(prize => ({
+                        ...prize,
+                        value: parseFloat(prize.value, 10),
+                        amount: parseInt(prize.amount, 10)
+                    })),
+                    participantInformationRequirements: selectedInformationsRequirement.map(option => option.value),
+                    endDate: new Date(contest.endDate).toISOString(),
+                    startDate: new Date(contest.startDate).toISOString()
+                });
+                if (response) {
+                    toast.success('Tạo cuộc thi thành công');
+                }
+            } catch (error) {
+                toast.error('Tạo cuộc thi thất bại');
+            }
         }
-      };
-      
-    const validateContestData = () => {
-        const { name, ruleDescription, startDate, endDate, organizationInformation } = contest;
-        if (!name || !ruleDescription || !startDate || !endDate || !organizationInformation.orgName || !organizationInformation.orgEmail) {
-            toast.error("Vui lòng điền đầy đủ thông tin");
-            return false;
-        }
-        return true;
     };
-
     const [informationsRequirement, setInformationsRequirement] = useState([
         'Họ và Tên',
         'Email',
@@ -104,13 +107,35 @@ const ContestCreating = () => {
     ]);
 
     const handleInformationsRequirementChange = (event, newValue) => {
-        const newinformationsRequirement = newValue.filter((option) =>
-            typeof option === 'string' && !informationsRequirement.some(opt => opt.label === option)
+        const newInformationsRequirement = newValue.filter((option) =>
+            typeof option === 'string' && !selectedInformationsRequirement.some(opt => opt.label === option)
         ).map(option => ({ value: option.toLowerCase(), label: option }));
 
-        setInformationsRequirement([...informationsRequirement, ...newinformationsRequirement]);
-        setSelectedInformationsRequirement(newValue);
+        const selectedOptions = newValue.filter(option => typeof option !== 'string');
+
+        const updatedSelectedInformations = [...selectedInformationsRequirement, ...newInformationsRequirement, ...selectedOptions];
+
+        setSelectedInformationsRequirement(updatedSelectedInformations);
+
+        setContest(prev => ({
+            ...prev,
+            participantInformationRequirements: updatedSelectedInformations.map(option => option.value),
+        }));
     };
+
+
+    const validateContestData = () => {
+        const { name, ruleDescription, startDate, endDate, organizationInformation } = contest;
+        if (!name || !ruleDescription || !startDate || !endDate || !organizationInformation.orgName || !organizationInformation.orgEmail) {
+            toast.error("Vui lòng điền đầy đủ thông tin");
+            return false;
+        }
+        return true;
+    };
+
+    useEffect(() => {
+        setContest((prev) => ({ ...prev, participantInformationRequirements: selectedInformationsRequirement }));
+    }, [selectedInformationsRequirement]);
 
     const prizeLevels = ['Giải nhất', 'Giải nhì', 'Giải ba', 'Giải khuyến khích'];
 
@@ -129,20 +154,18 @@ const ContestCreating = () => {
         setPrizes(updatedPrizes);
     };
 
-
     const handleImageChange = async (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        const uploadedImageUrl = await CloudinaryService.uploadImage(file);
-        if (uploadedImageUrl) {
-            console.log(uploadedImageUrl);
-          setImage(uploadedImageUrl);
-          setContest((prev) => ({
-            ...prev,
-            imageUrl: uploadedImageUrl,
-          }));
+        const file = event.target.files[0];
+        if (file) {
+            const uploadedImageUrl = await CloudinaryService.uploadImage(file);
+            if (uploadedImageUrl) {
+                setImageUrl(uploadedImageUrl);
+                setContest((prev) => ({
+                    ...prev,
+                    imageUrl: uploadedImageUrl,
+                }));
+            }
         }
-      }
     };
 
     useEffect(() => {
@@ -182,6 +205,10 @@ const ContestCreating = () => {
         setCommune(newValue);
     };
 
+    useEffect(() => {
+        console.log(contest);
+    }, [selectedInformationsRequirement]);
+
     return (
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 4 }}>
             <Typography marginBottom={2} fontSize={24} fontWeight={600}>Tạo cuộc thi</Typography>
@@ -191,22 +218,23 @@ const ContestCreating = () => {
                     Cấu hình cuộc thi
                 </Typography>
 
-                <Box sx={{ display: 'flex', gap: 4 }}>
+                <Box sx={{ display: 'flex', gap: 4, flexDirection: 'row', alignItems: 'center' }}>
                     {/* Image */}
-                    <Box sx={{ flex: 1, backgroundColor: gray[200], display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 2, borderRadius: 1 }}>
-                        {image ? (
-                            <img src={image} alt="Uploaded" style={{ width: '100%', height: 'auto' }} />
-                        ) : (
+                    <Box sx={{ flex: 1, height: 300, backgroundColor: gray[200], display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 2, borderRadius: 1 }}>                        {imageUrl ? (
+                        <img src={imageUrl} alt="uploaded" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    ) : (
+                        <>
                             <Typography sx={{ color: gray[600], marginBottom: 2 }}>
                                 Chọn hình ảnh từ tính của bạn
                             </Typography>
-                        )}
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageChange}
-                            style={{ marginTop: 8 }}
-                        />
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                style={{ marginTop: 8 }}
+                            />
+                        </>
+                    )}
                     </Box>
 
                     {/* Contest Information */}
@@ -300,6 +328,7 @@ const ContestCreating = () => {
                     value={prize.value}
                     amount={prize.amount}
                     description={prize.description}
+                    imageUrl={prize.imageUrl}
                     onChange={(field, value) => handlePrizeChange(index, field, value)}
                     onDelete={() => handleDeletePrize(index)}
                 />

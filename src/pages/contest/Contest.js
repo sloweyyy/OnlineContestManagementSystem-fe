@@ -107,6 +107,7 @@ const Contest = () => {
                                 justifyContent: 'center',
                                 alignItems: 'center',
                             }}
+                            href='/participant/contest-creating'
                         >
                             <Add />
                             Thêm mới

@@ -18,7 +18,6 @@ import {
     EmojiEvents,
     AddCircle,
     Phone,
-    FileDownloadOutlined,
     AccountCircleRounded,
     Logout,
 } from "@mui/icons-material";
@@ -112,7 +111,7 @@ const Sidebar = () => {
 
                     <Link to="/participant/contest" style={{ textDecoration: 'none' }}>
                         <CustomTooltip title={'Danh sách cuộc thi'} disableHoverListener={openSideBar}>
-                            <Box onClick={() => setActiveItem("video")} sx={itemStyles(activeItem === "video")}>
+                            <Box onClick={() => setActiveItem("contest")} sx={itemStyles(activeItem === "contest")}>
                                 <EmojiEvents />
                                 {openSideBar && <Typography variant="subtitle2" ml={2}>Danh sách cuộc thi</Typography>}
                             </Box>
@@ -135,6 +134,7 @@ const Sidebar = () => {
                                     backgroundColor: red[50],
                                     ":hover": { backgroundColor: white[50] },
                                 }}
+                                onClick={() => setActiveItem("contest-creating")}
                             >
                                 <AddCircle />
                                 {openSideBar && <Typography variant="h6" ml={2}>Tạo cuộc thi</Typography>}

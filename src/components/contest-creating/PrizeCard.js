@@ -1,8 +1,9 @@
 import { Box, Divider, IconButton, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import CustomTextField from '../user-profile/CustomTextField'
 import { Clear, EmojiEvents, Star, Recommend } from '@mui/icons-material';
 import { brown, gray, yellow } from '../../config/theme/themePrintives';
+import CloudinaryService from '../../services/cloudinary.service';
 
 const PrizeCard = ({
     index,
@@ -10,10 +11,11 @@ const PrizeCard = ({
     value,
     amount,
     description,
+    imageUrl,
     onChange,
     onDelete,
 }) => {
-    const [image, setImage] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     const handleSetIconByName = () => {
         switch (name) {
@@ -30,14 +32,14 @@ const PrizeCard = ({
         }
     };
 
-    const handleImageChange = (event) => {
+    const handleImageChange = async (event) => {
         const file = event.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImage(reader.result);
-            };
-            reader.readAsDataURL(file);
+            const uploadedImageUrl = await CloudinaryService.uploadImage(file);
+            if (uploadedImageUrl) {
+                setSelectedImage(uploadedImageUrl);
+                onChange('imageUrl', uploadedImageUrl);
+            }
         }
     };
 
@@ -67,20 +69,22 @@ const PrizeCard = ({
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 4 }}>
                 {/* Image */}
-                <Box sx={{ flex: 1, backgroundColor: gray[200], display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 2, borderRadius: 1 }}>
-                    {image ? (
-                        <img src={image} alt="Uploaded" style={{ width: '100%', height: 'auto' }} />
+                <Box sx={{ flex: 1, height: '30vh', backgroundColor: gray[200], display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 2, borderRadius: 1 }}>
+                    {selectedImage ? (
+                        <img src={selectedImage} alt="uploaded" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                     ) : (
-                        <Typography sx={{ color: gray[600], marginBottom: 2 }}>
-                            Chọn hình ảnh từ máy của bạn
-                        </Typography>
+                        <>
+                            <Typography sx={{ color: gray[600], marginBottom: 2 }}>
+                                Chọn hình ảnh từ máy của bạn
+                            </Typography>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                style={{ marginTop: 8 }}
+                            />
+                        </>
                     )}
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        style={{ marginTop: 8 }}
-                    />
                 </Box>
                 {/* Prize Information */}
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -100,7 +104,7 @@ const PrizeCard = ({
                             placeholder='Số lượng giải'
                             type='number'
                             value={amount}
-                            onChange={(e) => onChange('number', e.target.value)}
+                            onChange={(e) => onChange('amount', e.target.value)}
                             fullWidth
                         />
                     </Box>
