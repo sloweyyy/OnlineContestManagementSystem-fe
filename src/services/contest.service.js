@@ -15,8 +15,34 @@ const createContest = async (contest) => {
     }
 }
 
+const getContests = async () => {
+    try {
+        const response = await axiosConfig.get(`${CONTEST_ENDPOINT}`);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            return error.response.data;
+        }
+        return error.message;
+    }
+}
+
+const getContestById = async (id) => {
+    try {
+        const response = await axiosConfig.get(`${CONTEST_ENDPOINT}/${id}`);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            return error.response.data;
+        }
+        return error.message;
+    }
+}
+
 const ContestService = {
     createContest,
+    getContests,
+    getContestById,
 };
 
 export default ContestService;

@@ -63,9 +63,12 @@ const ContestCreating = () => {
     };
 
     const informationsRequirement = [
+        'Số điện thoại',
         'Nghề nghiệp',
         'Đơn vị công tác',
         'CMND/CCCD',
+        'Địa chỉ',
+        'Giới tính',
     ];
 
     const handleInformationsRequirementChange = useCallback((event, newValue) => {
@@ -157,10 +160,6 @@ const ContestCreating = () => {
     const handleCommuneChange = (event, newValue) => {
         setCommune(newValue);
     };
-
-    useEffect(() => {
-        console.log(contest);
-    }, [contest]);
 
     return (
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 4 }}>

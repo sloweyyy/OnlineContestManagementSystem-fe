@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Avatar, Box, Button, Divider, Menu, MenuItem, Typography
 } from '@mui/material';
 import { black, gray, red, white, yellow } from '../../config/theme/themePrintives';
 import PaticipatingModal from '../../components/contest/PaticipatingModal';
+import { useLocation } from 'react-router-dom';
+import ContestService from '../../services/contest.service';
 
 const CountdownBox = ({ value, index }) => (
     <Box
@@ -97,6 +99,22 @@ const RankCard = ({ rank, name }) => {
 };
 
 const DetailContest = () => {
+    const [contest, setContest] = useState(null);
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const contestId = queryParams.get('id');
+
+    useEffect(() => {
+        const fetchContest = async () => {
+            const contest = await ContestService.getContestById(contestId);
+            setContest(contest);
+        }
+
+        fetchContest();
+    }, [contestId]);
+
+    console.log(contest);
+
     const ParticipantData = [
         { rank: 1, name: 'Participant Name 1' },
         { rank: 2, name: 'Participant Name 2' },
@@ -234,7 +252,9 @@ const DetailContest = () => {
                     </Box>
                 </Box>
 
-                <Box mt={8} width="100%" maxWidth="70%" height="50vh" bgcolor={gray[100]} borderRadius={2} boxShadow="0px 6px 10px rgba(0, 0, 0, 0.1)" />
+                <Box mt={8} width="100%" maxWidth="70%" height="50vh">
+                    <img src={contest?.imageUrl} alt="contest" width="100%" height="100%" style={{ borderRadius: '8px' }} />
+                </Box>
                 <Box
                     display="flex"
                     justifyContent="center"
@@ -252,7 +272,7 @@ const DetailContest = () => {
                         maxWidth="80%"
                         textAlign="center"
                     >
-                        CUỘC THI TRỰC TUYẾN “TÌM HIỂU VỀ LUẬT PHÒNG CHỐNG MA TÚY”
+                        {contest?.name}
                     </Typography>
                 </Box>
             </Box>
@@ -459,7 +479,7 @@ const DetailContest = () => {
                 </Typography>
             </Box>
 
-            <PaticipatingModal open={opened} onClose={handleOnClose} />
+            <PaticipatingModal contestId={contestId} participantInformationRequirements={['số điện thoại', 'địa chỉ']} open={opened} onClose={handleOnClose} />
         </Box>
     );
 }
