@@ -9,40 +9,16 @@ import { getProvinces, getDistrictsByProvinceCode, getWardsByDistrictCode } from
 import ContestService from '../../services/contest.service';
 import { toast } from 'react-toastify';
 import CloudinaryService from '../../services/cloudinary.service';
+import useOrgAddress from '../../hooks/useOrgAddress';
 
 const ContestCreating = () => {
-    const [selectedInformationsRequirement, setSelectedInformationsRequirement] = useState([]);
-    const [prizes, setPrizes] = useState([{ name: 'Giải nhất', description: null, value: null, imageUrl: null, amount: null }]);
-    const [imageUrl, setImageUrl] = useState(null);
     const [provinces, setProvinces] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [communes, setCommunes] = useState([]);
-
     const [province, setProvince] = useState(null);
     const [district, setDistrict] = useState(null);
     const [commune, setCommune] = useState(null);
     const [detailAddress, setDetailAddress] = useState(null);
-    const [orgAddress, setOrgAddress] = useState(null);
-
-    useEffect(() => {
-        setContest((prev) => ({ ...prev, prizes }));
-    }, [prizes]);
-
-    useEffect(() => {
-        if (province && district && commune && detailAddress) {
-            const newOrgAddress = `${detailAddress}, ${commune.name}, ${district.name}, ${province.name}`;
-            setOrgAddress(newOrgAddress);
-
-            setContest(prev => ({
-                ...prev,
-                organizationInformation: {
-                    ...prev.organizationInformation,
-                    orgAddress: newOrgAddress,
-                },
-            }));
-        }
-    }, [detailAddress]);
-
 
     const [contest, setContest] = useState({
         name: null,
@@ -52,41 +28,31 @@ const ContestCreating = () => {
         minimumParticipant: null,
         maximumParticipant: null,
         prizes: [
-            {
-                name: null,
-                description: null,
-                value: null,
-                imageUrl: null,
-                amount: null
-            }
+            { name: 'Giải nhất', description: null, value: null, imageUrl: null, amount: null }
         ],
-        participantInformationRequirements: selectedInformationsRequirement,
+        participantInformationRequirements: [],
         organizationInformation: {
             orgName: null,
             orgPhoneNumber: null,
             orgEmail: null,
-            orgAddress: orgAddress,
+            orgAddress: null,
         },
         imageUrl: null,
     });
 
+    const orgAddress = useOrgAddress(province, district, commune, detailAddress);
+
+    useEffect(() => {
+        setContest(prev => ({
+            ...prev,
+            organizationInformation: { ...prev.organizationInformation, orgAddress },
+        }));
+    }, [orgAddress]);
+
     const handleSubmitContest = async () => {
         if (validateContestData()) {
             try {
-                const response = await ContestService.createContest({
-                    ...contest,
-                    imageUrl: contest.imageUrl,
-                    minimumParticipant: parseInt(contest.minimumParticipant, 10),
-                    maximumParticipant: parseInt(contest.maximumParticipant, 10),
-                    prizes: prizes.map(prize => ({
-                        ...prize,
-                        value: parseFloat(prize.value, 10),
-                        amount: parseInt(prize.amount, 10)
-                    })),
-                    participantInformationRequirements: selectedInformationsRequirement.map(option => option.value),
-                    endDate: new Date(contest.endDate).toISOString(),
-                    startDate: new Date(contest.startDate).toISOString()
-                });
+                const response = await ContestService.createContest(contest);
                 if (response) {
                     toast.success('Tạo cuộc thi thành công');
                 }
@@ -95,34 +61,20 @@ const ContestCreating = () => {
             }
         }
     };
-    const [informationsRequirement, setInformationsRequirement] = useState([
-        'Họ và Tên',
-        'Email',
-        'Số điện thoại',
-        'Địa chỉ',
-        'Ngày sinh',
+
+    const informationsRequirement = [
         'Nghề nghiệp',
         'Đơn vị công tác',
-        'CMND/CCCD'
-    ]);
+        'CMND/CCCD',
+    ];
 
-    const handleInformationsRequirementChange = (event, newValue) => {
-        const newInformationsRequirement = newValue.filter((option) =>
-            typeof option === 'string' && !selectedInformationsRequirement.some(opt => opt.label === option)
-        ).map(option => ({ value: option.toLowerCase(), label: option }));
-
-        const selectedOptions = newValue.filter(option => typeof option !== 'string');
-
-        const updatedSelectedInformations = [...selectedInformationsRequirement, ...newInformationsRequirement, ...selectedOptions];
-
-        setSelectedInformationsRequirement(updatedSelectedInformations);
-
+    const handleInformationsRequirementChange = useCallback((event, newValue) => {
+        const newSelections = newValue.filter(option => typeof option === 'string' && !contest.participantInformationRequirements.includes(option.toLowerCase()));
         setContest(prev => ({
             ...prev,
-            participantInformationRequirements: updatedSelectedInformations.map(option => option.value),
+            participantInformationRequirements: [...prev.participantInformationRequirements, ...newSelections.map(opt => opt.toLowerCase())],
         }));
-    };
-
+    }, [contest.participantInformationRequirements]);
 
     const validateContestData = () => {
         const { name, ruleDescription, startDate, endDate, organizationInformation } = contest;
@@ -133,33 +85,34 @@ const ContestCreating = () => {
         return true;
     };
 
-    useEffect(() => {
-        setContest((prev) => ({ ...prev, participantInformationRequirements: selectedInformationsRequirement }));
-    }, [selectedInformationsRequirement]);
-
     const prizeLevels = ['Giải nhất', 'Giải nhì', 'Giải ba', 'Giải khuyến khích'];
 
-    const handleAddPrize = (index) => {
-        setPrizes([...prizes, { name: prizeLevels[index], description: '', value: 0, imageUrl: '', amount: 1 }]);
-    };
+    const handleAddPrize = useCallback((index) => {
+        setContest(prev => ({
+            ...prev,
+            prizes: [...prev.prizes, { name: prizeLevels[index], description: '', value: 0, imageUrl: '', amount: 1 }],
+        }));
+    }, [contest.prizes, prizeLevels]);
 
-    const handlePrizeChange = (index, field, value) => {
-        const updatedPrizes = [...prizes];
-        updatedPrizes[index][field] = value;
-        setPrizes(updatedPrizes);
-    };
+    const handlePrizeChange = useCallback((index, field, value) => {
+        setContest(prev => ({
+            ...prev,
+            prizes: prev.prizes.map((prize, i) => i === index ? { ...prize, [field]: value } : prize),
+        }));
+    }, []);
 
-    const handleDeletePrize = (index) => {
-        const updatedPrizes = prizes.filter((prize, i) => i !== index);
-        setPrizes(updatedPrizes);
-    };
+    const handleDeletePrize = useCallback((index) => {
+        setContest(prev => ({
+            ...prev,
+            prizes: prev.prizes.filter((_, i) => i !== index),
+        }));
+    }, []);
 
     const handleImageChange = async (event) => {
         const file = event.target.files[0];
         if (file) {
             const uploadedImageUrl = await CloudinaryService.uploadImage(file);
             if (uploadedImageUrl) {
-                setImageUrl(uploadedImageUrl);
                 setContest((prev) => ({
                     ...prev,
                     imageUrl: uploadedImageUrl,
@@ -170,7 +123,7 @@ const ContestCreating = () => {
 
     useEffect(() => {
         async function fetchProvinces() {
-            const provinceList = await getProvinces();
+            const provinceList = getProvinces();
             setProvinces(provinceList);
         }
         fetchProvinces();
@@ -182,7 +135,7 @@ const ContestCreating = () => {
         setCommune(null);
 
         if (newValue) {
-            const districtList = await getDistrictsByProvinceCode(newValue.code);
+            const districtList = getDistrictsByProvinceCode(newValue.code);
             setDistricts(districtList);
         } else {
             setDistricts([]);
@@ -194,7 +147,7 @@ const ContestCreating = () => {
         setCommune(null);
 
         if (newValue) {
-            const communeList = await getWardsByDistrictCode(newValue.code);
+            const communeList = getWardsByDistrictCode(newValue.code);
             setCommunes(communeList);
         } else {
             setCommunes([]);
@@ -207,7 +160,7 @@ const ContestCreating = () => {
 
     useEffect(() => {
         console.log(contest);
-    }, [selectedInformationsRequirement]);
+    }, [contest]);
 
     return (
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 4 }}>
@@ -220,21 +173,22 @@ const ContestCreating = () => {
 
                 <Box sx={{ display: 'flex', gap: 4, flexDirection: 'row', alignItems: 'center' }}>
                     {/* Image */}
-                    <Box sx={{ flex: 1, height: 300, backgroundColor: gray[200], display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 2, borderRadius: 1 }}>                        {imageUrl ? (
-                        <img src={imageUrl} alt="uploaded" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                    ) : (
-                        <>
-                            <Typography sx={{ color: gray[600], marginBottom: 2 }}>
-                                Chọn hình ảnh từ tính của bạn
-                            </Typography>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleImageChange}
-                                style={{ marginTop: 8 }}
-                            />
-                        </>
-                    )}
+                    <Box sx={{ flex: 1, height: 300, backgroundColor: gray[200], display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 2, borderRadius: 1 }}>
+                        {contest.imageUrl ? (
+                            <img src={contest.imageUrl} alt="uploaded" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                        ) : (
+                            <>
+                                <Typography sx={{ color: gray[600], marginBottom: 2 }}>
+                                    Chọn hình ảnh từ tính của bạn
+                                </Typography>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    style={{ marginTop: 8 }}
+                                />
+                            </>
+                        )}
                     </Box>
 
                     {/* Contest Information */}
@@ -308,7 +262,7 @@ const ContestCreating = () => {
             <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', gap: 2 }}>
                 <CustomAutocomplete
                     label="Thông tin cần thiết"
-                    value={selectedInformationsRequirement}
+                    value={contest.participantInformationRequirements}
                     onChange={handleInformationsRequirementChange}
                     options={informationsRequirement}
                 />
@@ -320,7 +274,7 @@ const ContestCreating = () => {
             </Typography>
 
             {/* Prize Card Section */}
-            {prizes.map((prize, index) => (
+            {contest.prizes.map((prize, index) => (
                 <PrizeCard
                     key={index}
                     index={index}
@@ -336,7 +290,7 @@ const ContestCreating = () => {
 
             {/* Add Button */}
             <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', gap: 2 }}>
-                <Button sx={{ textTransform: 'none', paddingY: '8px', paddingX: '24px', backgroundColor: red[500], color: white[50], fontSize: 16, fontWeight: 600, ":disabled": { backgroundColor: gray[200], color: gray[400] } }} onClick={() => handleAddPrize(prizes.length)} disabled={prizes.length === 4}>
+                <Button sx={{ textTransform: 'none', paddingY: '8px', paddingX: '24px', backgroundColor: red[500], color: white[50], fontSize: 16, fontWeight: 600, ":disabled": { backgroundColor: gray[200], color: gray[400] } }} onClick={() => handleAddPrize(contest.prizes.length)} disabled={contest.prizes.length === 4}>
                     Thêm giải thưởng
                 </Button>
             </Box>

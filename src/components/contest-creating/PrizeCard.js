@@ -1,5 +1,5 @@
 import { Box, Divider, IconButton, Typography } from '@mui/material'
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import CustomTextField from '../user-profile/CustomTextField'
 import { Clear, EmojiEvents, Star, Recommend } from '@mui/icons-material';
 import { brown, gray, yellow } from '../../config/theme/themePrintives';
