@@ -10,6 +10,12 @@ const CustomTextField = ({ label, placeholder, type = 'text', ...props }) => {
         }
     };
 
+    const disableScroll = (e) => {
+        if (type === 'number') {
+            e.preventDefault();
+        }
+    };
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             <Typography
@@ -29,8 +35,16 @@ const CustomTextField = ({ label, placeholder, type = 'text', ...props }) => {
                 fullWidth
                 size="small"
                 onInput={handleInput}
+                onWheel={disableScroll}
                 sx={{
                     '& .MuiOutlinedInput-root': {
+                        '& input[type=number]': {
+                            MozAppearance: 'textfield',
+                        },
+                        '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
+                            WebkitAppearance: 'none',
+                            margin: 0,
+                        },
                         '& fieldset': {
                             borderColor: gray[200],
                         },

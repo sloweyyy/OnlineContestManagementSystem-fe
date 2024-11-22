@@ -80,10 +80,10 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
             let info = {};
 
             if (participantInformationRequirements.includes('số điện thoại')) {
-                info.additionalProp1 = phone;
+                info.phone = phone;
             }
             if (participantInformationRequirements.includes('địa chỉ')) {
-                info.additionalProp2 = address;
+                info.address = address;
             }
             if (participantInformationRequirements.includes('cmnd/cccd')) {
                 info.identity = identity;
@@ -130,7 +130,6 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
         setSelectedWorkingUnit('');
     };
 
-    console.log('user', user.id);
     return (
         <Modal
             open={open}
@@ -201,6 +200,7 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
                         placeholder='Nhập họ và tên'
                         fullWidth
                         onChange={(e) => setName(e.target.value)}
+                        value={name}
                     />
 
                     <CustomTextField
@@ -209,6 +209,7 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
                         placeholder='Nhập email'
                         fullWidth
                         onChange={(e) => setEmail(e.target.value)}
+                        value={email}
                     />
                     {participantInformationRequirements.includes('số điện thoại') && (
                         <CustomTextField
@@ -217,6 +218,7 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
                             placeholder='Nhập số điện thoại'
                             fullWidth
                             onChange={(e) => setPhone(e.target.value)}
+                            value={phone}
                         />
                     )}
 
@@ -226,6 +228,7 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
                             label='Số CMND/CCCD'
                             placeholder='Nhập số CMND/CCCD'
                             fullWidth
+                            value={identity}
                             onChange={(e) => setIdentity(e.target.value)}
                         />
                     )}
@@ -245,6 +248,7 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
                         placeholder='Nhập ngày sinh'
                         fullWidth
                         onChange={(e) => setDob(e.target.value)}
+                        value={dob}
                     />
 
                     {participantInformationRequirements.includes('nghề nghiệp') && (
@@ -273,6 +277,7 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
                             placeholder='Nhập địa chỉ'
                             fullWidth
                             onChange={(e) => setAddress(e.target.value)}
+                            value={address}
                         />
                     )}
                 </Box>

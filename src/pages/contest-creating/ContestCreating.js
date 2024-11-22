@@ -1,4 +1,4 @@
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, InputAdornment } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { black, gray, red, white } from '../../config/theme/themePrintives';
 import CustomTextField from '../../components/user-profile/CustomTextField';
@@ -38,6 +38,7 @@ const ContestCreating = () => {
             orgAddress: null,
         },
         imageUrl: null,
+        entryFee: null,
     });
 
     const orgAddress = useOrgAddress(province, district, commune, detailAddress);
@@ -264,6 +265,26 @@ const ContestCreating = () => {
                     value={contest.participantInformationRequirements}
                     onChange={handleInformationsRequirementChange}
                     options={informationsRequirement}
+                />
+            </Box>
+
+            {/* Participant Section */}
+            <Typography sx={{ fontSize: 18, fontWeight: 'bold', color: gray[500], marginY: 2 }}>
+                Thông tin lệ phí
+            </Typography>
+
+            <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', gap: 2, marginBottom: 2 }}>
+                <CustomTextField
+                    label="Lệ phí tham gia"
+                    placeholder="Lệ phí tham gia"
+                    type="number"
+                    value={contest.entryFee}
+                    onChange={(e) => setContest({ ...contest, entryFee: e.target.value })}
+                    slotProps={{
+                        input: {
+                            endAdornment: <InputAdornment position="end" sx={{ fontSize: 14, fontWeight: 600 }}>VND</InputAdornment>,
+                        },
+                    }}
                 />
             </Box>
 

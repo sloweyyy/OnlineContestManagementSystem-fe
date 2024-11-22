@@ -64,18 +64,48 @@ const RecentContestsCard = ({ contests }) => {
                     gap: 2,
                 }}
             >
-                {/* Main Card */}
                 {contests && contests.length > 0 && (
-                    <Card sx={{ flex: 1, height: '100%', boxShadow: 'none', bgcolor: 'transparent' }}>
-                        <CardActionArea disableRipple href={`/participant/detail-contest?id=${contests[0].id}`} sx={{ flex: 1, height: '100%', flexDirection: 'column', justifyContent: 'space-between' }} >
+                    <Card
+                        sx={{
+                            flex: 1,
+                            height: '100%',
+                            boxShadow: 'none',
+                            bgcolor: 'transparent',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'space-between',
+                            borderRadius: '8px'
+                        }}
+                    >
+                        <CardActionArea
+                            disableRipple
+                            href={`/participant/detail-contest?id=${contests[0]?.id}`}
+                            sx={{
+                                height: '100%',
+                                flexDirection: 'column',
+                                display: 'flex',
+                                alignItems: 'stretch',
+                            }}
+                        >
                             <CardMedia
                                 component="img"
-                                height="200"
-                                image={contests[0].imageUrl}
-                                alt={contests[0].name}
-                                sx={{ borderRadius: '8px' }}
+                                image={contests[0]?.imageUrl}
+                                alt={contests[0]?.name || 'Hình ảnh cuộc thi'}
+                                sx={{
+                                    borderRadius: '8px 8px 0 0',
+                                    width: '100%',
+                                    height: 230,
+                                    objectFit: 'cover',
+                                }}
                             />
-                            <CardContent sx={{ padding: '16px' }}>
+                            <CardContent
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'flex-start',
+                                    borderRadius: '0 0 8px 8px',
+                                }}
+                            >
                                 <Typography
                                     sx={{
                                         display: '-webkit-box',
@@ -85,31 +115,33 @@ const RecentContestsCard = ({ contests }) => {
                                         WebkitLineClamp: 2,
                                         fontSize: 18,
                                         fontWeight: 600,
-                                        color: black[900]
+                                        color: black[900],
                                     }}
                                 >
-                                    {contests[0].name}
+                                    {contests[0]?.name}
                                 </Typography>
-                                <Typography sx={{ fontSize: 18, fontWeight: 500, width: '80%', color: gray[500] }}>
-                                    Bắt đầu: {new Date(contests[0].startDate).toLocaleString('vi-VN')}
+                                <Typography
+                                    sx={{
+                                        fontSize: 14,
+                                        fontWeight: 500,
+                                        color: gray[500],
+                                        marginTop: 1,
+                                    }}
+                                >
+                                    Bắt đầu: {new Date(contests[0]?.startDate).toLocaleDateString('vi-VN')}
                                 </Typography>
                                 <Box
                                     sx={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        gap: 2,
-                                        width: '100%',
+                                        marginTop: 2,
+                                        padding: '8px',
                                         backgroundColor: red[500],
                                         color: white[50],
-                                        paddingY: '8px',
-                                        marginTop: '16px',
                                         borderRadius: '8px',
+                                        textAlign: 'center',
                                     }}
                                 >
                                     <Typography fontWeight={'bold'} fontSize={14}>
-                                        {contests[0].organizationInformation.orgName}
+                                        {contests[0]?.organizationInformation?.orgName || 'Tổ chức không xác định'}
                                     </Typography>
                                 </Box>
                             </CardContent>
@@ -117,7 +149,6 @@ const RecentContestsCard = ({ contests }) => {
                     </Card>
                 )}
 
-                {/* Remaining Cards */}
                 <Box
                     sx={{
                         flex: 1,
@@ -127,7 +158,7 @@ const RecentContestsCard = ({ contests }) => {
                     }}
                 >
                     {contests.slice(1).map((contest, index) => (
-                        <Card key={contest.id} sx={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
+                        <Card key={contest?.id} sx={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
                             <CardActionArea
                                 disableRipple
                                 sx={{
@@ -137,13 +168,13 @@ const RecentContestsCard = ({ contests }) => {
                                     justifyContent: 'flex-start',
                                     gap: 2,
                                 }}
-                                href={`/participant/detail-contest?id=${contest.id}`}
+                                href={`/participant/detail-contest?id=${contest?.id}`}
                             >
                                 <CardMedia
                                     component="img"
                                     height={80}
-                                    image={contest.imageUrl}
-                                    alt={contest.name}
+                                    image={contest?.imageUrl}
+                                    alt={contest?.name}
                                     sx={{
                                         width: '40%',
                                         borderRadius: '8px',
@@ -169,7 +200,7 @@ const RecentContestsCard = ({ contests }) => {
                                             fontWeight: 600,
                                         }}
                                     >
-                                        {contest.name}
+                                        {contest?.name}
                                     </Typography>
                                     <Typography
                                         sx={{
@@ -183,7 +214,7 @@ const RecentContestsCard = ({ contests }) => {
                                             color: gray[500],
                                         }}
                                     >
-                                        Bắt đầu: {new Date(contest.startDate).toLocaleString('vi-VN')}
+                                        Bắt đầu: {new Date(contest?.startDate).toLocaleString('vi-VN')}
                                     </Typography>
                                 </CardContent>
                             </CardActionArea>
