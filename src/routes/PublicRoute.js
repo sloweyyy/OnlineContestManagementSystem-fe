@@ -8,9 +8,9 @@ const PublicRoute = ({ children }) => {
     const role = user?.role;
 
     if (isAuthenticated) {
-        if (role === 'user') {
+        if (role?.toLowerCase() === 'user') {
             return <Navigate to="/participant/home" replace />;
-        } else if (role === 'admin') {
+        } else if (role?.toLowerCase() === 'admin') {
             return <Navigate to="/admin/dashboard" replace />;
         }
     }

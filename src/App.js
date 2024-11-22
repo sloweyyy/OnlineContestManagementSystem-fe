@@ -40,7 +40,15 @@ const NotFoundPage = lazy(() => import('./pages/static-pages/NotFoundPage'));
 
 function AppContent() {
   const location = useLocation();
-  const hideLayout = location.pathname === '/sign-in' || location.pathname === '/sign-up' || location.pathname === '/forgot-password' || location.pathname === '/otp' || location.pathname === '/confirm-password' || location.pathname === '/successfully' || location.pathname === '/*' || location.pathname === '/participant/detail-contest';
+  const hideLayout =
+    location.pathname === '/sign-in' ||
+    location.pathname === '/sign-up' ||
+    location.pathname === '/forgot-password' ||
+    location.pathname === '/otp' ||
+    location.pathname === '/confirm-password' ||
+    location.pathname === '/successfully' ||
+    location.pathname === '/*' ||
+    location.pathname === '/participant/detail-contest';
 
   const { isAuthenticated } = useSelector((state) => state.auth);
 
@@ -137,7 +145,8 @@ function AppContent() {
               />
 
               {/* User Route */}
-              <Route element={<PrivateRoute allowedRoles={['user']} />}>1
+              <Route element={<PrivateRoute allowedRoles={['user', 'User']} />}>
+                1
                 <Route path="/participant/home" element={<Home />} />
                 <Route path="/participant/contest" element={<Contest />} />
                 <Route path="/participant/profile" element={<Profile />} />
