@@ -162,7 +162,7 @@ function AppContent() {
               {/* Admin Route */}
               <Route element={<PrivateRoute allowedRoles={['admin', 'Admin']} />}>
                 <Route path="/admin/home" element={<AdminHome />} />
-                <Route path="/admin/contest" element={<AdminContest />} />
+                <Route path="/admin/contests" element={<AdminContest />} />
               </Route>
 
               {/* Other Route */}
