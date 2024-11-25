@@ -1,7 +1,7 @@
 import { Box, Button, Typography, Avatar } from '@mui/material';
 import React, { useState, useRef } from 'react';
-import CustomTextField from '../../components/user-profile/CustomTextField';
-import { black, gray, red, white } from '../../config/theme/themePrintives';
+import CustomTextField from '../../../components/user-profile/CustomTextField';
+import { black, gray, red, white } from '../../../config/theme/themePrintives';
 import { useSelector } from 'react-redux';
 
 const UserProfile = () => {

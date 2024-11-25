@@ -1,15 +1,15 @@
 import { Box, Typography, Button, InputAdornment } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
-import { black, gray, red, white } from '../../config/theme/themePrintives';
-import CustomTextField from '../../components/user-profile/CustomTextField';
-import CustomAutocomplete from '../../components/contest-creating/CustomAutocomplete';
-import PrizeCard from '../../components/contest-creating/PrizeCard';
-import CustomSelectorAddressAutocomplete from '../../components/contest-creating/CustomSelectorAddressAutocomplete';
+import { black, gray, red, white } from '../../../config/theme/themePrintives';
+import CustomTextField from '../../../components/user-profile/CustomTextField';
+import CustomAutocomplete from '../../../components/contest-creating/CustomAutocomplete';
+import PrizeCard from '../../../components/contest-creating/PrizeCard';
+import CustomSelectorAddressAutocomplete from '../../../components/contest-creating/CustomSelectorAddressAutocomplete';
 import { getProvinces, getDistrictsByProvinceCode, getWardsByDistrictCode } from 'vn-provinces';
-import ContestService from '../../services/contest.service';
+import ContestService from '../../../services/contest.service';
 import { toast } from 'react-toastify';
-import CloudinaryService from '../../services/cloudinary.service';
-import useOrgAddress from '../../hooks/useOrgAddress';
+import CloudinaryService from '../../../services/cloudinary.service';
+import useOrgAddress from '../../../hooks/useOrgAddress';
 
 const ContestCreating = () => {
     const [provinces, setProvinces] = useState([]);

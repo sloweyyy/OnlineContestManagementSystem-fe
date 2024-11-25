@@ -1,10 +1,10 @@
 import { Box, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState, useRef } from 'react'
-import { blue, gray, red, yellow, black } from '../../config/theme/themePrintives';
-import SearchingContestCard from '../../components/home/SearchingContestCard';
+import { blue, gray, red, yellow, black } from '../../../config/theme/themePrintives';
+import SearchingContestCard from '../../../components/home/SearchingContestCard';
 import { Chat, Email, Phone } from '@mui/icons-material';
 import { keyframes } from '@emotion/react';
-import ContestService from '../../services/contest.service';
+import ContestService from '../../../services/contest.service';
 
 const floatAnimation = keyframes`
     0% { transform: translateY(0); }

@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import {
     Avatar, Box, Button, Divider, Menu, MenuItem, Typography
 } from '@mui/material';
-import { black, gray, red, white, yellow } from '../../config/theme/themePrintives';
-import PaticipatingModal from '../../components/contest/PaticipatingModal';
+import { black, gray, red, white, yellow } from '../../../config/theme/themePrintives';
+import PaticipatingModal from '../../../components/contest/PaticipatingModal';
 import { useLocation } from 'react-router-dom';
-import ContestService from '../../services/contest.service';
+import ContestService from '../../../services/contest.service';
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
-import { userLogout } from "../../stores/actions/AuthAction";
+import { userLogout } from "../../../stores/actions/AuthAction";
 
 const CountdownBox = ({ value, index }) => (
     <Box
@@ -38,15 +38,15 @@ const RankCard = ({ rank, name }) => {
     switch (rank) {
         case 1:
             bgColor = yellow[100];
-            backgroundImage = `url(${require("../../assets/gold.svg").default})`;
+            backgroundImage = `url(${require("../../../assets/gold.svg").default})`;
             break;
         case 2:
             bgColor = yellow[50];
-            backgroundImage = `url(${require("../../assets/silver.svg").default})`;
+            backgroundImage = `url(${require("../../../assets/silver.svg").default})`;
             break;
         case 3:
             bgColor = gray[100];
-            backgroundImage = `url(${require("../../assets/brown.svg").default})`;
+            backgroundImage = `url(${require("../../../assets/brown.svg").default})`;
             break;
         default:
             bgColor = gray[50];
@@ -253,7 +253,7 @@ const DetailContest = () => {
             >
                 {/* Header */}
                 <Box display="flex" justifyContent="space-between" width="100%" maxWidth="70%">
-                    <img src={require("../../assets/ASE.png")} alt="logo" width="60px" height="70px" />
+                    <img src={require("../../../assets/ASE.png")} alt="logo" width="60px" height="70px" />
                     <Box display="flex" justifyContent="space-between" width="100%" maxWidth="80%" bgcolor="rgba(139, 0, 0, 0.5)" borderRadius={10} px={2} py={2} alignItems={'center'}>
                         <Box display="flex">
                             {['Trang chủ', 'Thể lệ', 'Bảng xếp hạng'].map((text) => (
@@ -382,7 +382,7 @@ const DetailContest = () => {
             <Box id='rankingTable' display="flex" justifyContent="center" alignItems="flex-start" width="100%" gap={4} py={4}>
                 <Box
                     sx={{
-                        backgroundImage: `url(${require("../../assets/Rank-card.png")})`,
+                        backgroundImage: `url(${require("../../../assets/Rank-card.png")})`,
                         backgroundSize: 'cover',
                         width: '100%',
                         maxWidth: '20%',
