@@ -1,50 +1,32 @@
 import { Box, Button, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import ContestTable from '../../components/contest/ContestTable';
-import { gray, red, white } from '../../config/theme/themePrintives';
-import { Add } from '@mui/icons-material';
-import ContestService from '../../services/contest.service';
+import { gray, red, white } from '../../../config/theme/themePrintives';
+import { Search } from '@mui/icons-material';
+import RegistrationTable from '../../../components/registration/RegistrationTable';
+import RegistrationService from '../../../services/registration.service';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 
-const Contest = () => {
-    const { user } = useSelector((state) => state.user);
+const Registration = () => {
     const [searchTerm, setSearchTerm] = useState('');
+    const { user } = useSelector(state => state.user);
     const [contests, setContests] = useState([]);
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
     };
 
-    const filteredContests = contests?.filter(contest =>
-        contest?.name?.toLowerCase().includes(searchTerm?.toLowerCase())
-    );
-
-    const handleDeleteSelected = async (contestId) => {
-        console.log('contestId', contestId);
-        const response = await ContestService.deleteContest(contestId);
-
-        try {
-            if (response) {
-                setContests(contests.filter(contest => contest.id !== contestId));
-                toast.success('Xóa cuộc thi thành công');
-            } else {
-                toast.error('Xóa cuộc thi thất bại');
-            }
-        } catch (error) {
-            console.log('error', error);
-            toast.error('Xóa cuộc thi thất bại');
-        }
-    };
-
     useEffect(() => {
-        const fetchContests = async () => {
-            const contests = await ContestService.getContestByCreatorId(user.id);
-            setContests(contests);
+        const fetchRegisteredContestsByUserId = async () => {
+            const response = await RegistrationService.getRetristeredContestsByUserId(user.id);
+            setContests(response);
         }
 
-        fetchContests();
-    }, [user.id]);
+        fetchRegisteredContestsByUserId();
+    }, []);
+
+    const filterRegisterdContest = [] || contests?.filter(contest =>
+        contest?.result.contestDetails?.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <Box
@@ -55,7 +37,7 @@ const Contest = () => {
                 gap: 2,
             }}
         >
-            <Typography variant="h4">Danh sách cuộc thi</Typography>
+            <Typography variant="h4">Danh sách dự thi</Typography>
             <Box
                 sx={{
                     display: 'flex',
@@ -66,48 +48,37 @@ const Contest = () => {
                     boxShadow: 1,
                 }}
             >
-                {/* Button and Searching Bar Section */}
                 <Box
                     sx={{
                         display: 'flex',
                         flexDirection: 'row',
                         justifyContent: 'space-between',
-                        gap: 2,
                         marginBottom: 4,
                     }}
                 >
-                    {/* Delete and Create Button */}
-                    <Box
+                    <Button
                         sx={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            gap: 2,
+                            backgroundColor: red[500],
+                            color: white[50],
+                            '&:hover': {
+                                backgroundColor: white[50],
+                                color: red[500],
+                                border: '1px solid',
+                            },
+                            gap: 1,
+                            width: 220,
+                            textTransform: 'none',
+                            fontWeight: 'bold',
+                            fontSize: 14,
+                            justifyContent: 'center',
+                            alignItems: 'center',
                         }}
+                        href='/participant/search'
                     >
-                        <Button
-                            sx={{
-                                backgroundColor: red[500],
-                                color: white[50],
-                                '&:hover': {
-                                    backgroundColor: white[50],
-                                    color: red[500],
-                                    border: '1px solid',
-                                },
-                                gap: 1,
-                                width: 150,
-                                textTransform: 'none',
-                                fontWeight: 'bold',
-                                fontSize: 14,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}
-                            href='/participant/contest-creating'
-                        >
-                            <Add />
-                            Thêm mới
-                        </Button>
-                    </Box>
-                    {/* Searching Bar */}
+                        <Search />
+                        Tham gia cuộc thi mới
+                    </Button>
+
                     <TextField
                         id="outlined-search"
                         label="Tìm kiếm cuộc thi"
@@ -150,13 +121,10 @@ const Contest = () => {
                 </Box>
 
                 {/* Pass filtered contests to ContestTable */}
-                <ContestTable
-                    contests={filteredContests}
-                    handleDeleteSelected={handleDeleteSelected}
-                />
+                <RegistrationTable registration={filterRegisterdContest} />
             </Box>
         </Box>
     );
 }
 
-export default Contest;
+export default Registration;

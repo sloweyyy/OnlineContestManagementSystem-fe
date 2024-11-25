@@ -1,14 +1,14 @@
 import { Box, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import AnalysisCard from '../../components/home/AnalysisCard'
+import AnalysisCard from '../../../components/home/AnalysisCard'
 import { CalendarMonth, SignalCellularAltRounded } from '@mui/icons-material'
-import { red, white } from '../../config/theme/themePrintives'
-import ExperienceNow from '../../components/home/ExperienceNow'
+import { red, white } from '../../../config/theme/themePrintives'
+import ExperienceNow from '../../../components/home/ExperienceNow'
 import ReactPlayer from 'react-player'
-import RecentContestsCard from '../../components/home/RecentContestsCard'
-import NewsCard from '../../components/home/NewsCard'
-import ContactCard from '../../components/home/ContactCard'
-import ContestService from '../../services/contest.service'
+import RecentContestsCard from '../../../components/home/RecentContestsCard'
+import NewsCard from '../../../components/home/NewsCard'
+import ContactCard from '../../../components/home/ContactCard'
+import ContestService from '../../../services/contest.service'
 
 const iconStyle = {
     fontSize: 26,

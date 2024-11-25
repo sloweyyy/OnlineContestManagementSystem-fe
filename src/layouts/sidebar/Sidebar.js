@@ -65,6 +65,20 @@ const Sidebar = () => {
         },
     });
 
+    const ADMIN = [
+        { name: "Trang chủ", icon: <Home />, path: "/admin/home" },
+        { name: "Danh sách cuộc thi", icon: <EmojiEvents />, path: "/admin/contest" },
+    ];
+
+    const PARTICIPANT = [
+        { name: "Trang chủ", icon: <Home />, path: "/participant/home" },
+        { name: "Danh sách cuộc thi", icon: <EmojiEvents />, path: "/participant/contest" },
+        { name: "Danh sách dự thi", icon: <AppRegistration />, path: "/participant/registration" },
+        { name: "Tạo cuộc thi", icon: <AddCircle />, path: "/participant/contest-creating" },
+    ];
+
+    const menuItems = user?.role === "Admin" ? ADMIN : PARTICIPANT;
+
     return (
         <Drawer
             variant="permanent"
@@ -101,56 +115,16 @@ const Sidebar = () => {
                 </Box>
 
                 <Box flex={1}>
-                    <Link to="/participant/home" style={{ textDecoration: 'none' }}>
-                        <CustomTooltip title={'Trang chủ'} disableHoverListener={openSideBar}>
-                            <Box onClick={() => setActiveItem("home")} sx={itemStyles(activeItem === "home")}>
-                                <Home />
-                                {openSideBar && <Typography variant="subtitle2" ml={2}>Trang chủ</Typography>}
-                            </Box>
-                        </CustomTooltip>
-                    </Link>
-
-                    <Link to="/participant/contest" style={{ textDecoration: 'none' }}>
-                        <CustomTooltip title={'Danh sách cuộc thi'} disableHoverListener={openSideBar}>
-                            <Box onClick={() => setActiveItem("contest")} sx={itemStyles(activeItem === "contest")}>
-                                <EmojiEvents />
-                                {openSideBar && <Typography variant="subtitle2" ml={2}>Danh sách cuộc thi</Typography>}
-                            </Box>
-                        </CustomTooltip>
-                    </Link>
-
-                    <Link to="/participant/registration" style={{ textDecoration: 'none' }}>
-                        <CustomTooltip title={'Danh sách dự thi'} disableHoverListener={openSideBar}>
-                            <Box onClick={() => setActiveItem("registration")} sx={itemStyles(activeItem === "registration")}>
-                                <AppRegistration />
-                                {openSideBar && <Typography variant="subtitle2" ml={2}>Danh sách dự thi</Typography>}
-                            </Box>
-                        </CustomTooltip>
-                    </Link>
-
-                    <Link to="/participant/contest-creating" style={{ textDecoration: 'none' }}>
-                        <CustomTooltip title={'Tạo cuộc thi'} disableHoverListener={openSideBar}>
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    mb: 2,
-                                    justifyContent: "center",
-                                    borderRadius: "8px",
-                                    padding: openSideBar ? "0.5rem 1rem" : "0.5rem",
-                                    border: "1px dashed",
-                                    color: red[500],
-                                    borderColor: red[500],
-                                    backgroundColor: red[50],
-                                    ":hover": { backgroundColor: white[50] },
-                                }}
-                                onClick={() => setActiveItem("contest-creating")}
-                            >
-                                <AddCircle />
-                                {openSideBar && <Typography variant="h6" ml={2}>Tạo cuộc thi</Typography>}
-                            </Box>
-                        </CustomTooltip>
-                    </Link>
+                    {menuItems.map((item) => (
+                        <Link to={item.path} style={{ textDecoration: 'none' }} key={item.name}>
+                            <CustomTooltip title={item.name} disableHoverListener={openSideBar}>
+                                <Box onClick={() => setActiveItem(item.name)} sx={itemStyles(activeItem === item.name)}>
+                                    {item.icon}
+                                    {openSideBar && <Typography variant="subtitle2" ml={2}>{item.name}</Typography>}
+                                </Box>
+                            </CustomTooltip>
+                        </Link>
+                    ))}
                 </Box>
 
                 <Box>
@@ -267,5 +241,6 @@ const Sidebar = () => {
         </Drawer>
     );
 };
+
 
 export default Sidebar;

@@ -12,14 +12,18 @@ import 'react-toastify/dist/ReactToastify.css';
 import PublicRoute from './routes/PublicRoute';
 import PrivateRoute from './routes/PrivateRoute';
 
-// Lazy Home Page
-const Home = lazy(() => import('./pages/home/Home'));
-const Contest = lazy(() => import('./pages/contest/Contest'));
-const Profile = lazy(() => import('./pages/user-profile/UserProfile'));
-const ContestCreating = lazy(() => import('./pages/contest-creating/ContestCreating'));
-const DetailContest = lazy(() => import('./pages/contest/DetailContest'));
-const Search = lazy(() => import('./pages/home/Search'));
-const Registration = lazy(() => import('./pages/registration/Registration'));
+// Lazy User Page
+const Home = lazy(() => import('./pages/user-role/home/Home'));
+const Contest = lazy(() => import('./pages/user-role/contest/Contest'));
+const Profile = lazy(() => import('./pages/user-role/user-profile/UserProfile'));
+const ContestCreating = lazy(() => import('./pages/user-role/contest-creating/ContestCreating'));
+const DetailContest = lazy(() => import('./pages/user-role/contest/DetailContest'));
+const Search = lazy(() => import('./pages/user-role/home/Search'));
+const Registration = lazy(() => import('./pages/user-role/registration/Registration'));
+
+// Lazy Admin Page
+const AdminHome = lazy(() => import('./pages/admin-role/home/Home'));
+const AdminContest = lazy(() => import('./pages/admin-role/contests/Contests'));
 
 // Lazy Landing Page
 const LandingPage = lazy(() => import('./pages/landing-page/LandingPage'));
@@ -146,7 +150,6 @@ function AppContent() {
 
               {/* User Route */}
               <Route element={<PrivateRoute allowedRoles={['user', 'User']} />}>
-                1
                 <Route path="/participant/home" element={<Home />} />
                 <Route path="/participant/contest" element={<Contest />} />
                 <Route path="/participant/profile" element={<Profile />} />
@@ -154,6 +157,12 @@ function AppContent() {
                 <Route path="/participant/detail-contest" element={<DetailContest />} />
                 <Route path="/participant/search" element={<Search />} />
                 <Route path="/participant/registration" element={<Registration />} />
+              </Route>
+
+              {/* Admin Route */}
+              <Route element={<PrivateRoute allowedRoles={['admin', 'Admin']} />}>
+                <Route path="/admin/home" element={<AdminHome />} />
+                <Route path="/admin/contest" element={<AdminContest />} />
               </Route>
 
               {/* Other Route */}
