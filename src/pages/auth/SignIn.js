@@ -46,16 +46,20 @@ const SignIn = () => {
     const [password, setPassword] = useState('');
     const [remembered, setRemembered] = useState(false);
 
-    const handleSignIn = async () => {
-        try {
-            const response = await AuthServices.signin(email, password);
-
-            if (response.status === 200) {
-                window.location.href = '/participant/home';
+    const handleSignIn = () => {
+        AuthServices.signin(email, password)
+            .then((response) => {
+                if (response.data.user.role === 'Admin') {
+                    window.location.href = '/admin/home';
+                } else {
+                    window.location.href = 'participant/home';
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                toast.error('Đăng nhập thất bại');
             }
-        } catch (error) {
-            console.error(error);
-        }
+            );
     };
 
     return (

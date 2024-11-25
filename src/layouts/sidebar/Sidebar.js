@@ -67,14 +67,13 @@ const Sidebar = () => {
 
     const ADMIN = [
         { name: "Trang chủ", icon: <Home />, path: "/admin/home" },
-        { name: "Danh sách cuộc thi", icon: <EmojiEvents />, path: "/admin/contest" },
+        { name: "Danh sách cuộc thi", icon: <EmojiEvents />, path: "/admin/contests" },
     ];
 
     const PARTICIPANT = [
         { name: "Trang chủ", icon: <Home />, path: "/participant/home" },
         { name: "Danh sách cuộc thi", icon: <EmojiEvents />, path: "/participant/contest" },
         { name: "Danh sách dự thi", icon: <AppRegistration />, path: "/participant/registration" },
-        { name: "Tạo cuộc thi", icon: <AddCircle />, path: "/participant/contest-creating" },
     ];
 
     const menuItems = user?.role === "Admin" ? ADMIN : PARTICIPANT;
@@ -125,6 +124,31 @@ const Sidebar = () => {
                             </CustomTooltip>
                         </Link>
                     ))}
+                    {user?.role?.toLowerCase() === "user" && (
+                        <Link to="/participant/contest-creating" style={{ textDecoration: 'none' }}>
+                            <CustomTooltip title={'Tạo cuộc thi'} disableHoverListener={openSideBar}>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        mb: 2,
+                                        justifyContent: "center",
+                                        borderRadius: "8px",
+                                        padding: openSideBar ? "0.5rem 1rem" : "0.5rem",
+                                        border: "1px dashed",
+                                        color: red[500],
+                                        borderColor: red[500],
+                                        backgroundColor: red[50],
+                                        ":hover": { backgroundColor: white[50] },
+                                    }}
+                                    onClick={() => setActiveItem("contest-creating")}
+                                >
+                                    <AddCircle />
+                                    {openSideBar && <Typography variant="h6" ml={2}>Tạo cuộc thi</Typography>}
+                                </Box>
+                            </CustomTooltip>
+                        </Link>
+                    )}
                 </Box>
 
                 <Box>
