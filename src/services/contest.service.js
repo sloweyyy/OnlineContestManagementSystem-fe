@@ -15,8 +15,60 @@ const createContest = async (contest) => {
     }
 }
 
+const getContests = async () => {
+    try {
+        const response = await axiosConfig.get(`${CONTEST_ENDPOINT}`);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            return error.response.data;
+        }
+        return error.message;
+    }
+}
+
+const getContestById = async (id) => {
+    try {
+        const response = await axiosConfig.get(`${CONTEST_ENDPOINT}/${id}`);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            return error.response.data;
+        }
+        return error.message;
+    }
+}
+
+const getContestByCreatorId = async (creatorId) => {
+    try {
+        const response = await axiosConfig.get(`${CONTEST_ENDPOINT}/creator/${creatorId}`);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            return error.response.data;
+        }
+        return error.message;
+    }
+}
+
+const deleteContest = async (id) => {
+    try {
+        const response = await axiosConfig.delete(`${CONTEST_ENDPOINT}/${id}`);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            return error.response.data;
+        }
+        return error.message;
+    }
+}
+
 const ContestService = {
     createContest,
+    getContests,
+    getContestById,
+    getContestByCreatorId,
+    deleteContest
 };
 
 export default ContestService;

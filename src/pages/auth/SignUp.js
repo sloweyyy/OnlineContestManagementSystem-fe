@@ -58,7 +58,6 @@ const SignUp = () => {
         }
         try {
             const response = await AuthServices.register(email, password, confirmPassword, fullName);
-            console.log('response: ', response);
             if (response) {
                 window.location.href = '/sign-in';
             }

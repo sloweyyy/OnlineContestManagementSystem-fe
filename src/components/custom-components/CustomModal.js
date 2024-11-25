@@ -16,7 +16,7 @@ const modalStyle = {
     textAlign: 'center',
 };
 
-export const ConfirmModal = ({ open, onClose, title, message }) => {
+export const ConfirmModal = ({ open, onClose, title, message, onConfirm }) => {
     return (
         <Modal open={open} onClose={onClose}>
             <Box sx={modalStyle}>
@@ -43,7 +43,7 @@ export const ConfirmModal = ({ open, onClose, title, message }) => {
                 <Typography sx={{ mb: 3, color: gray[500] }}>{message}</Typography>
                 <Button
                     disableRipple
-                    onClick={onClose}
+                    onClick={onConfirm}
                     fullWidth
                     sx={{
                         mb: 1,

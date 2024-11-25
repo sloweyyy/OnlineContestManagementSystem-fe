@@ -1,9 +1,10 @@
 import { Box, TextField, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { blue, gray, red, yellow, black } from '../../config/theme/themePrintives';
 import SearchingContestCard from '../../components/home/SearchingContestCard';
 import { Chat, Email, Phone } from '@mui/icons-material';
 import { keyframes } from '@emotion/react';
+import ContestService from '../../services/contest.service';
 
 const floatAnimation = keyframes`
     0% { transform: translateY(0); }
@@ -12,43 +13,38 @@ const floatAnimation = keyframes`
 `;
 
 const Search = () => {
-    const contestData = [
-        {
-            title: 'Cuộc thi video clip “Việt Nam hạnh phúc - Happy Vietnam 2024" 1',
-            timeStart: '10:00 ngày 10/10/2021',
-            timeEnd: '10:00 ngày 20/10/2021',
-            organizers: 'Cục Thông Tin Đối Ngoại 1',
-            image: 'https://picsum.photos/200/300',
-        },
-        {
-            title: 'Cuộc thi video clip “Việt Nam hạnh phúc - Happy Vietnam 2024" 2',
-            timeStart: '10:00 ngày 10/10/2021',
-            timeEnd: '10:00 ngày 20/10/2021',
-            organizers: 'Cục Thông Tin Đối Ngoại 2',
-            image: 'https://picsum.photos/200/300',
-        },
-        {
-            title: 'Cuộc thi video clip “Việt Nam hạnh phúc - Happy Vietnam 2024" 3',
-            timeStart: '10:00 ngày 10/10/2021',
-            timeEnd: '10:00 ngày 20/10/2021',
-            organizers: 'Cục Thông Tin Đối Ngoại 3',
-            image: 'https://picsum.photos/200/300',
-        },
-        {
-            title: 'Cuộc thi video clip “Việt Nam hạnh phúc - Happy Vietnam 2024" 4',
-            timeStart: '10:00 ngày 10/10/2021',
-            timeEnd: '10:00 ngày 20/10/2021',
-            organizers: 'Cục Thông Tin Đối Ngoại 4',
-            image: 'https://picsum.photos/200/300',
-        },
-        {
-            title: 'Cuộc thi video clip “Việt Nam hạnh phúc - Happy Vietnam 2024" 5',
-            timeStart: '10:00 ngày 10/10/2021',
-            timeEnd: '10:00 ngày 20/10/2021',
-            organizers: 'Cục Thông Tin Đối Ngoại 5',
-            image: 'https://picsum.photos/200/300',
-        },
-    ];
+    const [contests, setContests] = useState([]);
+    const [filteredContests, setFilteredContests] = useState([]);
+    const [searchValue, setSearchValue] = useState('');
+    const debounceTimeout = useRef(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchContests = async () => {
+            const response = await ContestService.getContests();
+            setContests(response);
+            setFilteredContests(response);
+            setIsLoading(false);
+        }
+
+        fetchContests();
+    }, []);
+
+    const handleSearch = (event) => {
+        const searchQuery = event.target.value;
+        setSearchValue(searchQuery);
+
+        if (debounceTimeout.current) {
+            clearTimeout(debounceTimeout.current);
+        }
+
+        debounceTimeout.current = setTimeout(() => {
+            const filtered = contests?.filter(contest =>
+                contest?.name.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+            setFilteredContests(filtered);
+        }, 300);
+    };
 
     return (
         <Box
@@ -65,6 +61,8 @@ const Search = () => {
                 label="Tìm kiếm cuộc thi"
                 type="search"
                 size='small'
+                value={searchValue}
+                onChange={handleSearch}
                 sx={{
                     width: '100%',
                     '& .MuiOutlinedInput-root': {
@@ -104,20 +102,17 @@ const Search = () => {
             <Typography fontSize={28} fontWeight={600} color={black[900]} width={'100%'}>
                 Các cuộc thi lớn đang diễn ra
             </Typography>
-            <Box
-                display="flex"
-                flexDirection="row"
-                justifyContent="flex-start"
-                alignItems="center"
-                flexWrap="wrap"
-                gap={2}
-                width="100%"
-            >
-                {contestData.map((contest, index) => (
-                    <SearchingContestCard key={index} contest={contest} />
-                ))}
+            <Box display="flex" flexDirection="row" justifyContent="flex-start" alignItems="center" flexWrap="wrap" gap={2} width="100%">
+                {isLoading
+                    ? Array.from(new Array(6)).map((_, index) => (
+                        <SearchingContestCard key={index} isLoading={true} />
+                    ))
+                    : filteredContests?.map((contest, index) => (
+                        <SearchingContestCard key={index} contest={contest} isLoading={false} />
+                    ))}
             </Box>
 
+            {/* Hotline, Feedback, and Chat Sections */}
             <Box
                 sx={{
                     flex: 1,

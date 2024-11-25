@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import AnalysisCard from '../../components/home/AnalysisCard'
 import { CalendarMonth, SignalCellularAltRounded } from '@mui/icons-material'
 import { red, white } from '../../config/theme/themePrintives'
@@ -8,6 +8,7 @@ import ReactPlayer from 'react-player'
 import RecentContestsCard from '../../components/home/RecentContestsCard'
 import NewsCard from '../../components/home/NewsCard'
 import ContactCard from '../../components/home/ContactCard'
+import ContestService from '../../services/contest.service'
 
 const iconStyle = {
     fontSize: 26,
@@ -18,6 +19,34 @@ const iconStyle = {
 }
 
 const Home = () => {
+    const [contests, setContests] = useState([]);
+    // const [CommingSoonContestContest, setCommingSoonContest] = useState(null);
+    // const [runningContest, setRunningContest] = useState(null);
+    // const [numberOfRegistration, setNumberOfRegistration] = useState(null);
+
+    useEffect(() => {
+        const fetchContests = async () => {
+            const contests = await ContestService.getContests();
+            setContests(contests);
+        }
+
+        fetchContests();
+    }, []);
+
+    console.log(contests);
+
+    // useEffect(() => {
+    //     const now = new Date();
+
+    //     const commingSoon = contests?.filter(contest => new Date(contest?.startDate) > now);
+    //     const running = contests?.filter(contest => new Date(contest?.startDate) < now && new Date(contest?.endDate) > now);
+    //     const number = contests?.filter(contest => new Date(contest?.startDate) < now && new Date(contest?.endDate) > now);
+
+    //     setCommingSoonContest(commingSoon.length);
+    //     setRunningContest(running.length);
+    //     setNumberOfRegistration(number.length);
+    // }, [contests]);
+
     return (
         <Box
             sx={{
@@ -85,7 +114,7 @@ const Home = () => {
                     gap: 2,
                 }}
             >
-                <RecentContestsCard contests={[]} />
+                <RecentContestsCard contests={contests?.slice(0, 5)} />
                 <Box
                     sx={{
                         display: 'flex',

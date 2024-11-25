@@ -19,6 +19,7 @@ const Profile = lazy(() => import('./pages/user-profile/UserProfile'));
 const ContestCreating = lazy(() => import('./pages/contest-creating/ContestCreating'));
 const DetailContest = lazy(() => import('./pages/contest/DetailContest'));
 const Search = lazy(() => import('./pages/home/Search'));
+const Registration = lazy(() => import('./pages/registration/Registration'));
 
 // Lazy Landing Page
 const LandingPage = lazy(() => import('./pages/landing-page/LandingPage'));
@@ -39,7 +40,15 @@ const NotFoundPage = lazy(() => import('./pages/static-pages/NotFoundPage'));
 
 function AppContent() {
   const location = useLocation();
-  const hideLayout = location.pathname === '/sign-in' || location.pathname === '/sign-up' || location.pathname === '/forgot-password' || location.pathname === '/otp' || location.pathname === '/confirm-password' || location.pathname === '/successfully' || location.pathname === '/*' || location.pathname === '/participant/detail-contest';
+  const hideLayout =
+    location.pathname === '/sign-in' ||
+    location.pathname === '/sign-up' ||
+    location.pathname === '/forgot-password' ||
+    location.pathname === '/otp' ||
+    location.pathname === '/confirm-password' ||
+    location.pathname === '/successfully' ||
+    location.pathname === '/*' ||
+    location.pathname === '/participant/detail-contest';
 
   const { isAuthenticated } = useSelector((state) => state.auth);
 
@@ -136,13 +145,15 @@ function AppContent() {
               />
 
               {/* User Route */}
-              <Route element={<PrivateRoute allowedRoles={['user']} />}>1
+              <Route element={<PrivateRoute allowedRoles={['user', 'User']} />}>
+                1
                 <Route path="/participant/home" element={<Home />} />
                 <Route path="/participant/contest" element={<Contest />} />
                 <Route path="/participant/profile" element={<Profile />} />
                 <Route path="/participant/contest-creating" element={<ContestCreating />} />
                 <Route path="/participant/detail-contest" element={<DetailContest />} />
                 <Route path="/participant/search" element={<Search />} />
+                <Route path="/participant/registration" element={<Registration />} />
               </Route>
 
               {/* Other Route */}

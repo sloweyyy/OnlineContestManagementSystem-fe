@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Avatar, Box, Button, Divider, Menu, MenuItem, Typography
 } from '@mui/material';
 import { black, gray, red, white, yellow } from '../../config/theme/themePrintives';
 import PaticipatingModal from '../../components/contest/PaticipatingModal';
+import { useLocation } from 'react-router-dom';
+import ContestService from '../../services/contest.service';
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { userLogout } from "../../stores/actions/AuthAction";
 
 const CountdownBox = ({ value, index }) => (
     <Box
@@ -97,6 +102,55 @@ const RankCard = ({ rank, name }) => {
 };
 
 const DetailContest = () => {
+    const [contest, setContest] = useState(null);
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const contestId = queryParams.get('id');
+    const [remainingTime, setRemainingTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchContest = async () => {
+            const contest = await ContestService.getContestById(contestId);
+            setContest(contest);
+        }
+
+        fetchContest();
+    }, [contestId]);
+
+    useEffect(() => {
+        if (!contest?.endDate) return;
+
+        const calculateRemainingTime = () => {
+            const now = new Date();
+            const endDate = new Date(contest?.endDate);
+            const distance = endDate - now;
+
+            if (distance <= 0) {
+                setRemainingTime({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            setRemainingTime({
+                days,
+                hours,
+                minutes,
+                seconds,
+            });
+        };
+
+        calculateRemainingTime();
+        const intervalId = setInterval(calculateRemainingTime, 1000);
+
+        return () => clearInterval(intervalId);
+    }, [contest]);
+
     const ParticipantData = [
         { rank: 1, name: 'Participant Name 1' },
         { rank: 2, name: 'Participant Name 2' },
@@ -170,6 +224,22 @@ const DetailContest = () => {
         setOpened(false);
     }
 
+
+    const handleSignOut = async () => {
+        try {
+            const resultAction = await dispatch(userLogout()).unwrap();
+            if (resultAction) navigate('/sign-in');
+            setAnchorEl(null);
+        } catch (error) {
+            console.error('Lỗi khi đăng xuất:', error);
+        }
+    };
+
+    const handlePersonalInfo = () => {
+        navigate('/participant/profile');
+        setAnchorEl(null);
+    }
+
     return (
         <Box display="flex" flexDirection="column" alignItems="center" width="100%">
             <Box
@@ -216,25 +286,23 @@ const DetailContest = () => {
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
                         >
-                            <MenuItem sx={{ fontSize: 16, fontWeight: 600, ":hover": { bgcolor: 'transparent' }, ":focus": { bgcolor: 'transparent' }, ":active": { bgcolor: 'transparent' } }} disableTouchRipple>
+                            <MenuItem sx={{ fontSize: 16, fontWeight: 600, ":hover": { bgcolor: 'transparent' }, ":focus": { bgcolor: 'transparent' }, ":active": { bgcolor: 'transparent' }, mb: 1 }} disableTouchRipple>
                                 Nguyễn Quốc Thắng
                             </MenuItem>
-                            <Divider />
-                            <MenuItem onClick={handleClose} sx={{ fontSize: 16, fontWeight: 600 }}>
+                            <MenuItem onClick={handlePersonalInfo} sx={{ fontSize: 16, fontWeight: 600 }}>
                                 Tài khoản
                             </MenuItem>
-                            <MenuItem onClick={handleClose} sx={{ fontSize: 16, fontWeight: 600 }}>
-                                Lịch sử làm bài
-                            </MenuItem>
                             <Divider />
-                            <MenuItem onClick={handleClose} sx={{ fontSize: 16, fontWeight: 600, color: red[500] }}>
+                            <MenuItem onClick={handleSignOut} sx={{ fontSize: 16, fontWeight: 600, color: red[500] }}>
                                 Đăng xuất
                             </MenuItem>
                         </Menu>
                     </Box>
                 </Box>
 
-                <Box mt={8} width="100%" maxWidth="70%" height="50vh" bgcolor={gray[100]} borderRadius={2} boxShadow="0px 6px 10px rgba(0, 0, 0, 0.1)" />
+                <Box mt={8} width="100%" maxWidth="70%" height="50vh">
+                    <img src={contest?.imageUrl} alt="contest" width="100%" height="100%" style={{ borderRadius: '8px', objectFit: 'cover' }} />
+                </Box>
                 <Box
                     display="flex"
                     justifyContent="center"
@@ -252,17 +320,21 @@ const DetailContest = () => {
                         maxWidth="80%"
                         textAlign="center"
                     >
-                        CUỘC THI TRỰC TUYẾN “TÌM HIỂU VỀ LUẬT PHÒNG CHỐNG MA TÚY”
+                        {contest?.name}
                     </Typography>
                 </Box>
             </Box>
 
-            <Box id='rules' textAlign="center" pt={8} width="100%">
+            <Box id="rules" textAlign="center" pt={8} width="100%">
                 <Typography textTransform="uppercase" fontWeight={600} fontSize={40} color={red[500]}>
                     Cuộc thi kết thúc trong
                 </Typography>
                 <Box display="flex" justifyContent="center" gap={3} mt={4}>
-                    {[20, 20, 20, 20].map((value, index) => <CountdownBox key={index} value={value} index={index} />)}
+                    {[remainingTime.days, remainingTime.hours, remainingTime.minutes, remainingTime.seconds].map(
+                        (value, index) => (
+                            <CountdownBox key={index} value={value} index={index} />
+                        )
+                    )}
                 </Box>
             </Box>
 
@@ -413,17 +485,17 @@ const DetailContest = () => {
                     <Typography fontWeight={600} fontSize={26} color={white[50]} textTransform={'uppercase'}>
                         Ban tổ chức
                     </Typography>
-                    <Typography fontWeight={600} fontSize={22} color={white[50]} textTransform={'capitalize'}>
-                        Khoa học xã hội và nhân văn
+                    <Typography fontWeight={600} fontSize={22} color={white[50]} textTransform={'none'}>
+                        {contest?.organizationInformation?.orgName}
                     </Typography>
                     <Typography fontWeight={400} fontSize={18} color={white[50]}>
-                        Địa chỉ: 144 Xuân Thủy, Cầu Giấy, Hà Nội
+                        <span style={{ fontWeight: 'bold' }}>Địa chỉ:</span> {contest?.organizationInformation?.orgAddress}
                     </Typography>
                     <Typography fontWeight={400} fontSize={18} color={white[50]}>
-                        Điện thoại: 024.3754.6183
+                        <span style={{ fontWeight: 'bold' }}>Điện thoại:</span> {contest?.organizationInformation?.orgPhoneNumber}
                     </Typography>
                     <Typography fontWeight={400} fontSize={18} color={white[50]}>
-                        Email: XHNV@gmail.com
+                        <span style={{ fontWeight: 'bold' }}>Email:</span> {contest?.organizationInformation?.orgEmail}
                     </Typography>
                 </Box>
 
@@ -431,17 +503,17 @@ const DetailContest = () => {
                     <Typography fontWeight={600} fontSize={26} color={white[50]} textTransform={'uppercase'}>
                         Đơn vị lập trình
                     </Typography>
-                    <Typography fontWeight={600} fontSize={22} color={white[50]} textTransform={'capitalize'}>
+                    <Typography fontWeight={600} fontSize={22} color={white[50]} textTransform={'none'}>
                         Công ty Cổ phần Kontext
                     </Typography>
                     <Typography fontWeight={400} fontSize={18} color={white[50]}>
-                        Địa chỉ: 144 Xuân Thủy, Cầu Giấy, Hà Nội
+                        <span style={{ fontWeight: 'bold' }}>Địa chỉ:</span> Khu phố 6, Phường Linh Trung, TP. Thủ Đức, Việt Nam
                     </Typography>
                     <Typography fontWeight={400} fontSize={18} color={white[50]}>
-                        Điện thoại: 024.3754.6183
+                        <span style={{ fontWeight: 'bold' }}>Điện thoại:</span> 02837252002
                     </Typography>
                     <Typography fontWeight={400} fontSize={18} color={white[50]}>
-                        Email: Kontext@gmail.com
+                        <span style={{ fontWeight: 'bold' }}>Email:</span> kontext.company@gmail.com
                     </Typography>
                 </Box>
             </Box>
@@ -459,7 +531,7 @@ const DetailContest = () => {
                 </Typography>
             </Box>
 
-            <PaticipatingModal open={opened} onClose={handleOnClose} />
+            <PaticipatingModal contestId={contestId} participantInformationRequirements={['số điện thoại', 'địa chỉ']} open={opened} onClose={handleOnClose} />
         </Box>
     );
 }

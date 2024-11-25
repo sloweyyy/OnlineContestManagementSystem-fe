@@ -18,9 +18,9 @@ import {
     EmojiEvents,
     AddCircle,
     Phone,
-    FileDownloadOutlined,
     AccountCircleRounded,
     Logout,
+    AppRegistration
 } from "@mui/icons-material";
 import { red, white, dark, black, gray } from "../../config/theme/themePrintives";
 import { Link, useNavigate } from "react-router-dom";
@@ -75,7 +75,7 @@ const Sidebar = () => {
                 "& .MuiDrawer-paper": {
                     width: drawerWidth,
                     transition: drawerTransition,
-                    overflow: "hidden",
+                    overflow: "auto",
                     borderRight: "0px",
                     backgroundColor: "transparent",
                 },
@@ -112,9 +112,18 @@ const Sidebar = () => {
 
                     <Link to="/participant/contest" style={{ textDecoration: 'none' }}>
                         <CustomTooltip title={'Danh sách cuộc thi'} disableHoverListener={openSideBar}>
-                            <Box onClick={() => setActiveItem("video")} sx={itemStyles(activeItem === "video")}>
+                            <Box onClick={() => setActiveItem("contest")} sx={itemStyles(activeItem === "contest")}>
                                 <EmojiEvents />
                                 {openSideBar && <Typography variant="subtitle2" ml={2}>Danh sách cuộc thi</Typography>}
+                            </Box>
+                        </CustomTooltip>
+                    </Link>
+
+                    <Link to="/participant/registration" style={{ textDecoration: 'none' }}>
+                        <CustomTooltip title={'Danh sách dự thi'} disableHoverListener={openSideBar}>
+                            <Box onClick={() => setActiveItem("registration")} sx={itemStyles(activeItem === "registration")}>
+                                <AppRegistration />
+                                {openSideBar && <Typography variant="subtitle2" ml={2}>Danh sách dự thi</Typography>}
                             </Box>
                         </CustomTooltip>
                     </Link>
@@ -135,6 +144,7 @@ const Sidebar = () => {
                                     backgroundColor: red[50],
                                     ":hover": { backgroundColor: white[50] },
                                 }}
+                                onClick={() => setActiveItem("contest-creating")}
                             >
                                 <AddCircle />
                                 {openSideBar && <Typography variant="h6" ml={2}>Tạo cuộc thi</Typography>}

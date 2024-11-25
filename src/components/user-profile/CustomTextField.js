@@ -10,6 +10,12 @@ const CustomTextField = ({ label, placeholder, type = 'text', ...props }) => {
         }
     };
 
+    const handleWheel = (e) => {
+        if (type === 'number') {
+            e.target.blur();
+        }
+    };
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             <Typography
@@ -29,8 +35,16 @@ const CustomTextField = ({ label, placeholder, type = 'text', ...props }) => {
                 fullWidth
                 size="small"
                 onInput={handleInput}
+                onWheel={handleWheel}
                 sx={{
                     '& .MuiOutlinedInput-root': {
+                        '& input[type=number]': {
+                            MozAppearance: 'textfield',
+                        },
+                        '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
+                            WebkitAppearance: 'none',
+                            margin: 0,
+                        },
                         '& fieldset': {
                             borderColor: gray[200],
                         },

@@ -6,8 +6,10 @@ import CustomTextField from '../../components/user-profile/CustomTextField'
 import CustomSelect from '../../components/contest-creating/CustomSelect'
 import { gray, red, white } from '../../config/theme/themePrintives'
 import { toast } from 'react-toastify'
+import RegisterService from '../../services/registration.service'
+import { useSelector } from 'react-redux'
 
-const PaticipatingModal = ({ open, onClose }) => {
+const PaticipatingModal = ({ contestId, participantInformationRequirements, open, onClose }) => {
     const WorkingUnit = [
         { label: 'Trường Đại học Công nghệ', value: 'tech_university' },
         { label: 'Trường Đại học Kinh tế', value: 'economics_university' },
@@ -29,12 +31,13 @@ const PaticipatingModal = ({ open, onClose }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
-    const [idCard, setIdCard] = useState('');
+    const [identity, setIdentity] = useState('');
     const [address, setAddress] = useState('');
     const [dob, setDob] = useState('');
     const [selectedJob, setSelectedJob] = useState('');
     const [selectedSexual, setSelectedSexual] = useState('');
     const [selectedWorkingUnit, setSelectedWorkingUnit] = useState('');
+    const { user } = useSelector(state => state.user);
 
     const handleJobChange = (event) => {
         setSelectedJob(event.target.value);
@@ -54,29 +57,77 @@ const PaticipatingModal = ({ open, onClose }) => {
         setIsChecked(!isChecked)
     }
 
-    const handleSubmission = () => {
+    const handleSubmission = async () => {
         if (!name) {
             toast.error('Vui lòng nhập họ và tên');
         } else if (!email) {
             toast.error('Vui lòng nhập email');
-        } else if (!phone) {
-            toast.error('Vui lòng nhập số điện thoại');
-        } else if (!idCard) {
-            toast.error('Vui lòng nhập số CMND/CCCD');
-        } else if (!selectedSexual) {
-            toast.error('Vui lòng chọn giới tính');
         } else if (!dob) {
             toast.error('Vui lòng nhập ngày sinh');
-        } else if (!selectedJob) {
-            toast.error('Vui lòng chọn nghề nghiệp');
-        } else if (!selectedWorkingUnit) {
-            toast.error('Vui lòng chọn đơn vị công tác');
-        } else if (!address) {
+        } else if (participantInformationRequirements.includes('số điện thoại') && !phone) {
+            toast.error('Vui lòng nhập số điện thoại');
+        } else if (participantInformationRequirements.includes('giới tính') && !selectedSexual) {
+            toast.error('Vui lòng chọn giới tính');
+        } else if (participantInformationRequirements.includes('địa chỉ') && !address) {
             toast.error('Vui lòng nhập địa chỉ');
+        } else if (participantInformationRequirements.includes('cmnd/cccd') && !identity) {
+            toast.error('Vui lòng nhập số CMND/CCCD');
+        } else if (participantInformationRequirements.includes('nghề nghiệp') && !selectedJob) {
+            toast.error('Vui lòng chọn nghề nghiệp');
+        } else if (participantInformationRequirements.includes('đơn vị công tác') && !selectedWorkingUnit) {
+            toast.error('Vui lòng chọn đơn vị công tác');
         } else {
-            onClose();
-            toast.success('Thông tin đã được cập nhật thành công');
+            let info = {};
+
+            if (participantInformationRequirements.includes('số điện thoại')) {
+                info.phone = phone;
+            }
+            if (participantInformationRequirements.includes('địa chỉ')) {
+                info.address = address;
+            }
+            if (participantInformationRequirements.includes('cmnd/cccd')) {
+                info.identity = identity;
+            }
+            if (participantInformationRequirements.includes('giới tính')) {
+                info.sexual = selectedSexual;
+            }
+            if (participantInformationRequirements.includes('nghề nghiệp')) {
+                info.job = selectedJob;
+            }
+            if (participantInformationRequirements.includes('đơn vị công tác')) {
+                info.workingUnit = selectedWorkingUnit;
+            }
+
+
+            const participantInformation = {
+                contestId,
+                userId: user.id,
+                name,
+                dateOfBirth: dob,
+                email,
+                additionalInfo: info,
+            };
+
+            const response = await RegisterService.registerContest(contestId, participantInformation)
+
+            if (response.status === 200) {
+                toast.success('Đăng ký thành công');
+                onClose();
+            }
         }
+        resetForm();
+    };
+
+    const resetForm = () => {
+        setName('');
+        setEmail('');
+        setPhone('');
+        setIdentity('');
+        setAddress('');
+        setDob('');
+        setSelectedJob('');
+        setSelectedSexual('');
+        setSelectedWorkingUnit('');
     };
 
     return (
@@ -149,6 +200,7 @@ const PaticipatingModal = ({ open, onClose }) => {
                         placeholder='Nhập họ và tên'
                         fullWidth
                         onChange={(e) => setName(e.target.value)}
+                        value={name}
                     />
 
                     <CustomTextField
@@ -157,31 +209,38 @@ const PaticipatingModal = ({ open, onClose }) => {
                         placeholder='Nhập email'
                         fullWidth
                         onChange={(e) => setEmail(e.target.value)}
+                        value={email}
                     />
+                    {participantInformationRequirements.includes('số điện thoại') && (
+                        <CustomTextField
+                            type='tel'
+                            label='Số điện thoại'
+                            placeholder='Nhập số điện thoại'
+                            fullWidth
+                            onChange={(e) => setPhone(e.target.value)}
+                            value={phone}
+                        />
+                    )}
 
-                    <CustomTextField
-                        type='tel'
-                        label='Số điện thoại'
-                        placeholder='Nhập số điện thoại'
-                        fullWidth
-                        onChange={(e) => setPhone(e.target.value)}
-                    />
-
-                    <CustomTextField
-                        type='text'
-                        label='Số CMND/CCCD'
-                        placeholder='Nhập số CMND/CCCD'
-                        fullWidth
-                        onChange={(e) => setIdCard(e.target.value)}
-                    />
-
-                    <CustomSelect
-                        label='Giới tính'
-                        value={selectedSexual}
-                        onChange={handleSexualChange}
-                        options={Sexual}
-                        placeholder='Chọn giới tính'
-                    />
+                    {participantInformationRequirements.includes('cmnd/cccd') && (
+                        <CustomTextField
+                            type='text'
+                            label='Số CMND/CCCD'
+                            placeholder='Nhập số CMND/CCCD'
+                            fullWidth
+                            value={identity}
+                            onChange={(e) => setIdentity(e.target.value)}
+                        />
+                    )}
+                    {participantInformationRequirements.includes('giới tính') && (
+                        <CustomSelect
+                            label='Giới tính'
+                            value={selectedSexual}
+                            onChange={handleSexualChange}
+                            options={Sexual}
+                            placeholder='Chọn giới tính'
+                        />
+                    )}
 
                     <CustomTextField
                         type='date'
@@ -189,31 +248,38 @@ const PaticipatingModal = ({ open, onClose }) => {
                         placeholder='Nhập ngày sinh'
                         fullWidth
                         onChange={(e) => setDob(e.target.value)}
+                        value={dob}
                     />
 
-                    <CustomSelect
-                        label="Nghề nghiệp"
-                        value={selectedJob}
-                        onChange={handleJobChange}
-                        options={Jobs}
-                        placeholder="Chọn ngành nghề"
-                    />
+                    {participantInformationRequirements.includes('nghề nghiệp') && (
+                        <CustomSelect
+                            label="Nghề nghiệp"
+                            value={selectedJob}
+                            onChange={handleJobChange}
+                            options={Jobs}
+                            placeholder="Chọn ngành nghề"
+                        />
+                    )}
 
-                    <CustomSelect
-                        label="Đơn vị công tác"
-                        value={selectedWorkingUnit}
-                        onChange={handleWorkingUnitChange}
-                        options={WorkingUnit}
-                        placeholder="Chọn đơn vị công tác"
-                    />
-
-                    <CustomTextField
-                        type='text'
-                        label='Địa chỉ'
-                        placeholder='Nhập địa chỉ'
-                        fullWidth
-                        onChange={(e) => setAddress(e.target.value)}
-                    />
+                    {participantInformationRequirements.includes('đơn vị công tác') && (
+                        <CustomSelect
+                            label="Đơn vị công tác"
+                            value={selectedWorkingUnit}
+                            onChange={handleWorkingUnitChange}
+                            options={WorkingUnit}
+                            placeholder="Chọn đơn vị công tác"
+                        />
+                    )}
+                    {participantInformationRequirements.includes('địa chỉ') && (
+                        <CustomTextField
+                            type='text'
+                            label='Địa chỉ'
+                            placeholder='Nhập địa chỉ'
+                            fullWidth
+                            onChange={(e) => setAddress(e.target.value)}
+                            value={address}
+                        />
+                    )}
                 </Box>
 
                 {/* Confirm Agreement Button */}
