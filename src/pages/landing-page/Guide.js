@@ -22,7 +22,7 @@ const Guide = () => {
         {
             title: "Tạo cuộc thi",
             description: `Sau khi đăng nhập vào tài khoản, bạn sẽ thấy nút "Tạo cuộc thi" ở góc trên bên trái của trang web. Nhấn vào nút đó để bắt đầu tạo cuộc thi của mình.<br/><br/>Bạn cần điền đầy đủ thông tin về cuộc thi, chọn hình thức tham gia, cài đặt thời gian diễn ra cuộc thi và chọn giải thưởng cho người chiến thắng.`,
-            image: "Howitworks-contest.png",
+            image: "Howitworks-contest?.png",
             notice: 'Hãy chắc chắn rằng bạn đã cài đặt thời gian diễn ra cuộc thi một cách hợp lý.',
         },
         {

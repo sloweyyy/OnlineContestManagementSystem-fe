@@ -33,18 +33,19 @@ const Home = () => {
         fetchContests();
     }, []);
 
+    console.log(contests);
+
     // useEffect(() => {
     //     const now = new Date();
 
-    //     const commingSoon = contests.filter(contest => new Date(contest.startDate) > now);
-    //     const running = contests.filter(contest => new Date(contest.startDate) < now && new Date(contest.endDate) > now);
-    //     const number = contests.filter(contest => new Date(contest.startDate) < now && new Date(contest.endDate) > now);
+    //     const commingSoon = contests?.filter(contest => new Date(contest?.startDate) > now);
+    //     const running = contests?.filter(contest => new Date(contest?.startDate) < now && new Date(contest?.endDate) > now);
+    //     const number = contests?.filter(contest => new Date(contest?.startDate) < now && new Date(contest?.endDate) > now);
 
     //     setCommingSoonContest(commingSoon.length);
     //     setRunningContest(running.length);
     //     setNumberOfRegistration(number.length);
     // }, [contests]);
-
 
     return (
         <Box
@@ -113,7 +114,7 @@ const Home = () => {
                     gap: 2,
                 }}
             >
-                <RecentContestsCard contests={contests.slice(0, 5)} />
+                <RecentContestsCard contests={contests?.slice(0, 5)} />
                 <Box
                     sx={{
                         display: 'flex',

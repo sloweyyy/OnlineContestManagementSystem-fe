@@ -15,10 +15,6 @@ const Registration = () => {
         setSearchTerm(event.target.value);
     };
 
-    const filterRegisterdContest = contests.filter(contest =>
-        contest.result.contestDetails?.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
     useEffect(() => {
         const fetchRegisteredContestsByUserId = async () => {
             const response = await RegistrationService.getRetristeredContestsByUserId(user.id);
@@ -28,7 +24,9 @@ const Registration = () => {
         fetchRegisteredContestsByUserId();
     }, []);
 
-    console.log('Contests: ', contests);
+    const filterRegisterdContest = [] || contests?.filter(contest =>
+        contest?.result.contestDetails?.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <Box
@@ -58,6 +56,29 @@ const Registration = () => {
                         marginBottom: 4,
                     }}
                 >
+                    <Button
+                        sx={{
+                            backgroundColor: red[500],
+                            color: white[50],
+                            '&:hover': {
+                                backgroundColor: white[50],
+                                color: red[500],
+                                border: '1px solid',
+                            },
+                            gap: 1,
+                            width: 220,
+                            textTransform: 'none',
+                            fontWeight: 'bold',
+                            fontSize: 14,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                        href='/participant/search'
+                    >
+                        <Search />
+                        Tham gia cuộc thi mới
+                    </Button>
+
                     <TextField
                         id="outlined-search"
                         label="Tìm kiếm cuộc thi"
@@ -66,7 +87,7 @@ const Registration = () => {
                         value={searchTerm}
                         onChange={handleSearchChange}
                         sx={{
-                            width: 350,
+                            width: 300,
                             '& .MuiOutlinedInput-root': {
                                 padding: '8px 14px',
                                 '& fieldset': {
@@ -97,28 +118,6 @@ const Registration = () => {
                             },
                         }}
                     />
-                    <Button
-                        sx={{
-                            backgroundColor: 'transparent',
-                            color: red[500],
-                            '&:hover': {
-                                backgroundColor: red[500],
-                                color: white[50],
-                            },
-                            border: '1px solid',
-                            gap: 1,
-                            width: 220,
-                            textTransform: 'none',
-                            fontWeight: 'bold',
-                            fontSize: 14,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        }}
-                        href='/participant/search'
-                    >
-                        <Search />
-                        Tham gia cuộc thi mới
-                    </Button>
                 </Box>
 
                 {/* Pass filtered contests to ContestTable */}

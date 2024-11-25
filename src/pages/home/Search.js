@@ -39,8 +39,8 @@ const Search = () => {
         }
 
         debounceTimeout.current = setTimeout(() => {
-            const filtered = contests.filter(contest =>
-                contest.name.toLowerCase().includes(searchQuery.toLowerCase())
+            const filtered = contests?.filter(contest =>
+                contest?.name.toLowerCase().includes(searchQuery.toLowerCase())
             );
             setFilteredContests(filtered);
         }, 300);
@@ -107,7 +107,7 @@ const Search = () => {
                     ? Array.from(new Array(6)).map((_, index) => (
                         <SearchingContestCard key={index} isLoading={true} />
                     ))
-                    : filteredContests.map((contest, index) => (
+                    : filteredContests?.map((contest, index) => (
                         <SearchingContestCard key={index} contest={contest} isLoading={false} />
                     ))}
             </Box>

@@ -1,33 +1,50 @@
 import { Box, Button, TextField, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ContestTable from '../../components/contest/ContestTable';
 import { gray, red, white } from '../../config/theme/themePrintives';
-import { Add, Delete } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
+import ContestService from '../../services/contest.service';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 const Contest = () => {
+    const { user } = useSelector((state) => state.user);
     const [searchTerm, setSearchTerm] = useState('');
-    const [contests, setContests] = useState([
-        { id: 1, name: 'Cuộc thi số 1', dateStart: '2021-10-10', dateEnd: '2021-10-20', contestantNumber: 10, status: 'Đang diễn ra' },
-        { id: 2, name: 'Cuộc thi số 2', dateStart: '2021-10-10', dateEnd: '2021-10-20', contestantNumber: 15, status: 'Đã kết thúc' },
-        { id: 3, name: 'Cuộc thi số 3', dateStart: '2021-10-10', dateEnd: '2021-10-20', contestantNumber: 20, status: 'Sắp diễn ra' },
-        { id: 4, name: 'Cuộc thi số 4', dateStart: '2021-10-10', dateEnd: '2021-10-20', contestantNumber: 5, status: 'Sắp diễn ra' },
-        { id: 5, name: 'Cuộc thi số 5', dateStart: '2021-10-10', dateEnd: '2021-10-20', contestantNumber: 8, status: 'Sắp diễn ra' },
-        { id: 6, name: 'Cuộc thi số 6', dateStart: '2021-10-10', dateEnd: '2021-10-20', contestantNumber: 12, status: 'Sắp diễn ra' }
-    ]);
-    const [selectedRows, setSelectedRows] = useState([]);
+    const [contests, setContests] = useState([]);
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
     };
 
-    const filteredContests = contests.filter(contest =>
-        contest.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredContests = contests?.filter(contest =>
+        contest?.name?.toLowerCase().includes(searchTerm?.toLowerCase())
     );
 
-    const handleDeleteSelected = () => {
-        setContests(prevContests => prevContests.filter(contest => !selectedRows.includes(contest.id)));
-        setSelectedRows([]);
+    const handleDeleteSelected = async (contestId) => {
+        console.log('contestId', contestId);
+        const response = await ContestService.deleteContest(contestId);
+
+        try {
+            if (response) {
+                setContests(contests.filter(contest => contest.id !== contestId));
+                toast.success('Xóa cuộc thi thành công');
+            } else {
+                toast.error('Xóa cuộc thi thất bại');
+            }
+        } catch (error) {
+            console.log('error', error);
+            toast.error('Xóa cuộc thi thất bại');
+        }
     };
+
+    useEffect(() => {
+        const fetchContests = async () => {
+            const contests = await ContestService.getContestByCreatorId(user.id);
+            setContests(contests);
+        }
+
+        fetchContests();
+    }, [user.id]);
 
     return (
         <Box
@@ -67,29 +84,6 @@ const Contest = () => {
                             gap: 2,
                         }}
                     >
-                        <Button
-                            sx={{
-                                backgroundColor: 'transparent',
-                                color: red[500],
-                                '&:hover': {
-                                    backgroundColor: red[500],
-                                    color: white[50],
-                                },
-                                border: '1px solid',
-                                gap: 1,
-                                width: 150,
-                                textTransform: 'none',
-                                fontWeight: 'bold',
-                                fontSize: 14,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}
-                            onClick={handleDeleteSelected}
-                            disabled={selectedRows.length === 0}
-                        >
-                            <Delete />
-                            Xóa
-                        </Button>
                         <Button
                             sx={{
                                 backgroundColor: red[500],
@@ -156,7 +150,10 @@ const Contest = () => {
                 </Box>
 
                 {/* Pass filtered contests to ContestTable */}
-                <ContestTable contests={filteredContests} setSelectedRows={setSelectedRows} />
+                <ContestTable
+                    contests={filteredContests}
+                    handleDeleteSelected={handleDeleteSelected}
+                />
             </Box>
         </Box>
     );

@@ -48,10 +48,15 @@ const refreshToken = async (refreshToken) => {
 };
 
 const signout = async (refreshToken) => {
+  Cookies.remove('accessToken');
+  Cookies.remove('refreshToken');
+  localStorage.removeItem('userData');
+
   return await AxiosConfig.post(`${AUTH_ENDPOINT}/revoke-token`, {
     refreshToken,
   });
 };
+
 const AuthServices = {
   signin,
   register,

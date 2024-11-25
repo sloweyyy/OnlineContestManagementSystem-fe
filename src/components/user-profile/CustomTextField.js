@@ -10,9 +10,9 @@ const CustomTextField = ({ label, placeholder, type = 'text', ...props }) => {
         }
     };
 
-    const disableScroll = (e) => {
+    const handleWheel = (e) => {
         if (type === 'number') {
-            e.preventDefault();
+            e.target.blur();
         }
     };
 
@@ -35,7 +35,7 @@ const CustomTextField = ({ label, placeholder, type = 'text', ...props }) => {
                 fullWidth
                 size="small"
                 onInput={handleInput}
-                onWheel={disableScroll}
+                onWheel={handleWheel}
                 sx={{
                     '& .MuiOutlinedInput-root': {
                         '& input[type=number]': {

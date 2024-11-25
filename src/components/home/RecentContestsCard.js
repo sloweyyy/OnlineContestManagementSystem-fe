@@ -64,7 +64,7 @@ const RecentContestsCard = ({ contests }) => {
                     gap: 2,
                 }}
             >
-                {contests && contests.length > 0 && (
+                {contests && contests?.length > 0 && (
                     <Card
                         sx={{
                             flex: 1,
@@ -157,7 +157,7 @@ const RecentContestsCard = ({ contests }) => {
                         gap: 2,
                     }}
                 >
-                    {contests.slice(1).map((contest, index) => (
+                    {contests?.slice(1).map((contest, index) => (
                         <Card key={contest?.id} sx={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
                             <CardActionArea
                                 disableRipple

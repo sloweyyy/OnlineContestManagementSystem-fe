@@ -73,12 +73,12 @@ const ContestCreating = () => {
     ];
 
     const handleInformationsRequirementChange = useCallback((event, newValue) => {
-        const newSelections = newValue.filter(option => typeof option === 'string' && !contest.participantInformationRequirements.includes(option.toLowerCase()));
+        const newSelections = newValue.filter(option => typeof option === 'string' && !contest?.participantInformationRequirements.includes(option.toLowerCase()));
         setContest(prev => ({
             ...prev,
             participantInformationRequirements: [...prev.participantInformationRequirements, ...newSelections.map(opt => opt.toLowerCase())],
         }));
-    }, [contest.participantInformationRequirements]);
+    }, [contest?.participantInformationRequirements]);
 
     const validateContestData = () => {
         const { name, ruleDescription, startDate, endDate, organizationInformation } = contest;
@@ -96,7 +96,7 @@ const ContestCreating = () => {
             ...prev,
             prizes: [...prev.prizes, { name: prizeLevels[index], description: '', value: 0, imageUrl: '', amount: 1 }],
         }));
-    }, [contest.prizes, prizeLevels]);
+    }, [contest?.prizes, prizeLevels]);
 
     const handlePrizeChange = useCallback((index, field, value) => {
         setContest(prev => ({
@@ -174,8 +174,8 @@ const ContestCreating = () => {
                 <Box sx={{ display: 'flex', gap: 4, flexDirection: 'row', alignItems: 'center' }}>
                     {/* Image */}
                     <Box sx={{ flex: 1, height: 300, backgroundColor: gray[200], display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 2, borderRadius: 1 }}>
-                        {contest.imageUrl ? (
-                            <img src={contest.imageUrl} alt="uploaded" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                        {contest?.imageUrl ? (
+                            <img src={contest?.imageUrl} alt="uploaded" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                         ) : (
                             <>
                                 <Typography sx={{ color: gray[600], marginBottom: 2 }}>
@@ -194,15 +194,15 @@ const ContestCreating = () => {
                     {/* Contest Information */}
                     <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
                         {/* Contest Name */}
-                        <CustomTextField label="Tên cuộc thi" placeholder="Tên cuộc thi" value={contest.name} onChange={(e) => setContest({ ...contest, name: e.target.value })} />
+                        <CustomTextField label="Tên cuộc thi" placeholder="Tên cuộc thi" value={contest?.name} onChange={(e) => setContest({ ...contest, name: e.target.value })} />
 
                         {/* Contest Description */}
-                        <CustomTextField label="Thể lệ cuộc thi" placeholder="Thể lệ cuộc thi" multiline rows={4} value={contest.ruleDescription} onChange={(e) => setContest({ ...contest, ruleDescription: e.target.value })} />
+                        <CustomTextField label="Thể lệ cuộc thi" placeholder="Thể lệ cuộc thi" multiline rows={4} value={contest?.ruleDescription} onChange={(e) => setContest({ ...contest, ruleDescription: e.target.value })} />
 
                         {/* Start Date and Ending Date */}
                         <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-                            <CustomTextField label="Thời gian bắt đầu" type="datetime-local" value={contest.startDate} onChange={(e) => setContest({ ...contest, startDate: e.target.value })} />
-                            <CustomTextField label="Thời gian kết thúc" type="datetime-local" value={contest.endDate} onChange={(e) => setContest({ ...contest, endDate: e.target.value })} />
+                            <CustomTextField label="Thời gian bắt đầu" type="datetime-local" value={contest?.startDate} onChange={(e) => setContest({ ...contest, startDate: e.target.value })} />
+                            <CustomTextField label="Thời gian kết thúc" type="datetime-local" value={contest?.endDate} onChange={(e) => setContest({ ...contest, endDate: e.target.value })} />
                         </Box>
                     </Box>
                 </Box>
@@ -213,12 +213,12 @@ const ContestCreating = () => {
             </Typography>
 
             {/* Organiser Name */}
-            <CustomTextField label="Tên ban tổ chức" placeholder="Tên ban tổ chức" value={contest.organizationInformation.orgName} onChange={(e) => setContest((prev) => ({ ...prev, organizationInformation: { ...prev.organizationInformation, orgName: e.target.value } }))} />
+            <CustomTextField label="Tên ban tổ chức" placeholder="Tên ban tổ chức" value={contest?.organizationInformation.orgName} onChange={(e) => setContest((prev) => ({ ...prev, organizationInformation: { ...prev.organizationInformation, orgName: e.target.value } }))} />
 
             {/* Phone Number and Email */}
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, marginY: 2 }}>
-                <CustomTextField label="Số điện thoại" placeholder="Số điện thoại" value={contest.organizationInformation.orgPhoneNumber} onChange={(e) => setContest((prev) => ({ ...prev, organizationInformation: { ...prev.organizationInformation, orgPhoneNumber: e.target.value } }))} />
-                <CustomTextField label="Email" placeholder="Email" value={contest.organizationInformation.orgEmail} onChange={(e) => setContest((prev) => ({ ...prev, organizationInformation: { ...prev.organizationInformation, orgEmail: e.target.value } }))} />
+                <CustomTextField label="Số điện thoại" placeholder="Số điện thoại" value={contest?.organizationInformation.orgPhoneNumber} onChange={(e) => setContest((prev) => ({ ...prev, organizationInformation: { ...prev.organizationInformation, orgPhoneNumber: e.target.value } }))} />
+                <CustomTextField label="Email" placeholder="Email" value={contest?.organizationInformation.orgEmail} onChange={(e) => setContest((prev) => ({ ...prev, organizationInformation: { ...prev.organizationInformation, orgEmail: e.target.value } }))} />
             </Box>
 
             {/* Province District Commune */}
@@ -246,14 +246,14 @@ const ContestCreating = () => {
                     label="Số lượng thí sinh tối thiểu"
                     placeholder="Số lượng thí sinh tối thiểu"
                     type="number"
-                    value={contest.minimumParticipant}
+                    value={contest?.minimumParticipant}
                     onChange={(e) => setContest({ ...contest, minimumParticipant: e.target.value })}
                 />
                 <CustomTextField
                     label="Số lượng thí sinh tối đa"
                     placeholder="Số lượng thí sinh tối đa"
                     type="number"
-                    value={contest.maximumParticipant}
+                    value={contest?.maximumParticipant}
                     onChange={(e) => setContest({ ...contest, maximumParticipant: e.target.value })}
                 />
             </Box>
@@ -262,7 +262,7 @@ const ContestCreating = () => {
             <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', gap: 2 }}>
                 <CustomAutocomplete
                     label="Thông tin cần thiết"
-                    value={contest.participantInformationRequirements}
+                    value={contest?.participantInformationRequirements}
                     onChange={handleInformationsRequirementChange}
                     options={informationsRequirement}
                 />
@@ -278,7 +278,7 @@ const ContestCreating = () => {
                     label="Lệ phí tham gia"
                     placeholder="Lệ phí tham gia"
                     type="number"
-                    value={contest.entryFee}
+                    value={contest?.entryFee}
                     onChange={(e) => setContest({ ...contest, entryFee: e.target.value })}
                     slotProps={{
                         input: {
@@ -294,7 +294,7 @@ const ContestCreating = () => {
             </Typography>
 
             {/* Prize Card Section */}
-            {contest.prizes.map((prize, index) => (
+            {contest?.prizes.map((prize, index) => (
                 <PrizeCard
                     key={index}
                     index={index}
@@ -310,7 +310,7 @@ const ContestCreating = () => {
 
             {/* Add Button */}
             <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', gap: 2 }}>
-                <Button sx={{ textTransform: 'none', paddingY: '8px', paddingX: '24px', backgroundColor: red[500], color: white[50], fontSize: 16, fontWeight: 600, ":disabled": { backgroundColor: gray[200], color: gray[400] } }} onClick={() => handleAddPrize(contest.prizes.length)} disabled={contest.prizes.length === 4}>
+                <Button sx={{ textTransform: 'none', paddingY: '8px', paddingX: '24px', backgroundColor: red[500], color: white[50], fontSize: 16, fontWeight: 600, ":disabled": { backgroundColor: gray[200], color: gray[400] } }} onClick={() => handleAddPrize(contest?.prizes.length)} disabled={contest?.prizes.length === 4}>
                     Thêm giải thưởng
                 </Button>
             </Box>
