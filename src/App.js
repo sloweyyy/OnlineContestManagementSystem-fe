@@ -22,7 +22,7 @@ const Search = lazy(() => import('./pages/user-role/home/Search'));
 const Registration = lazy(() => import('./pages/user-role/registration/Registration'));
 
 // Lazy Admin Page
-const AdminHome = lazy(() => import('./pages/admin-role/home/Home'));
+const AdminDashboard = lazy(() => import('./pages/admin-role/dashboard/Dashboard'));
 const AdminContest = lazy(() => import('./pages/admin-role/contests/Contests'));
 
 // Lazy Landing Page
@@ -161,7 +161,7 @@ function AppContent() {
 
               {/* Admin Route */}
               <Route element={<PrivateRoute allowedRoles={['admin', 'Admin']} />}>
-                <Route path="/admin/home" element={<AdminHome />} />
+                <Route path="/admin/home" element={<AdminDashboard />} />
                 <Route path="/admin/contests" element={<AdminContest />} />
               </Route>
 

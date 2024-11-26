@@ -51,7 +51,7 @@ const Contest = () => {
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                padding: 4,
+                padding: 2,
                 gap: 2,
             }}
         >

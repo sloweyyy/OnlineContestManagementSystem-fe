@@ -163,8 +163,8 @@ const ContestCreating = () => {
     };
 
     return (
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 4 }}>
-            <Typography marginBottom={2} fontSize={24} fontWeight={600}>Tạo cuộc thi</Typography>
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 2 }}>
+            <Typography marginBottom={2} variant='h4'>Tạo cuộc thi</Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', marginBottom: 4 }}>
                 {/* Contest Section */}
                 <Typography sx={{ fontSize: 18, fontWeight: 'bold', color: gray[500], marginBottom: 2 }}>

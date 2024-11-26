@@ -53,7 +53,7 @@ const Home = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 2,
-                padding: 4,
+                padding: 2,
             }}
         >
             <Box

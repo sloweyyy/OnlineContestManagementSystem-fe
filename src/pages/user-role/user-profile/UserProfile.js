@@ -23,8 +23,8 @@ const UserProfile = () => {
     };
 
     return (
-        <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'column', padding: 4 }}>
-            <Typography alignSelf={'flex-start'} marginBottom={4} fontSize={24} fontWeight={600}>
+        <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'column', padding: 2 }}>
+            <Typography alignSelf={'flex-start'} marginBottom={4} fontSize={22} fontWeight={600}>
                 Thông tin cá nhân
             </Typography>
             <Box
@@ -101,7 +101,7 @@ const UserProfile = () => {
                 </Box>
             </Box>
 
-            <Typography alignSelf={'flex-start'} marginBottom={2} marginTop={4} fontSize={24} fontWeight={600}>
+            <Typography alignSelf={'flex-start'} marginBottom={2} marginTop={4} fontSize={22} fontWeight={600}>
                 Mật khẩu
             </Typography>
 
