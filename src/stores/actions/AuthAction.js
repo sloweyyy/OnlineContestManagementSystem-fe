@@ -2,7 +2,6 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import AuthService from '../../services/auth.service';
 import { setUser } from '../slices/UserSlice';
 import Cookies from 'js-cookie';
-import { toast } from 'react-toastify';
 
 export const userLogin = createAsyncThunk('Auth/signin', async ({ email, password }, thunkAPI) => {
     try {

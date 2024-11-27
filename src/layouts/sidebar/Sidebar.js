@@ -45,7 +45,7 @@ const Sidebar = () => {
             const resultAction = await dispatch(userLogout()).unwrap();
             if (resultAction) navigate('/sign-in');
         } catch (error) {
-            console.error('Lỗi khi đăng xuất:', error);
+            navigate('/sign-in');
         }
     };
 
@@ -67,7 +67,7 @@ const Sidebar = () => {
 
     const ADMIN = [
         { name: "Trang chủ", icon: <Home />, path: "/admin/home" },
-        { name: "Danh sách cuộc thi", icon: <EmojiEvents />, path: "/admin/contests" },
+        { name: "Quản lý cuộc thi", icon: <EmojiEvents />, path: "/admin/contests" },
     ];
 
     const PARTICIPANT = [

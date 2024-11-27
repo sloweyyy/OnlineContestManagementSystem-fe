@@ -28,7 +28,7 @@ const data = [
 
 const RevenueTable = () => {
     return (
-        <Box sx={{ display: "flex", flexDirection: "column", mt: 4, width: "100%" }}>
+        <Box sx={{ display: "flex", flexDirection: "column", mt: 8, width: "100%" }}>
             {/* Title */}
             <Typography variant="h4" sx={{ mb: 4, textAlign: "left" }}>
                 Doanh thu
@@ -71,9 +71,9 @@ const RevenueTable = () => {
                         />
                         <Tooltip
                             cursor={{ stroke: black[900], strokeWidth: 1 }}
-                            contentStyle={{ backgroundColor: black[900], color: white[50] }}
-                            labelStyle={{ fontSize: '16px', fontWeight: 500 }}
-                            itemStyle={{ fontSize: '16px', fontWeight: 500, color: white[50] }}
+                            contentStyle={{ backgroundColor: white[50], color: black[900], gap: 8 }}
+                            labelStyle={{ fontSize: '18px', fontWeight: 600 }}
+                            itemStyle={{ fontSize: '16px', fontWeight: 500 }}
                             labelFormatter={(value) => `Doanh thu ${value.toLowerCase()}`}
                             formatter={(value) => `${value} triệu`}
                         />
