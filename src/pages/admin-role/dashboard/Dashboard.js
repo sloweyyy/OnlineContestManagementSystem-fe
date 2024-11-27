@@ -19,7 +19,7 @@ const Dashboard = () => {
 
             {/* Analytics */}
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <Typography variant='h4' >Thống kê hôm nay</Typography>
+                <Typography variant='h4'>Thống kê hôm nay</Typography>
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 2, mt: 4 }}>
                     <AnalyticsBox title='Doanh thu' value='1.000.000' growth='100' />
                     <AnalyticsBox title='Cuộc thi' value='100' growth='-100' />
@@ -31,7 +31,7 @@ const Dashboard = () => {
             <RevenueTable />
 
             {/* Contest Analytics */}
-            <Box sx={{ display: "flex", flexDirection: "row", width: "100%", mt: 4 }}>
+            <Box sx={{ display: "flex", flexDirection: "row", width: "100%", my: 8 }}>
                 <ContestStatisticsChart />
                 <FeaturedContestTable />
             </Box>

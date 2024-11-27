@@ -12,7 +12,7 @@ const ContestStatisticsChart = () => {
     ];
 
     return (
-        <Box sx={{ flex: 1, display: "flex", flexDirection: "column", height: 400 }}>
+        <Box sx={{ flex: 1, display: "flex", flexDirection: "column", height: '100%' }}>
             {/* Title */}
             <Typography variant="h4" sx={{ mb: 4, textAlign: "left" }}>
                 Thống kê cuộc thi
@@ -30,16 +30,20 @@ const ContestStatisticsChart = () => {
                             tick={{ dy: 8, fill: black[900] }}
                             padding={{ left: 0, right: 16 }}
                             fontSize={16}
+                            fontWeight={600}
+                            tickLine={{ stroke: black[900], strokeWidth: 1 }}
                         />
                         <YAxis
                             tick={{ dx: -8, fill: black[900] }}
                             fontSize={16}
+                            fontWeight={600}
+                            tickLine={{ stroke: black[900], strokeWidth: 1 }}
                         />
                         <Tooltip
-                            contentStyle={{ backgroundColor: black[900], color: white[50] }}
-                            labelStyle={{ fontSize: '16px', fontWeight: 500 }}
-                            itemStyle={{ fontSize: '16px', fontWeight: 500, color: white[50] }}
-                            labelFormatter={(value) => `Quý ${value}`}
+                            contentStyle={{ backgroundColor: white[50], color: black[900], gap: 8 }}
+                            labelStyle={{ fontSize: '18px', fontWeight: 600 }}
+                            itemStyle={{ fontSize: '16px', fontWeight: 500, color: black[900] }}
+                            labelFormatter={(value) => `${value}`}
                             formatter={(value) => `${value} cuộc thi`}
                         />
                         <Legend
@@ -50,9 +54,10 @@ const ContestStatisticsChart = () => {
                             wrapperStyle={{
                                 fontSize: '16px',
                                 fontWeight: 500,
-                                paddingTop: '16px',
+                                paddingTop: '32px',
                                 marginRight: '16px',
                             }}
+                            formatter={(value) => <span style={{ color: black[900], fontWeight: 500 }}>{value}</span>}
                         />
                         <Bar
                             dataKey="onBoarding"
