@@ -1,7 +1,7 @@
 import { Box, Button, Typography, Avatar } from '@mui/material';
 import React, { useState, useRef } from 'react';
-import CustomTextField from '../../../components/user-profile/CustomTextField';
-import { black, gray, red, white } from '../../../config/theme/themePrintives';
+import CustomTextField from '../../components/user-profile/CustomTextField';
+import { black, gray, red, white } from '../../config/theme/themePrintives';
 import { useSelector } from 'react-redux';
 
 const UserProfile = () => {
@@ -10,6 +10,14 @@ const UserProfile = () => {
     const { user } = useSelector((state) => state.user);
     const [fullName, setFullName] = useState(user.fullName);
     const [email, setEmail] = useState(user.email);
+    const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
+    const [dateOfBirth, setDateOfBirth] = useState(null);
+    const [address, setAddress] = useState(null);
+    const [password, setPassword] = useState(null);
+    const [newPassword, setNewPassword] = useState(null);
+    const [confirmPassword, setConfirmPassword] = useState(null);
+
+    console.log('user', user.phoneNumber);
 
     const handleAvatarChange = (event) => {
         const file = event.target.files[0];
@@ -48,7 +56,7 @@ const UserProfile = () => {
                         flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        backgroundImage: 'linear-gradient(to top, #EE443F, #F4827E, #EE443F)',
+                        backgroundColor: red[500],
                         borderRadius: '8px 0 0 8px',
                     }}
                 >
@@ -57,15 +65,13 @@ const UserProfile = () => {
                         sx={{
                             backgroundColor: 'transparent',
                             padding: 0,
-                            '&:hover': {
-                                backgroundColor: 'transparent',
-                            },
+                            '&:hover': { backgroundColor: 'transparent' },
                             marginBottom: 4,
                         }}
                     >
                         <Avatar
                             src={avatar}
-                            sx={{ width: 120, height: 120, border: '3px solid #fff', cursor: 'pointer' }}
+                            sx={{ width: 120, height: 120, border: `1px solid ${white[50]}`, cursor: 'pointer' }}
                             onClick={handleClick}
                         />
                         <input
@@ -90,12 +96,12 @@ const UserProfile = () => {
                     </Box>
 
                     <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', gap: 2, marginTop: 3 }}>
-                        <CustomTextField label="Số điện thoại" placeholder="Số điện thoại" type="tel" />
-                        <CustomTextField label="Ngày sinh" placeholder="Ngày sinh" type="date" />
+                        <CustomTextField label="Số điện thoại" placeholder="Số điện thoại" type="tel" value={phoneNumber} />
+                        <CustomTextField label="Ngày sinh" placeholder="Ngày sinh" type="date" value={dateOfBirth} />
                     </Box>
 
                     <Box sx={{ display: 'flex', width: '100%', marginTop: 3 }}>
-                        <CustomTextField label="Địa chỉ" placeholder="Địa chỉ cụ thể" />
+                        <CustomTextField label="Địa chỉ" placeholder="Địa chỉ cụ thể" value={address} />
                     </Box>
 
                 </Box>
@@ -117,18 +123,15 @@ const UserProfile = () => {
                 }}
             >
                 {/* Recent Password */}
-                <CustomTextField label="Mật khẩu hiện tại" placeholder="Mật khẩu hiện tại" type="password" />
+                <CustomTextField label="Mật khẩu hiện tại" placeholder="Mật khẩu hiện tại" type="password" value={password} />
                 {/* New Password */}
-                <CustomTextField label="Mật khẩu mới" placeholder="Mật khẩu mới" type="password" />
+                <CustomTextField label="Mật khẩu mới" placeholder="Mật khẩu mới" type="password" value={newPassword} />
                 {/* Confirm Password */}
-                <CustomTextField label="Xác nhận mật khẩu" placeholder="Xác nhận mật khẩu" type="password" />
+                <CustomTextField label="Xác nhận mật khẩu" placeholder="Xác nhận mật khẩu" type="password" value={confirmPassword} />
                 {/* Button Section */}
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginTop: 4 }}>
-                    <Button sx={{ textTransform: 'none', paddingY: '8px', paddingX: '24px', backgroundColor: gray[200], color: black[900], fontSize: 16, fontWeight: 600 }}>Đăng xuất</Button>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-                        <Button sx={{ textTransform: 'none', paddingY: '8px', paddingX: '24px', backgroundColor: gray[200], color: black[900], fontSize: 16, fontWeight: 600, marginLeft: 2 }}>Hủy</Button>
-                        <Button sx={{ textTransform: 'none', paddingY: '8px', paddingX: '24px', backgroundColor: red[500], color: white[50], fontSize: 16, fontWeight: 600 }}>Lưu thay đổi</Button>
-                    </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', width: '100%', marginTop: 4, gap: 2 }}>
+                    <Button sx={{ textTransform: 'none', paddingY: '8px', paddingX: '24px', backgroundColor: gray[200], color: black[900], fontSize: 16, fontWeight: 600, marginLeft: 2 }}>Hủy</Button>
+                    <Button sx={{ textTransform: 'none', paddingY: '8px', paddingX: '24px', backgroundColor: red[500], color: white[50], fontSize: 16, fontWeight: 600 }}>Lưu thay đổi</Button>
                 </Box>
             </Box>
         </Box>

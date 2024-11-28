@@ -1,12 +1,12 @@
 import axios from 'axios';
-import AxiosConfig from '../utils/AxiosConfig';
 import Cookies from 'js-cookie';
 import { API_BASE_URL } from './config';
+import UserService from './user.service';
 
 const AUTH_ENDPOINT = `${API_BASE_URL}/Auth`;
 
 const signin = async (email, password) => {
-  const response = await AxiosConfig.post(`${AUTH_ENDPOINT}/signin`, {
+  const response = await axios.post(`${AUTH_ENDPOINT}/signin`, {
     email,
     password,
   });
@@ -17,6 +17,7 @@ const signin = async (email, password) => {
 
   return response;
 };
+
 
 const register = async (email, password, confirmPassword, fullName) => {
   try {
@@ -42,7 +43,7 @@ const register = async (email, password, confirmPassword, fullName) => {
 };
 
 const refreshToken = async (refreshToken) => {
-  return await AxiosConfig.post(`${AUTH_ENDPOINT}/refresh-token`, {
+  return await axios.post(`${AUTH_ENDPOINT}/refresh-token`, {
     refreshToken,
   });
 };
@@ -52,7 +53,7 @@ const signout = async (refreshToken) => {
   Cookies.remove('refreshToken');
   localStorage.removeItem('userData');
 
-  return await AxiosConfig.post(`${AUTH_ENDPOINT}/revoke-token`, {
+  return await axios.post(`${AUTH_ENDPOINT}/revoke-token`, {
     refreshToken,
   });
 };

@@ -2,8 +2,8 @@ import React from 'react'
 import { Box, IconButton, Typography } from '@mui/material'
 import { Notifications } from '@mui/icons-material';
 import { black, red, white } from '../../../config/theme/themePrintives';
-import AnalyticsBox from '../../../components/admin-dashboard/AnalyticsBox';
 import ContestsTable from '../../../components/admin-contests/ContestsTable';
+import AnalyticsSection from '../../../components/admin-dashboard/AnalyticsSection';
 
 const Contests = () => {
     return (
@@ -15,15 +15,8 @@ const Contests = () => {
                 </IconButton>
             </Box>
 
-            {/* Analytics */}
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <Typography variant='h4'>Quản lý cuộc thi</Typography>
-                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 2, mt: 4 }}>
-                    <AnalyticsBox title='Doanh thu' value='1.000.000' growth='100' />
-                    <AnalyticsBox title='Cuộc thi' value='100' growth='-100' />
-                    <AnalyticsBox title='Số lượng thí sinh' value='1.000' growth='100' />
-                </Box>
-            </Box>
+            {/* Analytics Section */}
+            <AnalyticsSection />
 
             {/* Contests Table */}
             <ContestsTable />

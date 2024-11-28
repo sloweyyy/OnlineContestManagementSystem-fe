@@ -28,14 +28,18 @@ const AnalyticsBox = ({ title, value, growth }) => {
         }
     }
 
+    const formatValue = (value) => {
+        return value?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
     return (
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', border: 1, borderColor: gray[200], borderRadius: 2, padding: 2, gap: '12px' }}>
             {setIcon()}
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                <Typography sx={{ fontSize: 28, fontWeight: 600 }}>{value}</Typography>
+                <Typography sx={{ fontSize: 28, fontWeight: 600 }}>{formatValue(value)}</Typography>
                 <Typography sx={{ fontSize: 16, fontWeight: 600 }}>{title}</Typography>
             </Box>
-            <Typography sx={{ color: growth.includes('-') ? red[400] : green[400], fontSize: 12, fontWeight: 400 }}>{growth}% so với hôm qua</Typography>
+            <Typography sx={{ color: growth < 0 ? red[400] : green[400], fontSize: 12, fontWeight: 400 }}>{growth}% so với hôm qua</Typography>
         </Box>
     )
 }

@@ -78,6 +78,8 @@ const Sidebar = () => {
 
     const menuItems = user?.role === "Admin" ? ADMIN : PARTICIPANT;
 
+    const pathToProfile = user?.role === "Admin" ? "/admin/profile" : "/participant/profile";
+
     return (
         <Drawer
             variant="permanent"
@@ -91,6 +93,7 @@ const Sidebar = () => {
                     overflow: "auto",
                     borderRight: "0px",
                     backgroundColor: "transparent",
+                    scrollbarWidth: "none",
                 },
             }}
         >
@@ -210,7 +213,7 @@ const Sidebar = () => {
 
                 <List>
                     <CustomTooltip title={'Thông tin tài khoản'} disableHoverListener={openSideBar}>
-                        <Link to="/participant/profile" style={{ textDecoration: 'none' }}>
+                        <Link to={pathToProfile} style={{ textDecoration: 'none' }}>
                             <ListItem
                                 button
                                 disablePadding
