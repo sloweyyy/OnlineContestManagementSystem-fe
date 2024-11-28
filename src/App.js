@@ -3,8 +3,8 @@ import './App.css';
 import Sidebar from './layouts/sidebar/Sidebar';
 import Header from './layouts/header/Header';
 import Footer from './layouts/footer/Footer';
-import { Box, createTheme, ThemeProvider } from '@mui/material';
-import getDesignTokens from './config/theme/themePrintives';
+import { Box, createTheme, Skeleton, ThemeProvider } from '@mui/material';
+import getDesignTokens, { gray, white } from './config/theme/themePrintives';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
@@ -175,13 +175,87 @@ function AppContent() {
       </Box>
     </Box>
   );
+};
+
+function Loading() {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        gap: 3,
+        padding: 3,
+        backgroundColor: gray[100],
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 3,
+          width: "18rem",
+          height: "90vh",
+          borderRadius: 2,
+          backgroundColor: white[50],
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+          padding: 2,
+        }}
+      >
+        <Skeleton variant="rectangular" width="100%" height={40} sx={{ borderRadius: 1 }} />
+
+        <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
+          <Skeleton variant="text" width="70%" height={25} />
+          <Skeleton variant="text" width="50%" height={25} />
+          <Skeleton variant="text" width="60%" height={25} />
+          <Skeleton variant="rectangular" width="100%" height={200} sx={{ borderRadius: 2 }} />
+        </Box>
+
+        <Skeleton
+          variant="rectangular"
+          width="100%"
+          height={50}
+          sx={{
+            borderRadius: 1,
+            backgroundColor: "rgba(0, 0, 0, 0.05)",
+          }}
+        />
+
+        <Skeleton
+          variant="rectangular"
+          width="100%"
+          height={80}
+          sx={{
+            mt: "auto",
+            borderRadius: 1,
+            backgroundColor: "rgba(0, 0, 0, 0.05)",
+          }}
+        />
+      </Box>
+
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          gap: 3,
+          height: "90vh",
+          borderRadius: 2,
+          backgroundColor: white[50],
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+          padding: 3,
+        }}
+      >
+        <Skeleton variant="rectangular" width="100%" height="100%" sx={{ borderRadius: 2 }} />
+      </Box>
+    </Box>
+  );
 }
 
 function App() {
   const theme = createTheme(getDesignTokens());
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<Loading />}>
       <ThemeProvider theme={theme}>
         <AppContent />
       </ThemeProvider>

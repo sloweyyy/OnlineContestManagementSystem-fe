@@ -11,7 +11,7 @@ const PublicRoute = ({ children }) => {
         if (role?.toLowerCase() === 'user') {
             return <Navigate to="/participant/home" replace />;
         } else if (role?.toLowerCase() === 'admin') {
-            return <Navigate to="/admin/dashboard" replace />;
+            return <Navigate to="/admin/home" replace />;
         }
     }
 
