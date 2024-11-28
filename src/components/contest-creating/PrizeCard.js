@@ -43,6 +43,18 @@ const PrizeCard = ({
         }
     };
 
+    const formatCurrency = (value) => {
+        if (!value) return '';
+        const formattedValue = value?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        return formattedValue;
+    };
+
+    const parseCurrency = (value) => {
+        if (!value) return 0;
+        const cleanedValue = value.replace(/\./g, '');
+        return parseInt(cleanedValue, 10);
+    };
+
     return (
         <Box>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, justifyContent: 'space-between', alignItems: 'center' }} >
@@ -93,10 +105,11 @@ const PrizeCard = ({
                         <CustomTextField
                             label='Giá trị giải thưởng (VND)'
                             placeholder='Giá trị giải thưởng'
-                            value={value}
-                            onChange={(e) => onChange('value', e.target.value)}
+                            type='text'
+                            value={value ? formatCurrency(value) : ''}
+                            onChange={(e) => onChange('value', parseCurrency(e.target.value))}
+                            onBlur={(e) => onChange('value', parseCurrency(e.target.value))}
                             fullWidth
-                            type='number'
                         />
                         {/* Prize Number */}
                         <CustomTextField

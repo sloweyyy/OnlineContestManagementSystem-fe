@@ -20,6 +20,27 @@ const ContestCreating = () => {
     const [commune, setCommune] = useState(null);
     const [detailAddress, setDetailAddress] = useState(null);
 
+    const initialState = {
+        name: null,
+        ruleDescription: null,
+        startDate: null,
+        endDate: null,
+        minimumParticipant: null,
+        maximumParticipant: null,
+        prizes: [
+            { name: 'Giải nhất', description: null, value: null, imageUrl: null, amount: null }
+        ],
+        participantInformationRequirements: [],
+        organizationInformation: {
+            orgName: null,
+            orgPhoneNumber: null,
+            orgEmail: null,
+            orgAddress: null,
+        },
+        imageUrl: null,
+        entryFee: null,
+    };
+
     const [contest, setContest] = useState({
         name: null,
         ruleDescription: null,
@@ -56,6 +77,11 @@ const ContestCreating = () => {
                 const response = await ContestService.createContest(contest);
                 if (response) {
                     toast.success('Tạo cuộc thi thành công');
+                    // setContest(initialState);
+                    // setProvince(null);
+                    // setDistrict(null);
+                    // setCommune(null);
+                    // setDetailAddress(null);
                 }
             } catch (error) {
                 toast.error('Tạo cuộc thi thất bại');
@@ -160,6 +186,18 @@ const ContestCreating = () => {
 
     const handleCommuneChange = (event, newValue) => {
         setCommune(newValue);
+    };
+
+    const formatCurrency = (value) => {
+        if (!value) return '';
+        const formattedValue = value?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        return formattedValue;
+    };
+
+    const parseCurrency = (value) => {
+        if (!value) return 0;
+        const cleanedValue = value.replace(/\./g, '');
+        return parseInt(cleanedValue);
     };
 
     return (
@@ -277,9 +315,10 @@ const ContestCreating = () => {
                 <CustomTextField
                     label="Lệ phí tham gia"
                     placeholder="Lệ phí tham gia"
-                    type="number"
-                    value={contest?.entryFee}
-                    onChange={(e) => setContest({ ...contest, entryFee: e.target.value })}
+                    type="text"
+                    value={contest?.entryFee ? formatCurrency(contest.entryFee) : ''}
+                    onChange={(e) => setContest({ ...contest, entryFee: parseCurrency(e.target.value) })}
+                    onBlur={(e) => setContest({ ...contest, entryFee: parseCurrency(e.target.value) })}
                     slotProps={{
                         input: {
                             endAdornment: <InputAdornment position="end" sx={{ fontSize: 14, fontWeight: 600 }}>VND</InputAdornment>,
