@@ -6,6 +6,7 @@ const accessToken = Cookies.get('accessToken');
 
 const initialState = {
     isAuthenticated: !!accessToken,
+    role: '',
 };
 
 const authSlice = createSlice({

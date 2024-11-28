@@ -15,7 +15,6 @@ import PrivateRoute from './routes/PrivateRoute';
 // Lazy User Page
 const Home = lazy(() => import('./pages/user-role/home/Home'));
 const Contest = lazy(() => import('./pages/user-role/contest/Contest'));
-const Profile = lazy(() => import('./pages/user-role/user-profile/UserProfile'));
 const ContestCreating = lazy(() => import('./pages/user-role/contest-creating/ContestCreating'));
 const DetailContest = lazy(() => import('./pages/user-role/contest/DetailContest'));
 const Search = lazy(() => import('./pages/user-role/home/Search'));
@@ -41,6 +40,7 @@ const Successfully = lazy(() => import('./pages/auth/SuccessfullyCard'));
 
 // Lazy Other Page
 const NotFoundPage = lazy(() => import('./pages/static-pages/NotFoundPage'));
+const Profile = lazy(() => import('./pages/profile/Profile'));
 
 function AppContent() {
   const location = useLocation();
@@ -163,6 +163,7 @@ function AppContent() {
               <Route element={<PrivateRoute allowedRoles={['admin', 'Admin']} />}>
                 <Route path="/admin/home" element={<AdminDashboard />} />
                 <Route path="/admin/contests" element={<AdminContest />} />
+                <Route path="/admin/profile" element={<Profile />} />
               </Route>
 
               {/* Other Route */}

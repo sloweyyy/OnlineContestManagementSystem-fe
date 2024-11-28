@@ -33,8 +33,6 @@ const Home = () => {
         fetchContests();
     }, []);
 
-    console.log(contests);
-
     // useEffect(() => {
     //     const now = new Date();
 

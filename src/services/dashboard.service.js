@@ -3,10 +3,12 @@ import { API_BASE_URL } from "./config";
 
 const DASHBOARD_ENDPOINT = `${API_BASE_URL}/Dashboard`;
 
-const getContestStatistic = async () => {
+const getContestStatistics = async () => {
     try {
-        const response = await axiosConfig.get(`${DASHBOARD_ENDPOINT}/contest-statistic`);
-        return response.data;
+        const response = await axiosConfig.get(`${DASHBOARD_ENDPOINT}/contest-statistics`);
+
+        localStorage.setItem('contestStatistics', JSON.stringify(response.data));
+        return response.status;
     } catch (error) {
         if (error.response) {
             return error.response.data;
@@ -15,10 +17,12 @@ const getContestStatistic = async () => {
     }
 }
 
-const getRegistrationStatistic = async () => {
+const getRegistrationStatistics = async () => {
     try {
-        const response = await axiosConfig.get(`${DASHBOARD_ENDPOINT}/registration-statistic`);
-        return response.data;
+        const response = await axiosConfig.get(`${DASHBOARD_ENDPOINT}/registration-statistics`);
+
+        localStorage.setItem('registrationStatistics', JSON.stringify(response.data));
+        return response.status;
     } catch (error) {
         if (error.response) {
             return error.response.data;
@@ -28,8 +32,8 @@ const getRegistrationStatistic = async () => {
 }
 
 const DashboardService = {
-    getContestStatistic,
-    getRegistrationStatistic
+    getContestStatistics,
+    getRegistrationStatistics
 }
 
 export default DashboardService;

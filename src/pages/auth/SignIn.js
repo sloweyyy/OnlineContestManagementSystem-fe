@@ -5,6 +5,8 @@ import { Google } from '@mui/icons-material';
 import { Checkbox } from '@mui/material';
 import AuthServices from '../../services/auth.service';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { userLogin } from '../../stores/actions/AuthAction';
 
 const textFieldStyle = {
     '& .MuiOutlinedInput-root': {
@@ -46,20 +48,22 @@ const SignIn = () => {
     const [password, setPassword] = useState('');
     const [remembered, setRemembered] = useState(false);
 
+    const dispatch = useDispatch();
+
     const handleSignIn = () => {
-        AuthServices.signin(email, password)
+        dispatch(userLogin({ email, password }))
+            .unwrap()
             .then((response) => {
-                if (response.data.user.role === 'Admin') {
+                if (response.user.role === 'Admin') {
                     window.location.href = '/admin/home';
                 } else {
-                    window.location.href = 'participant/home';
+                    window.location.href = '/participant/home';
                 }
             })
             .catch((error) => {
                 console.error('Error:', error);
                 toast.error('Đăng nhập thất bại');
-            }
-            );
+            });
     };
 
     return (

@@ -21,9 +21,9 @@ const data = [
     { month: "Tháng 7", lastYear: 27, thisYear: 18 },
     { month: "Tháng 8", lastYear: 30, thisYear: 20 },
     { month: "Tháng 9", lastYear: 25, thisYear: 15 },
-    { month: "Tháng 10", lastYear: 20, thisYear: 10 },
-    { month: "Tháng 11", lastYear: 15, thisYear: 20 },
-    { month: "Tháng 12", lastYear: 10, thisYear: 0 },
+    { month: "Tháng 10", lastYear: 35, thisYear: 25 },
+    { month: "Tháng 11", lastYear: 25, thisYear: 15 },
+    { month: "Tháng 12", lastYear: 40, thisYear: 30 },
 ];
 
 const RevenueTable = () => {

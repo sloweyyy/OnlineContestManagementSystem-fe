@@ -1,26 +1,16 @@
-import React, { useState } from 'react';
-import {
-    Box,
-    Tab,
-    Tabs,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    IconButton,
-    Divider,
-    TextField,
-    TablePagination,
-} from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { black, gray } from '../../config/theme/themePrintives';
-import { Apps, BlockRounded, LockResetRounded, PlayCircleFilledRounded, WatchLaterRounded } from '@mui/icons-material';
+import React, { useState, useEffect } from 'react';
+import { Box, Tabs, Tab, TextField, IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+import { Apps, BlockRounded, LockResetRounded, PlayCircleFilledRounded, WatchLaterRounded, MoreVert, ManageSearchRounded, SlideshowRounded } from '@mui/icons-material';
+import { black, dark, gray } from '../../config/theme/themePrintives';
+import ContestService from '../../services/contest.service';
+import AdminService from '../../services/admin.service';
+import { toast } from 'react-toastify';
+import ContestDetailModal from './ContestDetailModal';
 
 const tabTextStyle = {
     color: black[200],
-    fontWeight: '600',
+    fontWeight: 600,
     fontSize: '16px',
     textTransform: 'none',
     '&.Mui-selected': {
@@ -32,62 +22,147 @@ const tabIconStyle = {
     fontSize: '18px',
 };
 
-const headerCellStyle = {
-    color: black[900],
-    fontWeight: '600',
-    fontSize: '16px',
-};
-
-const bodyCellStyle = {
-    color: black[900],
-    fontWeight: '400',
-    fontSize: '16px',
-};
-
 const ContestsTable = () => {
     const [tabValue, setTabValue] = useState(0);
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [searchQuery, setSearchQuery] = useState("");
+    const [searchQuery, setSearchQuery] = useState('');
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [contests, setContests] = useState([]);
+    const [selectedRow, setSelectedRow] = useState(null);
+    const [openModal, setOpenModal] = useState(false);
+    const [selectedContest, setSelectedContest] = useState(null);
+
+    useEffect(() => {
+        const fetchContests = async () => {
+            const response = await ContestService.getContests();
+            setContests(response);
+        };
+
+        fetchContests();
+    }, []);
+
+    const formatContestStatus = (status) => {
+        switch (status) {
+            case 'approved':
+                return 'Đã phê duyệt';
+            case 'pending':
+                return 'Chờ phê duyệt';
+            case 'rejected':
+                return 'Không phê duyệt';
+            default:
+                return 'Không xác định';
+        }
+    }
+
+    const rows = contests?.map((contest, index) => {
+        return {
+            id: index + 1,
+            name: contest.name,
+            status: formatContestStatus(contest.status),
+            organizer: contest.organizationInformation.orgName,
+            startDate: new Date(contest.startDate).toLocaleDateString('vi-VN'),
+            endDate: new Date(contest.endDate).toLocaleDateString('vi-VN'),
+            payment: 'Đã thanh toán',
+            _id: contest.id,
+        };
+    });
+
+    const filteredRows = rows?.filter(row => {
+        const matchesSearchQuery = row?.name?.toLowerCase().includes(searchQuery.toLowerCase());
+        const newDate = new Date().toLocaleDateString('vi-VN');
+        const matchesTabValue =
+            tabValue === 0 ||
+            (tabValue === 1 && row.startDate < newDate && row.endDate > newDate && row.status !== 'Không phê duyệt') ||
+            (tabValue === 2 && row.startDate > newDate && row.status !== 'Không phê duyệt') ||
+            (tabValue === 3 && row.endDate < newDate && row.status !== 'Không phê duyệt') ||
+            (tabValue === 4 && row.status === 'Không phê duyệt');
+        return matchesSearchQuery && matchesTabValue;
+    });
+
+    const columns = [
+        { field: 'id', headerName: '#', flex: 0.5 },
+        { field: 'name', headerName: 'Tên cuộc thi', flex: 1.5 },
+        { field: 'status', headerName: 'Trạng thái', flex: 1 },
+        { field: 'organizer', headerName: 'Ban tổ chức', flex: 1.5 },
+        { field: 'startDate', headerName: 'Ngày bắt đầu', flex: 1.2 },
+        { field: 'endDate', headerName: 'Ngày kết thúc', flex: 1.2 },
+        { field: 'payment', headerName: 'Thanh toán', flex: 1 },
+        {
+            field: 'action',
+            headerName: '',
+            flex: 0.5,
+            renderCell: (params) => (
+                <IconButton onClick={(event) => handleMenuClick(event, params.row)}>
+                    <MoreVert />
+                </IconButton>
+            ),
+        },
+    ];
 
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
     };
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-
     const handleSearchChange = (event) => {
-        setSearchQuery(event.target.value.toLowerCase());
+        setSearchQuery(event.target.value);
     };
 
-    const data = [
-        { name: 'Cuộc thi 1', status: 'Đang diễn ra', organizer: 'Name', startDate: '30/09/2024', endDate: '30/10/2024', payment: 'Đã thanh toán' },
-        { name: 'Cuộc thi 2', status: 'Sắp diễn ra', organizer: 'Name', startDate: '30/09/2024', endDate: '30/10/2024', payment: 'Chưa thanh toán' },
-        { name: 'Cuộc thi 3', status: 'Đã kết thúc', organizer: 'Name', startDate: '30/09/2024', endDate: '30/10/2024', payment: 'Đã thanh toán' },
-        { name: 'Cuộc thi 4', status: 'Đã kết thúc', organizer: 'Name', startDate: '30/09/2024', endDate: '30/10/2024', payment: 'Chưa thanh toán' },
-        { name: 'Cuộc thi 5', status: 'Đã kết thúc', organizer: 'Name', startDate: '30/09/2024', endDate: '30/10/2024', payment: 'Đã thanh toán' },
-        { name: 'Cuộc thi 6', status: 'Đang diễn ra', organizer: 'Name', startDate: '30/09/2024', endDate: '30/10/2024', payment: 'Chưa thanh toán' },
-        { name: 'Cuộc thi 7', status: 'Đang diễn ra', organizer: 'Name', startDate: '30/09/2024', endDate: '30/10/2024', payment: 'Đã thanh toán' },
-        { name: 'Cuộc thi 8', status: 'Sắp diễn ra', organizer: 'Name', startDate: '30/09/2024', endDate: '30/10/2024', payment: 'Chưa thanh toán' },
-        { name: 'Cuộc thi 9', status: 'Không phê duyệt', organizer: 'Name', startDate: '30/09/2024', endDate: '30/10/2024', payment: 'Đã thanh toán' },
-    ];
+    const handleMenuClick = (event, row) => {
+        setAnchorEl(event.currentTarget);
+        setSelectedRow(row);
+        setSelectedContest(contests.find(contest => contest.id === row._id));
+    };
 
-    const filteredData = data.filter(row => {
-        const matchesSearchQuery = row.name.toLowerCase().includes(searchQuery);
-        const matchesTabValue = tabValue === 0 || row.status === (tabValue === 1 ? 'Đang diễn ra' : tabValue === 2 ? 'Sắp diễn ra' : tabValue === 3 ? 'Đã kết thúc' : 'Không phê duyệt');
-        return matchesSearchQuery && matchesTabValue;
-    });
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+        setSelectedRow(null);
+    };
+
+    const handleViewDetails = () => {
+        setOpenModal(true);
+        handleCloseMenu();
+    };
+
+    const handleApprove = async (contestId) => {
+        handleCloseMenu();
+        const response = await AdminService.approveContest(contestId);
+        if (response.status === 200) {
+            toast.success('Phê duyệt cuộc thi thành công');
+            const updatedContests = contests?.map(contest => {
+                if (contest.id === contestId) {
+                    contest.status = 'approved';
+                }
+                return contest;
+            });
+            setContests(updatedContests);
+        } else {
+            console.log('Failed to approve contest');
+        }
+    };
+
+    const handleReject = async (contestId) => {
+        handleCloseMenu();
+        const response = await AdminService.rejectContest(contestId);
+        if (response.status === 200) {
+            toast.success('Không phê duyệt cuộc thi thành công');
+            const updatedContests = contests?.map(contest => {
+                if (contest.id === contestId) {
+                    contest.status = 'rejected';
+                }
+                return contest;
+            });
+            setContests(updatedContests);
+        } else {
+            console.log('Failed to reject contest');
+        }
+    };
+
+    const handleCloseModal = () => {
+        setOpenModal(false);
+        setSelectedContest(null);
+    };
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', my: 4 }}>
-            {/* Tabs */}
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', my: 2 }}>
                     <TextField
@@ -107,7 +182,7 @@ const ContestsTable = () => {
                                     borderWidth: 1,
                                 },
                                 '& .MuiInputBase-input': {
-                                    fontSize: '16px',
+                                    fontSize: 16,
                                     padding: '12px 24px',
                                 },
                             },
@@ -128,7 +203,7 @@ const ContestsTable = () => {
                             bottom: '12px',
                             left: 0,
                             right: 0,
-                            height: '2px',
+                            height: '1px',
                             backgroundColor: gray[200],
                             zIndex: -1,
                         },
@@ -172,63 +247,88 @@ const ContestsTable = () => {
                 </Tabs>
             </Box>
 
-            {/* Table */}
-            <TableContainer sx={{ mt: 2, borderRadius: 1, border: `1px solid ${gray[200]}` }}>
-                <Table>
-                    <TableHead>
-                        <TableRow sx={{ backgroundColor: black[50] }}>
-                            <TableCell sx={headerCellStyle}>#</TableCell>
-                            <TableCell sx={headerCellStyle}>Tên cuộc thi</TableCell>
-                            <TableCell sx={headerCellStyle}>Trạng thái</TableCell>
-                            <TableCell sx={headerCellStyle}>Ban tổ chức</TableCell>
-                            <TableCell sx={headerCellStyle}>Thời gian bắt đầu</TableCell>
-                            <TableCell sx={headerCellStyle}>Thời gian kết thúc</TableCell>
-                            <TableCell sx={headerCellStyle}>Thanh toán</TableCell>
-                            <TableCell></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody sx={{ height: 400 }}>
-                        {filteredData
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row, index) => (
-                                <>
-                                    <TableRow key={index} sx={{ height: 80 }}>
-                                        <TableCell sx={bodyCellStyle}>{index + 1}</TableCell>
-                                        <TableCell sx={bodyCellStyle}>{row.name}</TableCell>
-                                        <TableCell sx={bodyCellStyle}>{row.status}</TableCell>
-                                        <TableCell sx={bodyCellStyle}>{row.organizer}</TableCell>
-                                        <TableCell sx={bodyCellStyle}>{row.startDate}</TableCell>
-                                        <TableCell sx={bodyCellStyle}>{row.endDate}</TableCell>
-                                        <TableCell sx={bodyCellStyle}>{row.payment}</TableCell>
-                                        <TableCell align="center">
-                                            <IconButton>
-                                                <MoreVertIcon />
-                                            </IconButton>
-                                        </TableCell>
-                                    </TableRow>
-                                    {index !== rowsPerPage - 1 && (
-                                        <TableRow sx={{ margin: 0, padding: 0 }}>
-                                            <TableCell colSpan={8} sx={{ margin: 0, padding: 0 }}>
-                                                <Divider sx={{ margin: 0, padding: 0, backgroundColor: gray[200], height: 1 }} />
-                                            </TableCell>
-                                        </TableRow>
-                                    )}
-                                </>
-                            ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <Box sx={{ height: 400, mt: 2 }}>
+                <DataGrid
+                    rows={filteredRows}
+                    columns={columns}
+                    pageSizeOptions={[5]}
+                    initialState={{
+                        pagination: { paginationModel: { pageSize: 5, page: 0 } },
+                    }}
+                    disableColumnMenu
+                    localeText={{
+                        MuiTablePagination: {
+                            labelRowsPerPage: 'Số hàng mỗi bảng',
+                            labelDisplayedRows: ({ from, to, count }) => `${from}–${to} trên ${count !== -1 ? count : `hơn ${to}`}`,
+                        },
+                    }}
+                    sx={{
+                        width: '100%',
+                        border: `1px solid ${gray[200]}`,
+                        '& .MuiDataGrid-columnHeader': {
+                            backgroundColor: gray[200],
+                            color: black[900],
+                            fontWeight: 600,
+                            fontSize: 16,
+                            outline: 'none',
+                        },
+                        '& .MuiDataGrid-columnHeaderTitle': {
+                            fontWeight: 600,
+                        },
+                        '& .MuiDataGrid-cell': {
+                            outline: 'none',
+                        },
+                        '& .MuiDataGrid-row:hover': {
+                            backgroundColor: gray[200],
+                        },
+                        '& .MuiDataGrid-root': {
+                            border: 'none',
+                        },
+                        '& .MuiDataGrid-selectedRowCount': {
+                            visibility: 'hidden',
+                        },
+                        '& .MuiDataGrid-checkboxInput.Mui-checked': {
+                            color: 'inherit',
+                        },
+                        '& .MuiDataGrid-cell:focus, & .MuiDataGrid-cell:focus-within': {
+                            outline: 'none',
+                        },
+                        '& .MuiDataGrid-columnHeader:focus, & .MuiDataGrid-columnHeader:focus-within': {
+                            outline: 'none',
+                        },
+                        '& .MuiDataGrid-row.Mui-selected': {
+                            backgroundColor: `${gray[200]} !important`,
+                        },
+                        '& .MuiDataGrid-columnSeparator--resizable': {
+                            display: 'block',
+                        },
+                    }}
+                />
+            </Box>
 
-            {/* Pagination */}
-            <TablePagination
-                rowsPerPageOptions={[5]}
-                component="div"
-                count={filteredData.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+            <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleCloseMenu}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+                sx={{ '& .MuiMenuItem-root': { '&:hover': { backgroundColor: gray[200] } } }}
+            >
+                <MenuItem onClick={handleViewDetails}>
+                    <ManageSearchRounded fontSize='small' sx={{ mr: 1, color: dark[500] }} />
+                    <Typography sx={{ fontSize: '16px', color: dark[500] }}>Xem chi tiết</Typography>
+                </MenuItem>
+                <MenuItem onClick={() => handleApprove(selectedRow?._id)} disabled={selectedRow?.status !== 'Chờ phê duyệt'}>
+                    <SlideshowRounded fontSize='small' sx={{ mr: 1, color: dark[500] }} />
+                    <Typography sx={{ fontSize: '16px', color: dark[500] }}>Phê duyệt</Typography>
+                </MenuItem>
+                <MenuItem onClick={() => handleReject(selectedRow._id)} disabled={selectedRow?.status !== 'Chờ phê duyệt'}>
+                    <BlockRounded fontSize='small' sx={{ mr: 1, color: dark[500] }} />
+                    <Typography sx={{ fontSize: '16px', color: dark[500] }}>Không phê duyệt</Typography>
+                </MenuItem>
+            </Menu>
+
+            <ContestDetailModal open={openModal} onClose={handleCloseModal} contest={selectedContest} handleApprove={handleApprove} handleReject={handleReject} />
         </Box>
     );
 };
