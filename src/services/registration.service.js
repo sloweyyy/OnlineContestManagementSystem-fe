@@ -27,9 +27,22 @@ const getRetristeredContestsByUserId = async (userId) => {
     }
 }
 
+const getParticipantsByContestId = async (contestId) => {
+    try {
+        const response = await axiosConfig.get(`${CONTEST_ENDPOINT}/${contestId}/registrations`);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            return error.response.data;
+        }
+        return error.message;
+    }
+}
+
 const RegisterService = {
     registerContest,
-    getRetristeredContestsByUserId
+    getRetristeredContestsByUserId,
+    getParticipantsByContestId
 };
 
 export default RegisterService;

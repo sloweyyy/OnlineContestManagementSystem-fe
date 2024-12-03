@@ -10,7 +10,6 @@ import { useSelector } from 'react-redux';
 
 const Dashboard = () => {
     const { user } = useSelector(state => state.user)
-    console.log('user', user)
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', padding: 2 }}>
             {/* Title and Notification Icon Button */}

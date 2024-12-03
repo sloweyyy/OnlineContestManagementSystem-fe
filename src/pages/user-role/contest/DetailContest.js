@@ -7,99 +7,12 @@ import PaticipatingModal from '../../../components/contest/PaticipatingModal';
 import { useLocation } from 'react-router-dom';
 import ContestService from '../../../services/contest.service';
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { userLogout } from "../../../stores/actions/AuthAction";
-
-const CountdownBox = ({ value, index }) => (
-    <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-        width="100px"
-        height="100px"
-        bgcolor={white[100]}
-        borderRadius={2}
-        boxShadow="0px 4px 8px rgba(0, 0, 0, 0.1)"
-    >
-        <Typography fontWeight={600} fontSize={36} color={red[500]}>
-            {value}
-        </Typography>
-        <Typography fontWeight={400} fontSize={18} color={gray[500]}>
-            {index === 0 ? 'Ngày' : index === 1 ? 'Giờ' : index === 2 ? 'Phút' : 'Giây'}
-        </Typography>
-    </Box>
-);
-
-const RankCard = ({ rank, name }) => {
-    let bgColor;
-    let backgroundImage;
-
-    switch (rank) {
-        case 1:
-            bgColor = yellow[100];
-            backgroundImage = `url(${require("../../../assets/gold.svg").default})`;
-            break;
-        case 2:
-            bgColor = yellow[50];
-            backgroundImage = `url(${require("../../../assets/silver.svg").default})`;
-            break;
-        case 3:
-            bgColor = gray[100];
-            backgroundImage = `url(${require("../../../assets/brown.svg").default})`;
-            break;
-        default:
-            bgColor = gray[50];
-            backgroundImage = 'none';
-            break;
-    }
-
-    return (
-        <Box
-            sx={{
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                borderRadius: 2,
-                bgcolor: bgColor,
-                paddingY: 2,
-                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-            }}
-        >
-            <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                width="40px"
-                height="40px"
-                color={black[900]}
-                fontSize={20}
-                marginLeft={4}
-                sx={{
-                    backgroundImage: backgroundImage,
-                    backgroundSize: 'cover',
-                    display: backgroundImage ? 'flex' : 'none',
-                }}
-            >
-                {rank}
-            </Box>
-            <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                width="60%"
-                height="100%"
-                borderRadius={2}
-                fontSize={18}
-                fontWeight={500}
-                color={black[700]}
-            >
-                {name}
-            </Box>
-        </Box >
-    );
-};
+import RegisterService from '../../../services/registration.service';
+import CountdownBox from '../../../components/contest/CountdownBox';
+import RankCard from '../../../components/contest/RankCard';
+import CustomTooltip from '../../../components/custom-components/CustomTooltip';
 
 const DetailContest = () => {
     const [contest, setContest] = useState(null);
@@ -109,6 +22,9 @@ const DetailContest = () => {
     const [remainingTime, setRemainingTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { user } = useSelector(state => state.user);
+    const [participants, setParticipants] = useState([]);
+    const isDisable = user?.id === contest?.creatorUserId || participants?.some(participant => participant.userId === user?.id);
 
     useEffect(() => {
         const fetchContest = async () => {
@@ -151,24 +67,20 @@ const DetailContest = () => {
         return () => clearInterval(intervalId);
     }, [contest]);
 
-    const ParticipantData = [
-        { rank: 1, name: 'Participant Name 1' },
-        { rank: 2, name: 'Participant Name 2' },
-        { rank: 3, name: 'Participant Name 3' },
-        { rank: 4, name: 'Participant Name 4' },
-        { rank: 5, name: 'Participant Name 5' },
-        { rank: 6, name: 'Participant Name 6' },
-        { rank: 7, name: 'Participant Name 7' },
-        { rank: 8, name: 'Participant Name 8' },
-        { rank: 9, name: 'Participant Name 9' },
-        { rank: 10, name: 'Participant Name 10' },
-    ];
+    useEffect(() => {
+        const fetchParticipants = async () => {
+            const participants = await RegisterService.getParticipantsByContestId(contestId);
+            setParticipants(participants);
+        }
+
+        fetchParticipants();
+    }, [contestId]);
 
     const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 5;
-    const totalPages = Math.ceil(ParticipantData.length / itemsPerPage);
+    const totalPages = Math.ceil(participants?.length / itemsPerPage);
 
-    const paginatedData = ParticipantData.slice(
+    const paginatedData = participants?.slice(
         currentPage * itemsPerPage,
         currentPage * itemsPerPage + itemsPerPage
     );
@@ -287,7 +199,7 @@ const DetailContest = () => {
                             onClose={handleClose}
                         >
                             <MenuItem sx={{ fontSize: 16, fontWeight: 600, ":hover": { bgcolor: 'transparent' }, ":focus": { bgcolor: 'transparent' }, ":active": { bgcolor: 'transparent' }, mb: 1 }} disableTouchRipple>
-                                Nguyễn Quốc Thắng
+                                {user?.fullName}
                             </MenuItem>
                             <MenuItem onClick={handlePersonalInfo} sx={{ fontSize: 16, fontWeight: 600 }}>
                                 Tài khoản
@@ -351,8 +263,13 @@ const DetailContest = () => {
                             backgroundColor: red[600],
                         },
                         textTransform: 'none',
+                        '&:disabled': {
+                            backgroundColor: gray[300],
+                            color: white[50],
+                        },
                     }}
                     onClick={() => setOpened(true)}
+                    disabled={isDisable}
                 >
                     <Typography fontWeight={600} fontSize={24} color={white[50]}>
                         Tham gia
@@ -379,14 +296,14 @@ const DetailContest = () => {
                 </Button>
             </Box>
 
-            <Box id='rankingTable' display="flex" justifyContent="center" alignItems="flex-start" width="100%" gap={4} py={4}>
+            <Box id='rankingTable' display="flex" justifyContent="center" alignItems="flex-start" width="100%" height={'80vh'} gap={4} py={4}>
                 <Box
                     sx={{
                         backgroundImage: `url(${require("../../../assets/Rank-card.png")})`,
                         backgroundSize: 'cover',
                         width: '100%',
                         maxWidth: '20%',
-                        height: '80vh',
+                        height: '100%',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'flex-end',
@@ -395,25 +312,6 @@ const DetailContest = () => {
                         boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.2)',
                     }}
                 >
-                    <Box
-                        display="flex"
-                        flexDirection="column"
-                        alignItems="center"
-                        justifyContent="center"
-                        bgcolor={white[50]}
-                        borderRadius={1}
-                        width="80%"
-                        lineHeight={1.5}
-                        my={2}
-                        py={1}
-                    >
-                        <Typography fontWeight={600} fontSize={26} color={red[600]}>
-                            1000
-                        </Typography>
-                        <Typography fontWeight={400} fontSize={18} color={black[900]}>
-                            lượt thi
-                        </Typography>
-                    </Box>
                     <Box
                         display="flex"
                         flexDirection="column"
@@ -435,28 +333,37 @@ const DetailContest = () => {
                     </Box>
                 </Box>
 
-                <Box width="100%" maxWidth="60%">
-                    <Box display="flex" justifyContent="flex-start">
-                        <Typography fontWeight={600} fontSize={36} color={black[900]}>
-                            Bảng xếp hạng
-                        </Typography>
-                    </Box>
+                <Box
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="space-between"
+                    width="100%"
+                    maxWidth="60%"
+                    height="100%"
+                >
+                    <Typography fontWeight={600} fontSize={36} color={black[900]}>
+                        Bảng xếp hạng
+                    </Typography>
 
                     <Box
                         display="flex"
                         flexDirection="column"
                         gap={2}
-                        width="100%"
+                        flexGrow={1}
                         my={3}
                     >
-                        {paginatedData.map((data) => (
-                            <RankCard key={data.rank} {...data} />
+                        {paginatedData.map((participant, index) => (
+                            <RankCard
+                                key={participant.id}
+                                index={currentPage * itemsPerPage + index + 1}
+                                participant={participant}
+                            />
                         ))}
                     </Box>
 
-                    <Box display="flex" justifyContent="space-between">
+                    <Box display="flex" justifyContent="space-between" mt="auto">
                         <Button onClick={handlePrev} disabled={currentPage === 0}>
-                            <Typography fontWeight={600} fontSize={18} color={currentPage === 0 ? gray[400] : red[500]} >
+                            <Typography fontWeight={600} fontSize={18} color={currentPage === 0 ? gray[400] : red[500]}>
                                 Trước
                             </Typography>
                         </Button>
@@ -481,7 +388,7 @@ const DetailContest = () => {
                 marginTop={8}
             >
                 {/* Organiser */}
-                <Box display="flex" flexDirection="column" alignItems="flex-start" justifyContent={'center'} gap={2}>
+                <Box display="flex" flexDirection="column" alignItems="flex-start" justifyContent={'center'} gap={2} marginLeft={8}>
                     <Typography fontWeight={600} fontSize={26} color={white[50]} textTransform={'uppercase'}>
                         Ban tổ chức
                     </Typography>
@@ -499,7 +406,7 @@ const DetailContest = () => {
                     </Typography>
                 </Box>
 
-                <Box display="flex" flexDirection="column" alignItems="flex-start" justifyContent={'center'} gap={2}>
+                <Box display="flex" flexDirection="column" alignItems="flex-start" justifyContent={'center'} gap={2} marginRight={8}>
                     <Typography fontWeight={600} fontSize={26} color={white[50]} textTransform={'uppercase'}>
                         Đơn vị lập trình
                     </Typography>

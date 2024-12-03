@@ -7,7 +7,7 @@ import RegistrationService from '../../../services/registration.service';
 import { useSelector } from 'react-redux';
 
 const Registration = () => {
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState(null);
     const { user } = useSelector(state => state.user);
     const [contests, setContests] = useState([]);
 
@@ -24,9 +24,14 @@ const Registration = () => {
         fetchRegisteredContestsByUserId();
     }, []);
 
-    const filterRegisterdContest = [] || contests?.filter(contest =>
-        contest?.result.contestDetails?.name.toLowerCase().includes(searchTerm.toLowerCase())
+    console.log(contests);
+
+    const filterRegisterdContest = contests?.filter(contest =>
+        searchTerm
+            ? contest.result.contestDetails.name.toLowerCase().includes(searchTerm.toLowerCase())
+            : true
     );
+
 
     return (
         <Box
