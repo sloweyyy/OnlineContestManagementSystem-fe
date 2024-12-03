@@ -11,13 +11,9 @@ const UserProfile = () => {
     const [fullName, setFullName] = useState(user.fullName);
     const [email, setEmail] = useState(user.email);
     const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
-    const [dateOfBirth, setDateOfBirth] = useState(null);
-    const [address, setAddress] = useState(null);
     const [password, setPassword] = useState(null);
     const [newPassword, setNewPassword] = useState(null);
     const [confirmPassword, setConfirmPassword] = useState(null);
-
-    console.log('user', user.phoneNumber);
 
     const handleAvatarChange = (event) => {
         const file = event.target.files[0];
@@ -89,21 +85,10 @@ const UserProfile = () => {
                 </Box>
 
                 {/* Form Section */}
-                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', height: '100%', padding: 4 }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', gap: 2, marginTop: 4 }}>
-                        <CustomTextField label="Họ và tên" placeholder="Họ và tên" value={fullName} />
-                        <CustomTextField label="Email" placeholder="Email" type="email" value={email} />
-                    </Box>
-
-                    <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', gap: 2, marginTop: 3 }}>
-                        <CustomTextField label="Số điện thoại" placeholder="Số điện thoại" type="tel" value={phoneNumber} />
-                        <CustomTextField label="Ngày sinh" placeholder="Ngày sinh" type="date" value={dateOfBirth} />
-                    </Box>
-
-                    <Box sx={{ display: 'flex', width: '100%', marginTop: 3 }}>
-                        <CustomTextField label="Địa chỉ" placeholder="Địa chỉ cụ thể" value={address} />
-                    </Box>
-
+                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', padding: 4, gap: 3 }}>
+                    <CustomTextField label="Họ và tên" placeholder="Họ và tên" value={fullName} />
+                    <CustomTextField label="Email" placeholder="Email" type="email" value={email} />
+                    <CustomTextField label="Số điện thoại" placeholder="Số điện thoại" type="tel" value={phoneNumber} />
                 </Box>
             </Box>
 

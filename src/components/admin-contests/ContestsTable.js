@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Tabs, Tab, TextField, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { Apps, BlockRounded, LockResetRounded, PlayCircleFilledRounded, WatchLaterRounded, MoreVert, ManageSearchRounded, SlideshowRounded } from '@mui/icons-material';
+import { Apps, BlockRounded, LockResetRounded, PlayCircleFilledRounded, WatchLaterRounded, MoreVert, ManageSearchRounded, SlideshowRounded, HourglassBottom } from '@mui/icons-material';
 import { black, dark, gray } from '../../config/theme/themePrintives';
 import ContestService from '../../services/contest.service';
 import AdminService from '../../services/admin.service';
@@ -74,7 +74,8 @@ const ContestsTable = () => {
             (tabValue === 1 && row.startDate < newDate && row.endDate > newDate && row.status !== 'Không phê duyệt') ||
             (tabValue === 2 && row.startDate > newDate && row.status !== 'Không phê duyệt') ||
             (tabValue === 3 && row.endDate < newDate && row.status !== 'Không phê duyệt') ||
-            (tabValue === 4 && row.status === 'Không phê duyệt');
+            (tabValue === 4 && row.status === 'Chờ phê duyệt') ||
+            (tabValue === 5 && row.status === 'Không phê duyệt');
         return matchesSearchQuery && matchesTabValue;
     });
 
@@ -186,7 +187,7 @@ const ContestsTable = () => {
                                     padding: '12px 24px',
                                 },
                             },
-                            width: 740,
+                            width: 400,
                         }}
                     />
                 </Box>
@@ -234,6 +235,13 @@ const ContestsTable = () => {
                         label="Đã kết thúc"
                         sx={tabTextStyle}
                         icon={<LockResetRounded sx={tabIconStyle} />}
+                        iconPosition='start'
+                        disableRipple
+                    />
+                    <Tab
+                        label="Chờ phê duyệt"
+                        sx={tabTextStyle}
+                        icon={<HourglassBottom sx={tabIconStyle} />}
                         iconPosition='start'
                         disableRipple
                     />

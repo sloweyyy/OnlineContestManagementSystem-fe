@@ -7,6 +7,8 @@ import { black, gray } from '../../config/theme/themePrintives';
 const RegistrationTable = ({ registration }) => {
     const navigate = useNavigate();
 
+    console.log('registration', registration);
+
     const columns = [
         { field: 'id', headerName: '#', flex: 0.5 },
         { field: 'name', headerName: 'Tên cuộc thi', flex: 1.5 },
@@ -17,24 +19,13 @@ const RegistrationTable = ({ registration }) => {
 
     const paginationModel = { page: 0, pageSize: 5 };
 
-    const formatStatus = (status) => {
-        switch (status) {
-            case 'Withdrawn':
-                return 'Đã kết thúc';
-            case 'Registered':
-                return 'Đã đăng ký';
-            default:
-                return 'Không xác định';
-        }
-    };
-
     const contests = registration?.map((contest, index) => ({
         id: index + 1,
         name: contest?.result.contestDetails.name,
-        startDate: new Date(contest.startDate).toLocaleDateString('vi-VN'),
-        endDate: new Date(contest.endDate).toLocaleDateString('vi-VN'),
-        status: formatStatus(contest?.result.status),
-        _id: contest?.result.contestDetails.id,
+        startDate: new Date(contest?.result.contestDetails.startDate).toLocaleDateString('vi-VN'),
+        endDate: new Date(contest?.result.contestDetails.endDate).toLocaleDateString('vi-VN'),
+        status: contest?.status,
+        _id: contest?.result.contestId,
     }));
 
     return (
