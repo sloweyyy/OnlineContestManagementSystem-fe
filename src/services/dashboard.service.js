@@ -1,3 +1,4 @@
+
 import axiosConfig from "../utils/AxiosConfig";
 import { API_BASE_URL } from "./config";
 
@@ -31,9 +32,63 @@ const getRegistrationStatistics = async () => {
     }
 }
 
+const getMonthlyRevenue = async () => {
+    try {
+        const response = await axiosConfig.get(`${DASHBOARD_ENDPOINT}/monthly-revenue`);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            return error.response.data;
+        }
+        return error.message;
+    }
+}
+
+const getFeaturedContests = async () => {
+    try {
+        const response = await axiosConfig.get(`${DASHBOARD_ENDPOINT}/featured-contests`);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            return error.response.data;
+        }
+        return error.message;
+    }
+}
+
+const getWebsiteRevenue = async () => {
+    try {
+        const response = await axiosConfig.get(`${DASHBOARD_ENDPOINT}/website-revenue`);
+
+        localStorage.setItem('websiteRevenue', JSON.stringify(response.data));
+        return response.status;
+    } catch (error) {
+        if (error.response) {
+            return error.response.data;
+        }
+        return error.message;
+    }
+}
+
+const getQuarterlyContestCounts = async () => {
+    try {
+        const response = await axiosConfig.get(`${DASHBOARD_ENDPOINT}/quarterly-contest-counts`);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            return error.response.data;
+        }
+        return error.message;
+    }
+}
+
 const DashboardService = {
     getContestStatistics,
-    getRegistrationStatistics
+    getRegistrationStatistics,
+    getMonthlyRevenue,
+    getFeaturedContests,
+    getWebsiteRevenue,
+    getQuarterlyContestCounts
 }
 
 export default DashboardService;

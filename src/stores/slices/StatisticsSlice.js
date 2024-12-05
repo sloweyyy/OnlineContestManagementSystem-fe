@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchContestStatistics, fetchRegistrationStatistics } from '../actions/StatisticsActions';
+import { fetchContestStatistics, fetchRegistrationStatistics, fetchWebsiteRevenue } from '../actions/StatisticsActions';
 
 const initialState = {
     contestStatistics: null,
     registrationStatistics: null,
+    websiteRevenue: null,
     loading: false,
     error: null,
 };
@@ -15,6 +16,7 @@ const StatisticsSlice = createSlice({
         clearStatistics: (state) => {
             state.contestStatistics = null;
             state.registrationStatistics = null;
+            state.websiteRevenue = null;
         },
     },
     extraReducers: (builder) => {
@@ -41,6 +43,19 @@ const StatisticsSlice = createSlice({
                 state.registrationStatistics = action.payload;
             })
             .addCase(fetchRegistrationStatistics.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
+            .addCase(fetchWebsiteRevenue.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchWebsiteRevenue.fulfilled, (state, action) => {
+                state.loading = false;
+                state.websiteRevenue = action.payload;
+            })
+            .addCase(fetchWebsiteRevenue.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });
