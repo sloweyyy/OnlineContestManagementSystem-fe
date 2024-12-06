@@ -55,7 +55,6 @@ const RankCard = ({ index, participant }) => {
                 sx={{
                     backgroundImage: backgroundImage,
                     backgroundSize: 'cover',
-                    display: backgroundImage !== 'none' ? 'flex' : 'none',
                 }}
             >
                 {index}

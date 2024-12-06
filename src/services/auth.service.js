@@ -25,7 +25,7 @@ const register = async (email, password, confirmPassword, fullName) => {
       password,
       confirmPassword,
       fullName,
-      role: 'user',
+      role: 'User',
     });
 
     if (response.status === 200) {

@@ -12,7 +12,9 @@ import { userLogout } from "../../../stores/actions/AuthAction";
 import RegisterService from '../../../services/registration.service';
 import CountdownBox from '../../../components/contest/CountdownBox';
 import RankCard from '../../../components/contest/RankCard';
-import CustomTooltip from '../../../components/custom-components/CustomTooltip';
+import { ConfirmModal } from '../../../components/custom-components/CustomModal';
+import PaymentService from '../../../services/payment.service';
+import { toast } from 'react-toastify';
 
 const DetailContest = () => {
     const [contest, setContest] = useState(null);
@@ -25,6 +27,7 @@ const DetailContest = () => {
     const { user } = useSelector(state => state.user);
     const [participants, setParticipants] = useState([]);
     const isDisable = user?.id === contest?.creatorUserId || participants?.some(participant => participant.userId === user?.id);
+    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchContest = async () => {
@@ -150,6 +153,21 @@ const DetailContest = () => {
     const handlePersonalInfo = () => {
         navigate('/participant/profile');
         setAnchorEl(null);
+    }
+
+    const handleConfirm = async () => {
+        try {
+            const response = await PaymentService.getPaymentStatus(contestId, user.id);
+            if (response && response.status === 'SUCCESS') {
+                toast.success('Thanh toán thành công!');
+            } else {
+                toast.error('Thanh toán thất bại!');
+            }
+        } catch (error) {
+            toast.error('Không thể xác nhận thanh toán!');
+        } finally {
+            setIsConfirmModalOpen(false);
+        }
     }
 
     return (
@@ -325,10 +343,10 @@ const DetailContest = () => {
                         py={1}
                     >
                         <Typography fontWeight={600} fontSize={26} color={red[600]}>
-                            1000
+                            {participants.length}
                         </Typography>
-                        <Typography fontWeight={400} fontSize={18} color={black[900]}>
-                            lượt đăng ký
+                        <Typography fontWeight={600} fontSize={20} color={black[900]}>
+                            lượt tham gia
                         </Typography>
                     </Box>
                 </Box>
@@ -355,7 +373,7 @@ const DetailContest = () => {
                         {paginatedData.map((participant, index) => (
                             <RankCard
                                 key={participant.id}
-                                index={currentPage * itemsPerPage + index + 1}
+                                index={participants.indexOf(participant) + 1}
                                 participant={participant}
                             />
                         ))}
@@ -437,8 +455,17 @@ const DetailContest = () => {
                     © 2021 Kontext. All rights reserved.
                 </Typography>
             </Box>
-
-            <PaticipatingModal contestId={contestId} participantInformationRequirements={['số điện thoại', 'địa chỉ']} open={opened} onClose={handleOnClose} />
+            <PaticipatingModal
+                contest={contest}
+                open={opened}
+                onClose={handleOnClose} />
+            <ConfirmModal
+                open={isConfirmModalOpen}
+                onClose={() => setIsConfirmModalOpen(false)}
+                title="Xác nhận thanh toán"
+                message={`Bạn đã hoàn thành thủ tục thanh toán?`}
+                onConfirm={handleConfirm}
+            />
         </Box>
     );
 }
