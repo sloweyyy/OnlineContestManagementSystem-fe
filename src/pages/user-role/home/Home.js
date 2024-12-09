@@ -64,9 +64,13 @@ const Home = () => {
                     gap: 2,
                 }}
             >
+                {/* TODO */}
+                {/* total-contest-conming-soon */}
                 <AnalysisCard title="Sắp diễn ra" count={10} icon={<CalendarMonth sx={iconStyle} />} isContest={true} />
+                {/* total-contest-onboarding */}
                 <AnalysisCard title="Đang diễn ra" count={1000} icon={<CalendarMonth sx={iconStyle} />} isContest={true} />
-                <AnalysisCard title="7 ngày qua" count={10000} icon={<SignalCellularAltRounded sx={iconStyle} />} isContest={false} />
+                {/* total-participant */}
+                <AnalysisCard title="Tổng số lượt thi" count={10000} icon={<SignalCellularAltRounded sx={iconStyle} />} isContest={false} />
             </Box>
 
             <Box

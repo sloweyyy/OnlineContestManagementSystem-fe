@@ -28,7 +28,7 @@ const Sexual = [
     { label: 'Khác', value: 'other' },
 ];
 
-const PaticipatingModal = ({ contest, open, onClose }) => {
+const PaticipatingModal = ({ contest, open, onClose, onSubmissionSuccess }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
@@ -60,6 +60,7 @@ const PaticipatingModal = ({ contest, open, onClose }) => {
 
     const handleSubmission = async () => {
         setLoading(true);
+
         if (!name) {
             toast.error('Vui lòng nhập họ và tên');
         } else if (!email) {
@@ -112,7 +113,11 @@ const PaticipatingModal = ({ contest, open, onClose }) => {
             try {
                 const response = await RegisterService.registerContest(contest.id, participantInformation);
                 if (response && response.paymentLink) {
-                    window.location.href = response.paymentLink;
+                    window.open(response.paymentLink, '_blank');
+
+                    if (onSubmissionSuccess) {
+                        onSubmissionSuccess();
+                    }
                 } else {
                     toast.error('Không tìm thấy đường dẫn thanh toán. Vui lòng thử lại!');
                 }
@@ -123,6 +128,7 @@ const PaticipatingModal = ({ contest, open, onClose }) => {
 
         resetForm();
         setLoading(false);
+        onClose();
     };
 
     const resetForm = () => {
@@ -138,10 +144,7 @@ const PaticipatingModal = ({ contest, open, onClose }) => {
     };
 
     return (
-        <Modal
-            open={open}
-            onClose={() => !loading && onClose()}
-        >
+        <Modal open={open} onClose={() => !loading && onClose()}>
             <Box
                 sx={{
                     position: 'absolute',

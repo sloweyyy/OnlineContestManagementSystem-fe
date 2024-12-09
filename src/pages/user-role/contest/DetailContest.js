@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
     Avatar, Box, Button, Divider, Menu, MenuItem, Typography
 } from '@mui/material';
-import { black, gray, red, white, yellow } from '../../../config/theme/themePrintives';
+import { black, gray, red, white } from '../../../config/theme/themePrintives';
 import PaticipatingModal from '../../../components/contest/PaticipatingModal';
 import { useLocation } from 'react-router-dom';
 import ContestService from '../../../services/contest.service';
@@ -25,8 +25,6 @@ const DetailContest = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { user } = useSelector(state => state.user);
-    const [participants, setParticipants] = useState([]);
-    const isDisable = user?.id === contest?.creatorUserId || participants?.some(participant => participant.userId === user?.id);
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
     useEffect(() => {
@@ -70,14 +68,25 @@ const DetailContest = () => {
         return () => clearInterval(intervalId);
     }, [contest]);
 
+    const [participants, setParticipants] = useState([]);
+
     useEffect(() => {
         const fetchParticipants = async () => {
-            const participants = await RegisterService.getParticipantsByContestId(contestId);
-            setParticipants(participants);
-        }
+            try {
+                const participants = await RegisterService.getParticipantsByContestId(contestId);
+                setParticipants(Array.isArray(participants) ? participants : []);
+            } catch (error) {
+                console.error('Error fetching participants:', error);
+                setParticipants([]);
+            }
+        };
 
         fetchParticipants();
     }, [contestId]);
+
+    const isDisable =
+        user?.id === contest?.creatorUserId ||
+        (Array.isArray(participants) && participants.some(participant => participant.userId === user?.id));
 
     const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 5;
@@ -160,13 +169,15 @@ const DetailContest = () => {
             const response = await PaymentService.getPaymentStatus(contestId, user.id);
             if (response && response.status === 'SUCCESS') {
                 toast.success('Thanh toán thành công!');
-            } else {
+                setIsConfirmModalOpen(false);
+            } else if (response && response.status === 'PENDING') {
+                toast.error('Thanh toán đang chờ xác nhận!');
+            } else if (response && response.status === 'CANCELLED') {
                 toast.error('Thanh toán thất bại!');
+                setIsConfirmModalOpen(false);
             }
         } catch (error) {
             toast.error('Không thể xác nhận thanh toán!');
-        } finally {
-            setIsConfirmModalOpen(false);
         }
     }
 
@@ -458,7 +469,9 @@ const DetailContest = () => {
             <PaticipatingModal
                 contest={contest}
                 open={opened}
-                onClose={handleOnClose} />
+                onClose={handleOnClose}
+                onSubmissionSuccess={() => setIsConfirmModalOpen(true)}
+            />
             <ConfirmModal
                 open={isConfirmModalOpen}
                 onClose={() => setIsConfirmModalOpen(false)}
