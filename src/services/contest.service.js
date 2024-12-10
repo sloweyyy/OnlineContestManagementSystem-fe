@@ -68,7 +68,7 @@ const ContestService = {
     getContests,
     getContestById,
     getContestByCreatorId,
-    deleteContest
+    deleteContest,
 };
 
 export default ContestService;

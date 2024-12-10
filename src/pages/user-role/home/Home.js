@@ -66,8 +66,6 @@ const Home = () => {
                 onBoarding: onBoarding.onBoardingContests,
                 totalParticipant: totalParticipant
             });
-
-            console.log(contestStatistics);
         }
 
         fetchContestStatistics();

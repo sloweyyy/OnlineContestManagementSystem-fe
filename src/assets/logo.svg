@@ -1,0 +1,5 @@
+<svg width="1000" height="1000" viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 1000H1000L500 500L1000 0H0V1000Z" fill="#ED443F"/>
+<path d="M500 500L0 7.39098e-06L1000 7.39098e-06L500 500Z" fill="white"/>
+<path d="M500 500L1000 1000L0 1000L500 500Z" fill="black"/>
+</svg>
