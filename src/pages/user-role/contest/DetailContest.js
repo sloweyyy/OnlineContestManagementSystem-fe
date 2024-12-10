@@ -193,7 +193,7 @@ const DetailContest = () => {
                 pt={4}
             >
                 {/* Header */}
-                <Box display="flex" justifyContent="space-between" width="100%" maxWidth="70%">
+                <Box display="flex" justifyContent="space-between" width="100%" maxWidth="70%" alignItems={'center'}>
                     <img
                         src={require("../../../assets/ASE.png")}
                         alt="logo"
@@ -377,8 +377,8 @@ const DetailContest = () => {
                     maxWidth="60%"
                     height="100%"
                 >
-                    <Typography fontWeight={600} fontSize={36} color={black[900]}>
-                        Bảng xếp hạng
+                    <Typography fontWeight={600} fontSize={32} color={black[900]}>
+                        Danh sách thí sinh
                     </Typography>
 
                     <Box

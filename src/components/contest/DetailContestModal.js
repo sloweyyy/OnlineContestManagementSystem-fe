@@ -1,8 +1,11 @@
-import { Modal, Box, Typography, Button } from '@mui/material'
+import { Modal, Box, Typography, Button, IconButton } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import ContestService from '../../services/contest.service'
-import { black, gray, red, white } from '../../config/theme/themePrintives'
-import { CloudDownload } from '@mui/icons-material'
+import { black, gray, white, red } from '../../config/theme/themePrintives'
+import { Cancel, CloudDownload, MoreVert } from '@mui/icons-material'
+import RegistrationService from '../../services/registration.service'
+import { DataGrid } from '@mui/x-data-grid'
+import { toast } from 'react-toastify'
 
 const title = {
     color: black[900],
@@ -38,7 +41,7 @@ const modal = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '80vw',
+    width: '85vw',
     maxHeight: '80vh',
     bgcolor: 'background.paper',
     boxShadow: 24,
@@ -50,6 +53,31 @@ const modal = {
     overflowY: 'auto',
     scrollbarWidth: 'none',
 }
+
+const columns = [
+    { field: 'id', headerName: '#', flex: 0.5, align: 'center', headerAlign: 'center' },
+    { field: 'name', headerName: 'Tên', flex: 1 },
+    {
+        field: 'dob',
+        headerName: 'Ngày sinh',
+        flex: 1,
+    },
+    { field: 'email', headerName: 'Email', flex: 1.5 },
+    { field: 'registrationDate', headerName: 'Ngày đăng ký', flex: 1.2 },
+    { field: 'status', headerName: 'Trạng thái', flex: 1 },
+    {
+        field: 'action',
+        headerName: '',
+        flex: 0.5,
+        renderCell: (params) => (
+            <IconButton>
+                <MoreVert />
+            </IconButton>
+        ),
+        align: 'center',
+        headerAlign: 'center',
+    },
+];
 
 const CustomInfoSection = ({ title, value }) => {
     return (
@@ -79,6 +107,20 @@ const CustomInfoSection = ({ title, value }) => {
 
 const DetailContestModal = ({ open, handleClose, contest }) => {
     const [contestDetail, setContestDetail] = useState(null);
+    const [participants, setParticipants] = useState([]);
+
+    useEffect(() => {
+        const fetchParticipants = async () => {
+            const response = await RegistrationService.getParticipantsByContestId(contest._id);
+            if (response.message) {
+                console.log(response);
+            } else {
+                setParticipants(response);
+            }
+        }
+
+        fetchParticipants();
+    }, [contest]);
 
     useEffect(() => {
         const fetchContestDetail = async () => {
@@ -92,6 +134,45 @@ const DetailContestModal = ({ open, handleClose, contest }) => {
 
         fetchContestDetail();
     }, [contest]);
+
+    const formatStatus = (status) => {
+        switch (status) {
+            case 'Pending':
+                return 'Chờ thanh toán';
+            case 'Withdrawn':
+                return 'Đã hủy';
+            case 'Paid':
+                return 'Đã thanh toán';
+            default:
+                return 'Không xác định';
+        }
+    };
+
+    const rows = Array.isArray(participants) ? participants.map((participant, index) => ({
+        id: index + 1,
+        name: participant.name,
+        dob: new Date(participant.dateOfBirth).toLocaleDateString('vi-VN'),
+        email: participant.email,
+        registrationDate: new Date(participant.registrationDate).toLocaleDateString('vi-VN'),
+        status: formatStatus(participant.status),
+    })) : [];
+
+    const paginationModel = { page: 0, pageSize: 5 };
+
+    const handleExportExcel = async () => {
+        const response = await RegistrationService.exportExcel(contest._id);
+
+        if (response) {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `${contestDetail?.name}.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+
+            toast.success('Xuất file thành công');
+        }
+    }
 
     return (
         <Modal
@@ -140,12 +221,99 @@ const DetailContestModal = ({ open, handleClose, contest }) => {
                         <CustomInfoSection title="Thời gian kết thúc" value={new Date(contestDetail?.endDate).toLocaleDateString('vi-VN')} />
                     </Box>
                 </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', gap: 2 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', gap: 2, marginBottom: 2 }}>
                     <CustomInfoSection title="Địa chỉ chi tiết" value={contestDetail?.organizationInformation?.orgAddress} />
+                </Box>
+
+                {/* Participants Table */}
+
+                <Typography sx={title}>
+                    Danh sách thí sinh
+                </Typography>
+                <Typography sx={subtitles}>
+                    Danh sách thí sinh đã đăng ký cuộc thi
+                </Typography>
+
+                <Box marginTop={3}>
+                    <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        initialState={{ pagination: { paginationModel } }}
+                        pageSizeOptions={[5, 10]}
+                        disableColumnMenu={true}
+                        localeText={{
+                            MuiTablePagination: {
+                                labelRowsPerPage: 'Số hàng mỗi bảng',
+                                labelDisplayedRows: ({ from, to, count }) => `${from}–${to} trên ${count !== -1 ? count : `hơn ${to}`}`,
+                            },
+                        }}
+                        sx={{
+                            width: '100%',
+                            height: 400,
+                            border: `1px solid ${gray[200]}`,
+                            '& .MuiDataGrid-columnHeader': {
+                                backgroundColor: gray[200],
+                                color: black[900],
+                                fontWeight: 'bold',
+                                fontSize: '16px',
+                                outline: 'none',
+                            },
+                            '& .MuiDataGrid-columnHeaderTitle': {
+                                fontWeight: '600',
+                            },
+                            '& .MuiDataGrid-cell': {
+                                outline: 'none',
+                            },
+                            '& .MuiDataGrid-row:hover': {
+                                backgroundColor: 'transparent',
+                            },
+                            '& .MuiDataGrid-root': {
+                                border: 'none',
+                            },
+                            '& .MuiDataGrid-selectedRowCount': {
+                                visibility: 'hidden',
+                            },
+                            '& .MuiDataGrid-checkboxInput.Mui-checked': {
+                                color: 'inherit',
+                            },
+                            '& .MuiDataGrid-cell:focus, & .MuiDataGrid-cell:focus-within': {
+                                outline: 'none',
+                            },
+                            '& .MuiDataGrid-columnHeader:focus, & .MuiDataGrid-columnHeader:focus-within': {
+                                outline: 'none',
+                            },
+                            '& .MuiDataGrid-row:hover': {
+                                backgroundColor: 'transparent',
+                            },
+                            '& .MuiDataGrid-row.Mui-selected': {
+                                backgroundColor: 'transparent !important',
+                            },
+                        }}
+                    />
                 </Box>
 
                 {/* Button */}
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', gap: 2, mt: 4 }}>
+                    <Button
+                        sx={{
+                            color: white[50],
+                            bgcolor: red[500],
+                            ":hover": { bgcolor: red[400] },
+                            fontWeight: 600,
+                            fontSize: 14,
+                            textTransform: 'none',
+                            paddingX: 4,
+                            '&:disabled': {
+                                bgcolor: gray[200],
+                                color: black[100],
+                            },
+                        }}
+                        endIcon={<Cancel />}
+                        onClick={handleClose}
+                    >
+                        Đóng
+                    </Button>
+
                     <Button
                         sx={{
                             color: white[50],
@@ -163,8 +331,9 @@ const DetailContestModal = ({ open, handleClose, contest }) => {
                             },
                         }}
                         endIcon={<CloudDownload />}
+                        onClick={handleExportExcel}
                     >
-                        Xuất danh sách thí sinh
+                        Xuất chi tiết cuộc thi
                     </Button>
                 </Box>
             </Box>

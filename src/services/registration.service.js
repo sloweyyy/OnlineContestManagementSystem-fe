@@ -51,11 +51,24 @@ const withdrawContest = async (contestId, userId) => {
     }
 }
 
+const exportExcel = async (contestId) => {
+    try {
+        const response = await axiosConfig.get(`${CONTEST_ENDPOINT}/${contestId}/registrations/excel`);
+        return response;
+    } catch (error) {
+        if (error.response) {
+            return error.response.data;
+        }
+        return error.message;
+    }
+}
+
 const RegistrationService = {
     registerContest,
     getRetristeredContestsByUserId,
     getParticipantsByContestId,
-    withdrawContest
+    withdrawContest,
+    exportExcel,
 };
 
 export default RegistrationService;
