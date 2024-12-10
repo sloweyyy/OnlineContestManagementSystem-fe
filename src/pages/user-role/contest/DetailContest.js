@@ -109,12 +109,12 @@ const DetailContest = () => {
         }
     };
 
-    const handleScroll = (text) => {
+    const handleHeaderClick = (text) => {
         return () => {
             let elementId;
             switch (text) {
                 case 'Trang chủ':
-                    elementId = 'top';
+                    window.location.href = '/participant/home';
                     break;
                 case 'Thể lệ':
                     elementId = 'rules';
@@ -194,7 +194,14 @@ const DetailContest = () => {
             >
                 {/* Header */}
                 <Box display="flex" justifyContent="space-between" width="100%" maxWidth="70%">
-                    <img src={require("../../../assets/ASE.png")} alt="logo" width="60px" height="70px" />
+                    <img
+                        src={require("../../../assets/ASE.png")}
+                        alt="logo"
+                        width="60px"
+                        height="70px"
+                        onClick={() => window.location.href = '/participant/home'}
+                        style={{ cursor: 'pointer' }}
+                    />
                     <Box display="flex" justifyContent="space-between" width="100%" maxWidth="80%" bgcolor="rgba(139, 0, 0, 0.5)" borderRadius={10} px={2} py={2} alignItems={'center'}>
                         <Box display="flex">
                             {['Trang chủ', 'Thể lệ', 'Bảng xếp hạng'].map((text) => (
@@ -213,7 +220,7 @@ const DetailContest = () => {
                                         border: 'none',
                                         background: 'none',
                                     }}
-                                    onClick={handleScroll(text)}
+                                    onClick={handleHeaderClick(text)}
                                 >
                                     {text}
                                 </Button>

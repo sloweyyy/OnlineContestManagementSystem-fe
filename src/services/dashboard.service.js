@@ -82,13 +82,52 @@ const getQuarterlyContestCounts = async () => {
     }
 }
 
+const getComingSoonContests = async () => {
+    try {
+        const response = await axiosConfig.get(`${DASHBOARD_ENDPOINT}/comingsoon-contests`);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            return error.response.data;
+        }
+        return error.message;
+    }
+}
+
+const getOnboardingContests = async () => {
+    try {
+        const response = await axiosConfig.get(`${DASHBOARD_ENDPOINT}/onboarding-contests`);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            return error.response.data;
+        }
+        return error.message;
+    }
+}
+
+const getTotalParticipants = async () => {
+    try {
+        const response = await axiosConfig.get(`${DASHBOARD_ENDPOINT}/total-participants`);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            return error.response.data;
+        }
+        return error.message;
+    }
+}
+
 const DashboardService = {
     getContestStatistics,
     getRegistrationStatistics,
     getMonthlyRevenue,
     getFeaturedContests,
     getWebsiteRevenue,
-    getQuarterlyContestCounts
+    getQuarterlyContestCounts,
+    getComingSoonContests,
+    getOnboardingContests,
+    getTotalParticipants
 }
 
 export default DashboardService;

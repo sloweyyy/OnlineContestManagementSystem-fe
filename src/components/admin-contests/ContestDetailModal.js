@@ -134,12 +134,14 @@ const ContestDetailModal = ({ open, onClose, contest, handleApprove, handleRejec
 
                 <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', gap: 2 }}>
                     <CustomInfoSection title="Số điện thoại" value={contest?.organizationInformation?.orgPhoneNumber} />
-                    <CustomInfoSection title="Địa chỉ chi tiết" value={contest?.organizationInformation?.orgAddress} />
+                    <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', gap: 2 }}>
+                        <CustomInfoSection title="Thời gian bắt đầu" value={new Date(contest?.startDate).toLocaleDateString('vi-VN')} />
+                        <CustomInfoSection title="Thời gian kết thúc" value={new Date(contest?.endDate).toLocaleDateString('vi-VN')} />
+                    </Box>
                 </Box>
 
                 <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', gap: 2 }}>
-                    <CustomInfoSection title="Thời gian bắt đầu" value={new Date(contest?.startDate).toLocaleDateString('vi-VN')} />
-                    <CustomInfoSection title="Thời gian kết thúc" value={new Date(contest?.endDate).toLocaleDateString('vi-VN')} />
+                    <CustomInfoSection title="Địa chỉ chi tiết" value={contest?.organizationInformation?.orgAddress} />
                 </Box>
                 {/* Button */}
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', gap: 2, mt: 4 }}>

@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
-import { Skeleton } from '@mui/material';  // Import Skeleton
+import { Skeleton, IconButton, MenuItem, Menu, Typography } from '@mui/material';
 import { black, gray } from '../../config/theme/themePrintives';
+import { MoreVert } from '@mui/icons-material';
+import { useSelector } from 'react-redux';
 
-const RegistrationTable = ({ registration }) => {
+const RegistrationTable = ({ registration, handleWithdraw }) => {
     const navigate = useNavigate();
-
-    console.log('registration', registration);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [selectedContest, setSelectedContest] = useState(null);
+    const { user } = useSelector(state => state.user);
+    const isDisabled = selectedContest?.status === 'Đã hủy' || selectedContest?.status === 'Đã thanh toán';
 
     const columns = [
         { field: 'id', headerName: '#', flex: 0.5 },
@@ -15,18 +19,57 @@ const RegistrationTable = ({ registration }) => {
         { field: 'startDate', headerName: 'Ngày bắt đầu', flex: 1.2 },
         { field: 'endDate', headerName: 'Ngày kết thúc', flex: 1.2 },
         { field: 'status', headerName: 'Trạng thái', flex: 1 },
+        {
+            field: 'action',
+            headerName: '',
+            flex: 0.5,
+            renderCell: (params) => (
+                <IconButton onClick={(event) => handleMenuClick(event, params.row)}>
+                    <MoreVert />
+                </IconButton>
+            ),
+        },
     ];
 
     const paginationModel = { page: 0, pageSize: 5 };
+
+    const formatStatus = (status) => {
+        switch (status) {
+            case 'Pending':
+                return 'Chờ thanh toán';
+            case 'Withdrawn':
+                return 'Đã hủy';
+            case 'Paid':
+                return 'Đã thanh toán';
+            default:
+                return 'Không xác định';
+        }
+    };
 
     const contests = registration?.map((contest, index) => ({
         id: index + 1,
         name: contest?.result.contestDetails.name,
         startDate: new Date(contest?.result.contestDetails.startDate).toLocaleDateString('vi-VN'),
         endDate: new Date(contest?.result.contestDetails.endDate).toLocaleDateString('vi-VN'),
-        status: contest?.status,
+        status: formatStatus(contest?.result.status),
         _id: contest?.result.contestId,
     }));
+
+    const handleMenuClick = (event, contest) => {
+        setAnchorEl(event.currentTarget);
+        setSelectedContest(contest);
+    };
+
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+    };
+
+    const handleWithdrawClick = () => {
+        handleWithdraw(selectedContest._id, user.id);
+        handleCloseMenu();
+    };
+
+    console.log(selectedContest);
 
     return (
         <>
@@ -70,12 +113,6 @@ const RegistrationTable = ({ registration }) => {
                                 `${from}–${to} trên ${count !== -1 ? count : `hơn ${to}`}`,
                         },
                     }}
-                    onCellClick={(cell) => {
-                        const row = cell.row;
-                        if (row._id) {
-                            navigate(`/participant/detail-contest?id=${row._id}`);
-                        }
-                    }}
                     sx={{
                         width: '100%',
                         border: 0,
@@ -116,6 +153,29 @@ const RegistrationTable = ({ registration }) => {
                     }}
                 />
             )}
+            <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleCloseMenu}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                }}
+            >
+                <MenuItem onClick={() => navigate(`/participant/detail-contest?id=${selectedContest._id}`)}>
+                    <Typography sx={{ fontSize: 16, fontWeight: 500 }}>Xem chi tiết</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleWithdrawClick} disabled={isDisabled}>
+                    <Typography sx={{ fontSize: 16, fontWeight: 500 }}>Hủy đang ký</Typography>
+                </MenuItem>
+                <MenuItem disabled={isDisabled}>
+                    <Typography sx={{ fontSize: 16, fontWeight: 500 }}>Thanh toán</Typography>
+                </MenuItem>
+            </Menu>
         </>
     );
 };

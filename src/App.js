@@ -60,7 +60,7 @@ function AppContent() {
     <Box display={'flex'}>
       {!hideLayout && isAuthenticated && <Sidebar />}
       <Box flex={1}>
-        {!hideLayout && !isAuthenticated && <Header />}
+        {!isAuthenticated && <Header />}
         <Box display={'flex'}>
           <Box flex={1}>
             <Routes>
@@ -171,7 +171,7 @@ function AppContent() {
             </Routes>
           </Box>
         </Box>
-        {!hideLayout && !isAuthenticated && <Footer />}
+        {!isAuthenticated && <Footer />}
       </Box>
     </Box>
   );

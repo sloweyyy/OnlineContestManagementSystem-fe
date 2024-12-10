@@ -21,7 +21,6 @@ const Contest = () => {
     );
 
     const handleDeleteSelected = async (contestId) => {
-        console.log('contestId', contestId);
         const response = await ContestService.deleteContest(contestId);
 
         try {

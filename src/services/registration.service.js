@@ -39,10 +39,23 @@ const getParticipantsByContestId = async (contestId) => {
     }
 }
 
-const RegisterService = {
+const withdrawContest = async (contestId, userId) => {
+    try {
+        const response = await axiosConfig.post(`${CONTEST_ENDPOINT}/withdraw`, { contestId, userId });
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            return error.response.data;
+        }
+        return error.message;
+    }
+}
+
+const RegistrationService = {
     registerContest,
     getRetristeredContestsByUserId,
-    getParticipantsByContestId
+    getParticipantsByContestId,
+    withdrawContest
 };
 
-export default RegisterService;
+export default RegistrationService;
