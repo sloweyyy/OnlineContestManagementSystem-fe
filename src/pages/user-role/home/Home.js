@@ -9,6 +9,7 @@ import RecentContestsCard from '../../../components/home/RecentContestsCard'
 import NewsCard from '../../../components/home/NewsCard'
 import ContactCard from '../../../components/home/ContactCard'
 import ContestService from '../../../services/contest.service'
+import DashboardService from '../../../services/dashboard.service'
 
 const iconStyle = {
     fontSize: 26,
@@ -20,6 +21,11 @@ const iconStyle = {
 
 const Home = () => {
     const [contests, setContests] = useState([]);
+    const [contestStatistics, setContestStatistics] = useState({
+        comingSoon: 0,
+        onBoarding: 0,
+        totalParticipant: 0
+    });
     // const [CommingSoonContestContest, setCommingSoonContest] = useState(null);
     // const [runningContest, setRunningContest] = useState(null);
     // const [numberOfRegistration, setNumberOfRegistration] = useState(null);
@@ -27,7 +33,11 @@ const Home = () => {
     useEffect(() => {
         const fetchContests = async () => {
             const contests = await ContestService.getContests();
-            setContests(contests);
+            if (contests.message) {
+                console.log(contests);
+            } else {
+                setContests(contests);
+            }
         }
 
         fetchContests();
@@ -44,6 +54,24 @@ const Home = () => {
     //     setRunningContest(running.length);
     //     setNumberOfRegistration(number.length);
     // }, [contests]);
+
+    useEffect(() => {
+        const fetchContestStatistics = async () => {
+            const comingSoon = await DashboardService.getComingSoonContests();
+            const onBoarding = await DashboardService.getOnboardingContests();
+            const totalParticipant = await DashboardService.getTotalParticipants();
+
+            setContestStatistics({
+                comingSoon: comingSoon.comingSoonContests,
+                onBoarding: onBoarding.onBoardingContests,
+                totalParticipant: totalParticipant
+            });
+
+            console.log(contestStatistics);
+        }
+
+        fetchContestStatistics();
+    }, []);
 
     return (
         <Box
@@ -64,9 +92,13 @@ const Home = () => {
                     gap: 2,
                 }}
             >
-                <AnalysisCard title="Sắp diễn ra" count={10} icon={<CalendarMonth sx={iconStyle} />} isContest={true} />
-                <AnalysisCard title="Đang diễn ra" count={1000} icon={<CalendarMonth sx={iconStyle} />} isContest={true} />
-                <AnalysisCard title="7 ngày qua" count={10000} icon={<SignalCellularAltRounded sx={iconStyle} />} isContest={false} />
+                {/* TODO */}
+                {/* total-contest-conming-soon */}
+                <AnalysisCard title="Sắp diễn ra" count={contestStatistics?.comingSoon} icon={<CalendarMonth sx={iconStyle} />} isContest={true} />
+                {/* total-contest-onboarding */}
+                <AnalysisCard title="Đang diễn ra" count={contestStatistics?.onBoarding} icon={<CalendarMonth sx={iconStyle} />} isContest={true} />
+                {/* total-participant */}
+                <AnalysisCard title="Tổng số lượt thi" count={contestStatistics?.totalParticipant} icon={<SignalCellularAltRounded sx={iconStyle} />} isContest={false} />
             </Box>
 
             <Box

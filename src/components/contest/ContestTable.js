@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { black, gray } from '../../config/theme/themePrintives';
-import { useNavigate } from 'react-router-dom';
 import { Menu, MenuItem, IconButton, Typography } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
-import { Skeleton } from '@mui/material';  // Import Skeleton
+import { Skeleton } from '@mui/material';
+import DetailContestModal from './DetailContestModal';
 
 const ContestTable = ({ contests, handleDeleteSelected }) => {
-    const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedContest, setSelectedContest] = useState([]);
+    const [openDetailModal, setOpenDetailModal] = useState(false);
 
     const formatStatus = (status) => {
         switch (status) {
@@ -31,13 +31,10 @@ const ContestTable = ({ contests, handleDeleteSelected }) => {
 
     const handleCloseMenu = () => {
         setAnchorEl(null);
-        setSelectedContest(null);
     };
 
     const handleViewDetails = () => {
-        if (selectedContest && selectedContest.status === 'Đã duyệt') {
-            navigate(`/participant/detail-contest?id=${selectedContest._id}`);
-        }
+        setOpenDetailModal(true);
         handleCloseMenu();
     };
 
@@ -186,6 +183,11 @@ const ContestTable = ({ contests, handleDeleteSelected }) => {
                     <Typography sx={{ fontSize: 16, fontWeight: 500 }}>Xóa</Typography>
                 </MenuItem>
             </Menu>
+            <DetailContestModal
+                open={openDetailModal}
+                handleClose={() => setOpenDetailModal(false)}
+                contest={selectedContest}
+            />
         </>
     );
 };

@@ -18,13 +18,15 @@ const Registration = () => {
     useEffect(() => {
         const fetchRegisteredContestsByUserId = async () => {
             const response = await RegistrationService.getRetristeredContestsByUserId(user.id);
-            setContests(response);
+            if (response.message) {
+                console.log(response);
+            } else {
+                setContests(response);
+            }
         }
 
         fetchRegisteredContestsByUserId();
     }, []);
-
-    console.log(contests);
 
     const filterRegisterdContest = contests?.filter(contest =>
         searchTerm
@@ -32,6 +34,14 @@ const Registration = () => {
             : true
     );
 
+    const handleWithdraw = async (contestId, userId) => {
+        const response = await RegistrationService.withdrawContest(contestId, userId);
+        if (response.message) {
+            console.log(response);
+        } else {
+            setContests(contests.filter(contest => contest.result.contestId !== contestId));
+        }
+    }
 
     return (
         <Box
@@ -126,7 +136,7 @@ const Registration = () => {
                 </Box>
 
                 {/* Pass filtered contests to ContestTable */}
-                <RegistrationTable registration={filterRegisterdContest} />
+                <RegistrationTable registration={filterRegisterdContest} handleWithdraw={handleWithdraw} />
             </Box>
         </Box>
     );

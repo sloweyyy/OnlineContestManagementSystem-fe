@@ -8,26 +8,27 @@ import { gray, red, white } from '../../config/theme/themePrintives'
 import { toast } from 'react-toastify'
 import RegisterService from '../../services/registration.service'
 import { useSelector } from 'react-redux'
+import CircularProgress from '@mui/material/CircularProgress';
 
-const PaticipatingModal = ({ contestId, participantInformationRequirements, open, onClose }) => {
-    const WorkingUnit = [
-        { label: 'Trường Đại học Công nghệ', value: 'tech_university' },
-        { label: 'Trường Đại học Kinh tế', value: 'economics_university' },
-        { label: 'Trường Đại học Ngoại ngữ', value: 'language_university' },
-    ];
+const WorkingUnit = [
+    { label: 'Trường Đại học Công nghệ', value: 'tech_university' },
+    { label: 'Trường Đại học Kinh tế', value: 'economics_university' },
+    { label: 'Trường Đại học Ngoại ngữ', value: 'language_university' },
+];
 
-    const Jobs = [
-        { label: 'Sinh viên', value: 'student' },
-        { label: 'Giáo viên', value: 'teacher' },
-        { label: 'Nhân viên', value: 'employee' },
-    ];
+const Jobs = [
+    { label: 'Sinh viên', value: 'student' },
+    { label: 'Giáo viên', value: 'teacher' },
+    { label: 'Nhân viên', value: 'employee' },
+];
 
-    const Sexual = [
-        { label: 'Nam', value: 'male' },
-        { label: 'Nữ', value: 'female' },
-        { label: 'Khác', value: 'other' },
-    ];
+const Sexual = [
+    { label: 'Nam', value: 'male' },
+    { label: 'Nữ', value: 'female' },
+    { label: 'Khác', value: 'other' },
+];
 
+const PaticipatingModal = ({ contest, open, onClose, onSubmissionSuccess }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
@@ -38,6 +39,8 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
     const [selectedSexual, setSelectedSexual] = useState('');
     const [selectedWorkingUnit, setSelectedWorkingUnit] = useState('');
     const { user } = useSelector(state => state.user);
+    const [loading, setLoading] = useState(false);
+    const [isChecked, setIsChecked] = useState(false)
 
     const handleJobChange = (event) => {
         setSelectedJob(event.target.value);
@@ -51,56 +54,55 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
         setSelectedWorkingUnit(event.target.value);
     };
 
-    const [isChecked, setIsChecked] = useState(false)
-
     const handleToggleCheck = () => {
         setIsChecked(!isChecked)
     }
 
     const handleSubmission = async () => {
+        setLoading(true);
+
         if (!name) {
             toast.error('Vui lòng nhập họ và tên');
         } else if (!email) {
             toast.error('Vui lòng nhập email');
         } else if (!dob) {
             toast.error('Vui lòng nhập ngày sinh');
-        } else if (participantInformationRequirements.includes('số điện thoại') && !phone) {
+        } else if (contest?.participantInformationRequirements.includes('số điện thoại') && !phone) {
             toast.error('Vui lòng nhập số điện thoại');
-        } else if (participantInformationRequirements.includes('giới tính') && !selectedSexual) {
+        } else if (contest?.participantInformationRequirements.includes('giới tính') && !selectedSexual) {
             toast.error('Vui lòng chọn giới tính');
-        } else if (participantInformationRequirements.includes('địa chỉ') && !address) {
+        } else if (contest?.participantInformationRequirements.includes('địa chỉ') && !address) {
             toast.error('Vui lòng nhập địa chỉ');
-        } else if (participantInformationRequirements.includes('cmnd/cccd') && !identity) {
+        } else if (contest?.participantInformationRequirements.includes('cmnd/cccd') && !identity) {
             toast.error('Vui lòng nhập số CMND/CCCD');
-        } else if (participantInformationRequirements.includes('nghề nghiệp') && !selectedJob) {
+        } else if (contest?.participantInformationRequirements.includes('nghề nghiệp') && !selectedJob) {
             toast.error('Vui lòng chọn nghề nghiệp');
-        } else if (participantInformationRequirements.includes('đơn vị công tác') && !selectedWorkingUnit) {
+        } else if (contest?.participantInformationRequirements.includes('đơn vị công tác') && !selectedWorkingUnit) {
             toast.error('Vui lòng chọn đơn vị công tác');
         } else {
             let info = {};
 
-            if (participantInformationRequirements.includes('số điện thoại')) {
+            if (contest?.participantInformationRequirements.includes('số điện thoại')) {
                 info.phone = phone;
             }
-            if (participantInformationRequirements.includes('địa chỉ')) {
+            if (contest?.participantInformationRequirements.includes('địa chỉ')) {
                 info.address = address;
             }
-            if (participantInformationRequirements.includes('cmnd/cccd')) {
+            if (contest?.participantInformationRequirements.includes('cmnd/cccd')) {
                 info.identity = identity;
             }
-            if (participantInformationRequirements.includes('giới tính')) {
+            if (contest?.participantInformationRequirements.includes('giới tính')) {
                 info.sexual = selectedSexual;
             }
-            if (participantInformationRequirements.includes('nghề nghiệp')) {
+            if (contest?.participantInformationRequirements.includes('nghề nghiệp')) {
                 info.job = selectedJob;
             }
-            if (participantInformationRequirements.includes('đơn vị công tác')) {
+            if (contest?.participantInformationRequirements.includes('đơn vị công tác')) {
                 info.workingUnit = selectedWorkingUnit;
             }
 
-
             const participantInformation = {
-                contestId,
+                contestId: contest.id,
                 userId: user.id,
                 name,
                 dateOfBirth: dob,
@@ -108,14 +110,25 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
                 additionalInfo: info,
             };
 
-            const response = await RegisterService.registerContest(contestId, participantInformation)
+            try {
+                const response = await RegisterService.registerContest(contest.id, participantInformation);
+                if (response && response.paymentLink) {
+                    window.open(response.paymentLink, '_blank');
 
-            if (response.status === 200) {
-                toast.success('Đăng ký thành công');
-                onClose();
+                    if (onSubmissionSuccess) {
+                        onSubmissionSuccess();
+                    }
+                } else {
+                    toast.error('Không tìm thấy đường dẫn thanh toán. Vui lòng thử lại!');
+                }
+            } catch (error) {
+                toast.error('Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại sau!');
             }
         }
+
         resetForm();
+        setLoading(false);
+        onClose();
     };
 
     const resetForm = () => {
@@ -131,10 +144,7 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
     };
 
     return (
-        <Modal
-            open={open}
-            onClose={onClose}
-        >
+        <Modal open={open} onClose={() => !loading && onClose()}>
             <Box
                 sx={{
                     position: 'absolute',
@@ -211,7 +221,7 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
                         onChange={(e) => setEmail(e.target.value)}
                         value={email}
                     />
-                    {participantInformationRequirements.includes('số điện thoại') && (
+                    {contest?.participantInformationRequirements.includes('số điện thoại') && (
                         <CustomTextField
                             type='tel'
                             label='Số điện thoại'
@@ -222,7 +232,7 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
                         />
                     )}
 
-                    {participantInformationRequirements.includes('cmnd/cccd') && (
+                    {contest?.participantInformationRequirements.includes('cmnd/cccd') && (
                         <CustomTextField
                             type='text'
                             label='Số CMND/CCCD'
@@ -232,7 +242,7 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
                             onChange={(e) => setIdentity(e.target.value)}
                         />
                     )}
-                    {participantInformationRequirements.includes('giới tính') && (
+                    {contest?.participantInformationRequirements.includes('giới tính') && (
                         <CustomSelect
                             label='Giới tính'
                             value={selectedSexual}
@@ -251,7 +261,7 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
                         value={dob}
                     />
 
-                    {participantInformationRequirements.includes('nghề nghiệp') && (
+                    {contest?.participantInformationRequirements.includes('nghề nghiệp') && (
                         <CustomSelect
                             label="Nghề nghiệp"
                             value={selectedJob}
@@ -261,7 +271,7 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
                         />
                     )}
 
-                    {participantInformationRequirements.includes('đơn vị công tác') && (
+                    {contest?.participantInformationRequirements.includes('đơn vị công tác') && (
                         <CustomSelect
                             label="Đơn vị công tác"
                             value={selectedWorkingUnit}
@@ -270,7 +280,7 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
                             placeholder="Chọn đơn vị công tác"
                         />
                     )}
-                    {participantInformationRequirements.includes('địa chỉ') && (
+                    {contest?.participantInformationRequirements.includes('địa chỉ') && (
                         <CustomTextField
                             type='text'
                             label='Địa chỉ'
@@ -332,6 +342,7 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
                             textTransform: 'none',
                             fontSize: 18,
                             border: `2px solid ${red[500]}`,
+                            width: 150,
                             ":hover": {
                                 bgcolor: white[50],
                                 color: red[500],
@@ -344,10 +355,10 @@ const PaticipatingModal = ({ contestId, participantInformationRequirements, open
                                     border: `2px solid ${gray[300]}`,
                                 }),
                         }}
-                        disabled={!isChecked}
+                        disabled={!isChecked || loading}
                         onClick={handleSubmission}
                     >
-                        Xác nhận
+                        {loading ? <CircularProgress size={24} color="inherit" /> : 'Xác nhận'}
                     </Button>
                 </Box>
             </Box>

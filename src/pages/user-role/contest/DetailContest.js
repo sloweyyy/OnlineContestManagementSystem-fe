@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
     Avatar, Box, Button, Divider, Menu, MenuItem, Typography
 } from '@mui/material';
-import { black, gray, red, white, yellow } from '../../../config/theme/themePrintives';
+import { black, gray, red, white } from '../../../config/theme/themePrintives';
 import PaticipatingModal from '../../../components/contest/PaticipatingModal';
 import { useLocation } from 'react-router-dom';
 import ContestService from '../../../services/contest.service';
@@ -12,7 +12,9 @@ import { userLogout } from "../../../stores/actions/AuthAction";
 import RegisterService from '../../../services/registration.service';
 import CountdownBox from '../../../components/contest/CountdownBox';
 import RankCard from '../../../components/contest/RankCard';
-import CustomTooltip from '../../../components/custom-components/CustomTooltip';
+import { ConfirmModal } from '../../../components/custom-components/CustomModal';
+import PaymentService from '../../../services/payment.service';
+import { toast } from 'react-toastify';
 
 const DetailContest = () => {
     const [contest, setContest] = useState(null);
@@ -23,8 +25,7 @@ const DetailContest = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { user } = useSelector(state => state.user);
-    const [participants, setParticipants] = useState([]);
-    const isDisable = user?.id === contest?.creatorUserId || participants?.some(participant => participant.userId === user?.id);
+    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchContest = async () => {
@@ -67,14 +68,25 @@ const DetailContest = () => {
         return () => clearInterval(intervalId);
     }, [contest]);
 
+    const [participants, setParticipants] = useState([]);
+
     useEffect(() => {
         const fetchParticipants = async () => {
-            const participants = await RegisterService.getParticipantsByContestId(contestId);
-            setParticipants(participants);
-        }
+            try {
+                const participants = await RegisterService.getParticipantsByContestId(contestId);
+                setParticipants(Array.isArray(participants) ? participants : []);
+            } catch (error) {
+                console.error('Error fetching participants:', error);
+                setParticipants([]);
+            }
+        };
 
         fetchParticipants();
     }, [contestId]);
+
+    const isDisable =
+        user?.id === contest?.creatorUserId ||
+        (Array.isArray(participants) && participants.some(participant => participant.userId === user?.id));
 
     const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 5;
@@ -97,12 +109,12 @@ const DetailContest = () => {
         }
     };
 
-    const handleScroll = (text) => {
+    const handleHeaderClick = (text) => {
         return () => {
             let elementId;
             switch (text) {
                 case 'Trang chủ':
-                    elementId = 'top';
+                    window.location.href = '/participant/home';
                     break;
                 case 'Thể lệ':
                     elementId = 'rules';
@@ -152,6 +164,23 @@ const DetailContest = () => {
         setAnchorEl(null);
     }
 
+    const handleConfirm = async () => {
+        try {
+            const response = await PaymentService.getPaymentStatus(contestId, user.id);
+            if (response && response.status === 'SUCCESS') {
+                toast.success('Thanh toán thành công!');
+                setIsConfirmModalOpen(false);
+            } else if (response && response.status === 'PENDING') {
+                toast.error('Thanh toán đang chờ xác nhận!');
+            } else if (response && response.status === 'CANCELLED') {
+                toast.error('Thanh toán thất bại!');
+                setIsConfirmModalOpen(false);
+            }
+        } catch (error) {
+            toast.error('Không thể xác nhận thanh toán!');
+        }
+    }
+
     return (
         <Box display="flex" flexDirection="column" alignItems="center" width="100%">
             <Box
@@ -165,7 +194,14 @@ const DetailContest = () => {
             >
                 {/* Header */}
                 <Box display="flex" justifyContent="space-between" width="100%" maxWidth="70%">
-                    <img src={require("../../../assets/ASE.png")} alt="logo" width="60px" height="70px" />
+                    <img
+                        src={require("../../../assets/ASE.png")}
+                        alt="logo"
+                        width="60px"
+                        height="70px"
+                        onClick={() => window.location.href = '/participant/home'}
+                        style={{ cursor: 'pointer' }}
+                    />
                     <Box display="flex" justifyContent="space-between" width="100%" maxWidth="80%" bgcolor="rgba(139, 0, 0, 0.5)" borderRadius={10} px={2} py={2} alignItems={'center'}>
                         <Box display="flex">
                             {['Trang chủ', 'Thể lệ', 'Bảng xếp hạng'].map((text) => (
@@ -184,7 +220,7 @@ const DetailContest = () => {
                                         border: 'none',
                                         background: 'none',
                                     }}
-                                    onClick={handleScroll(text)}
+                                    onClick={handleHeaderClick(text)}
                                 >
                                     {text}
                                 </Button>
@@ -325,10 +361,10 @@ const DetailContest = () => {
                         py={1}
                     >
                         <Typography fontWeight={600} fontSize={26} color={red[600]}>
-                            1000
+                            {participants.length}
                         </Typography>
-                        <Typography fontWeight={400} fontSize={18} color={black[900]}>
-                            lượt đăng ký
+                        <Typography fontWeight={600} fontSize={20} color={black[900]}>
+                            lượt tham gia
                         </Typography>
                     </Box>
                 </Box>
@@ -355,7 +391,7 @@ const DetailContest = () => {
                         {paginatedData.map((participant, index) => (
                             <RankCard
                                 key={participant.id}
-                                index={currentPage * itemsPerPage + index + 1}
+                                index={participants.indexOf(participant) + 1}
                                 participant={participant}
                             />
                         ))}
@@ -437,8 +473,19 @@ const DetailContest = () => {
                     © 2021 Kontext. All rights reserved.
                 </Typography>
             </Box>
-
-            <PaticipatingModal contestId={contestId} participantInformationRequirements={['số điện thoại', 'địa chỉ']} open={opened} onClose={handleOnClose} />
+            <PaticipatingModal
+                contest={contest}
+                open={opened}
+                onClose={handleOnClose}
+                onSubmissionSuccess={() => setIsConfirmModalOpen(true)}
+            />
+            <ConfirmModal
+                open={isConfirmModalOpen}
+                onClose={() => setIsConfirmModalOpen(false)}
+                title="Xác nhận thanh toán"
+                message={`Bạn đã hoàn thành thủ tục thanh toán?`}
+                onConfirm={handleConfirm}
+            />
         </Box>
     );
 }
