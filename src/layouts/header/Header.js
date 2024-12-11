@@ -72,9 +72,9 @@ const Header = () => {
                         marginLeft: { xs: 1, sm: 5, md: 5, lg: 10, xl: 10 },
                     }}
                 >
-                    <img src={require("../../assets/ASE-light.png")} alt="logo" width={'32.8px'} height={'38.4px'} />
+                    <img src={require("../../assets/logo.svg").default} alt="logo" width={40} height={40} />
                     <Typography variant="h5" color={white[50]} sx={{ ml: 2 }}>
-                        Kontext
+                        KONTEXT
                     </Typography>
                 </Button>
 
