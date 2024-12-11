@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, Typography, IconButton, Menu, MenuItem } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { MoreVert } from '@mui/icons-material';
+import { Add, MoreVert, Notifications } from '@mui/icons-material';
 import NewsService from '../../../services/news.service';
 import { toast } from 'react-toastify';
-import { gray, black } from '../../../config/theme/themePrintives';
+import { gray, black, red, white } from '../../../config/theme/themePrintives';
 import NewsModal from '../../../components/news/NewsModal';
 
 const NewsManagement = () => {
@@ -23,13 +23,13 @@ const NewsManagement = () => {
   }, []);
 
   const handleMenuClick = (event, newsItem) => {
+    console.log('Menu Clicked, News Item:', newsItem);
     setAnchorEl(event.currentTarget);
     setSelectedNews(newsItem);
   };
 
   const handleCloseMenu = () => {
     setAnchorEl(null);
-    setSelectedNews(null);
   };
 
   const handleViewDetails = () => {
@@ -39,8 +39,8 @@ const NewsManagement = () => {
 
   const handleDelete = async () => {
     try {
-      await NewsService.deleteNews(selectedNews.id);
-      setNews(news.filter((item) => item.id !== selectedNews.id));
+      await NewsService.deleteNews(selectedNews._id);
+      setNews(news.filter((item) => item.id !== selectedNews._id));
       toast.success('Xóa tin tức thành công');
     } catch (error) {
       toast.error('Xóa tin tức thất bại');
@@ -48,14 +48,21 @@ const NewsManagement = () => {
     handleCloseMenu();
   };
 
+  const handleCloseNewsModal = () => {
+    setOpenModal(false);
+    setSelectedNews(null);
+  }
+
   const columns = [
-    { field: 'id', headerName: '#', flex: 0.5 },
-    { field: 'name', headerName: 'Tiêu đề', flex: 1.5 },
-    { field: 'date', headerName: 'Ngày đăng', flex: 1.2 },
+    { field: 'id', headerName: '#', flex: 0.5, headerAlign: 'center', align: 'center' },
+    { field: 'name', headerName: 'Tiêu đề', flex: 4 },
+    { field: 'date', headerName: 'Ngày đăng', flex: 1 },
     {
       field: 'action',
       headerName: '',
       flex: 0.5,
+      headerAlign: 'center',
+      align: 'center',
       renderCell: (params) => (
         <IconButton onClick={(event) => handleMenuClick(event, params.row)}>
           <MoreVert />
@@ -68,23 +75,58 @@ const NewsManagement = () => {
     id: index + 1,
     name: item.name,
     date: new Date(item.createdAt).toLocaleDateString('vi-VN'),
-    id: item.id,
+    _id: item.id,
+    imageUrl: item.imageUrl,
   }));
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', padding: 2, gap: 2 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', padding: 2 }}>
+      {/* Title and Notification Icon Button */}
+      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+        <IconButton size='small' sx={{ color: black[900], ":hover": { color: white[50], bgcolor: red[500] } }}>
+          <Notifications />
+        </IconButton>
+      </Box>
       <Typography variant="h4">Quản lý tin tức</Typography>
-      <Button variant="contained" color="primary" onClick={() => setOpenModal(true)}>
+      <Button
+        sx={{
+          width: 200,
+          color: white[50],
+          bgcolor: black[900],
+          ":hover": { bgcolor: gray[400] },
+          fontWeight: 600,
+          fontSize: 14,
+          textTransform: 'none',
+          paddingX: 4,
+          '&:disabled': {
+            bgcolor: gray[200],
+            color: black[100],
+          },
+          marginTop: 4,
+        }}
+        startIcon={<Add />}
+        onClick={() => setOpenModal(true)}
+      >
         Thêm tin tức
       </Button>
-      <Box sx={{ height: 400, mt: 2 }}>
+      <Box sx={{ marginTop: 2, display: 'flex', flex: 1 }}>
         <DataGrid
           rows={rows}
           columns={columns}
           pageSizeOptions={[5]}
-          initialState={{ pagination: { paginationModel: { pageSize: 5, page: 0 } } }}
+          initialState={{
+            pagination: { paginationModel: { pageSize: 5, page: 0 } },
+          }}
           disableColumnMenu
+          localeText={{
+            MuiTablePagination: {
+              labelRowsPerPage: 'Số hàng mỗi bảng',
+              labelDisplayedRows: ({ from, to, count }) => `${from}–${to} trên ${count !== -1 ? count : `hơn ${to}`}`,
+            },
+          }}
           sx={{
+            flex: 1,
+            display: 'flex',
             width: '100%',
             border: `1px solid ${gray[200]}`,
             '& .MuiDataGrid-columnHeader': {
@@ -96,6 +138,33 @@ const NewsManagement = () => {
             },
             '& .MuiDataGrid-columnHeaderTitle': {
               fontWeight: 600,
+            },
+            '& .MuiDataGrid-cell': {
+              outline: 'none',
+            },
+            '& .MuiDataGrid-row:hover': {
+              backgroundColor: gray[200],
+            },
+            '& .MuiDataGrid-root': {
+              border: 'none',
+            },
+            '& .MuiDataGrid-selectedRowCount': {
+              visibility: 'hidden',
+            },
+            '& .MuiDataGrid-checkboxInput.Mui-checked': {
+              color: 'inherit',
+            },
+            '& .MuiDataGrid-cell:focus, & .MuiDataGrid-cell:focus-within': {
+              outline: 'none',
+            },
+            '& .MuiDataGrid-columnHeader:focus, & .MuiDataGrid-columnHeader:focus-within': {
+              outline: 'none',
+            },
+            '& .MuiDataGrid-row.Mui-selected': {
+              backgroundColor: `${gray[200]} !important`,
+            },
+            '& .MuiDataGrid-columnSeparator--resizable': {
+              display: 'block',
             },
           }}
         />
@@ -116,7 +185,7 @@ const NewsManagement = () => {
         </MenuItem>
       </Menu>
 
-      {openModal && <NewsModal open={openModal} onClose={() => setOpenModal(false)} news={selectedNews} setNews={setNews} />}
+      {openModal && <NewsModal open={openModal} onClose={handleCloseNewsModal} news={selectedNews} setNews={setNews} />}
     </Box>
   );
 };

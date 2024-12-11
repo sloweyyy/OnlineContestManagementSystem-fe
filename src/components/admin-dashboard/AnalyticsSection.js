@@ -16,8 +16,6 @@ const AnalyticsSection = () => {
         dispatch(fetchWebsiteRevenue());
     }, [dispatch]);
 
-    console.log(contestStatistics, registrationStatistics, websiteRevenue);
-
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography variant='h4'>Thống kê hôm nay</Typography>

@@ -3,6 +3,7 @@ import { Box, Button, TextField, Typography, Modal } from '@mui/material';
 import NewsService from '../../services/news.service';
 import { toast } from 'react-toastify';
 import CloudinaryService from '../../services/cloudinary.service';
+import { gray, black, white } from '../../config/theme/themePrintives';
 
 const NewsModal = ({ open, onClose, news, setNews }) => {
   const [name, setName] = useState('');
@@ -64,32 +65,90 @@ const NewsModal = ({ open, onClose, news, setNews }) => {
         }}
       >
         <Typography variant="h6">{news ? 'Chỉnh sửa tin tức' : 'Thêm tin tức'}</Typography>
-        <TextField label="Tiêu đề" value={name} onChange={(e) => setName(e.target.value)} fullWidth />
+        <TextField
+          type="text"
+          variant="outlined"
+          placeholder={'Nhập tiêu đề'}
+          fullWidth
+          size="small"
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              '& input[type=number]': {
+                MozAppearance: 'textfield',
+              },
+              '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
+                WebkitAppearance: 'none',
+                margin: 0,
+              },
+              '& fieldset': {
+                borderColor: gray[200],
+              },
+              '&:hover fieldset': {
+                borderColor: black[900],
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: black[900],
+                borderWidth: 1,
+              },
+            },
+          }}
+          onChange={(e) => setName(e.target.value)}
+          value={name}
+        />
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
           {selectedImage ? (
-            <Box
-              sx={{
-                width: '100%',
-                height: 200,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                border: '1px solid gray',
-                borderRadius: 1,
-                overflow: 'hidden',
-              }}
-            >
-              <img src={selectedImage} alt="uploaded" style={{ width: 'auto', height: '100%', objectFit: 'contain' }} />
-            </Box>
+            <>
+              <Box
+                sx={{
+                  width: '100%',
+                  height: 200,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  border: `1px solid ${gray[200]}`,
+                  borderRadius: 1,
+                  overflow: 'hidden',
+                }}
+              >
+                <img src={selectedImage} alt="uploaded" style={{ width: 'auto', height: '100%', objectFit: 'contain' }} />
+              </Box>
+              <input type="file" accept="image/*" onChange={handleImageChange} style={{ marginTop: 8 }} />
+            </>
           ) : (
             <>
-              <Typography sx={{ color: 'gray', marginBottom: 2 }}>Chọn hình ảnh từ máy của bạn</Typography>
+              <Box
+                sx={{
+                  width: '100%',
+                  height: 200,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  border: `1px solid ${gray[200]}`,
+                  borderRadius: 1,
+                  overflow: 'hidden',
+                }}
+              />
               <input type="file" accept="image/*" onChange={handleImageChange} style={{ marginTop: 8 }} />
             </>
           )}
         </Box>
-        <Button variant="contained" color="primary" onClick={handleSave}>
-          Lưu
+        <Button
+          sx={{
+            color: white[50],
+            bgcolor: black[900],
+            ":hover": { bgcolor: gray[400] },
+            fontWeight: 600,
+            fontSize: 14,
+            textTransform: 'none',
+            '&:disabled': {
+              bgcolor: gray[200],
+              color: black[100],
+            },
+            marginTop: 2,
+          }}
+          onClick={handleSave}
+        >
+          Lưu tin tức
         </Button>
       </Box>
     </Modal>
