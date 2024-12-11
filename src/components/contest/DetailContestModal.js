@@ -160,20 +160,39 @@ const DetailContestModal = ({ open, handleClose, contest }) => {
     const paginationModel = { page: 0, pageSize: 5 };
 
     const handleExportExcel = async () => {
-        const response = await RegistrationService.exportExcel(contest._id);
-
-        if (response) {
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', `${contestDetail?.name}.xlsx`);
-            document.body.appendChild(link);
-            link.click();
-
-            toast.success('Xuất file thành công');
+        try {
+            const response = await RegistrationService.exportExcel(contest._id);
+    
+            if (response && response.data) {
+                const blob = new Blob([response.data], { 
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+                });
+    
+                if (blob.size === 0) {
+                    toast.error('Tệp tin trống');
+                    return;
+                }
+    
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `${contestDetail?.name}_Registrations.xlsx`);
+                document.body.appendChild(link);
+                link.click();
+    
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(link);
+    
+                toast.success('Xuất file thành công');
+            } else {
+                toast.error('Không thể tải file');
+            }
+        } catch (error) {
+            console.error('Excel export error:', error);
+            toast.error('Lỗi xuất file');
         }
     }
-
+    
     return (
         <Modal
             open={open}

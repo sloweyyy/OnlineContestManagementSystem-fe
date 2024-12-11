@@ -53,13 +53,13 @@ const withdrawContest = async (contestId, userId) => {
 
 const exportExcel = async (contestId) => {
     try {
-        const response = await axiosConfig.get(`${CONTEST_ENDPOINT}/${contestId}/registrations/excel`);
+        const response = await axiosConfig.get(`${CONTEST_ENDPOINT}/${contestId}/registrations/excel`, {
+            responseType: 'blob'  
+        });
         return response;
     } catch (error) {
-        if (error.response) {
-            return error.response.data;
-        }
-        return error.message;
+        console.error('Excel export error:', error);
+        throw error; 
     }
 }
 
