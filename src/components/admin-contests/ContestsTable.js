@@ -47,7 +47,7 @@ const ContestsTable = () => {
             case 'pending':
                 return 'Chờ phê duyệt';
             case 'rejected':
-                return 'Không phê duyệt';
+                return 'Từ chối';
             default:
                 return 'Không xác định';
         }
@@ -71,11 +71,11 @@ const ContestsTable = () => {
         const newDate = new Date().toLocaleDateString('vi-VN');
         const matchesTabValue =
             tabValue === 0 ||
-            (tabValue === 1 && row.startDate < newDate && row.endDate > newDate && row.status !== 'Không phê duyệt') ||
-            (tabValue === 2 && row.startDate > newDate && row.status !== 'Không phê duyệt') ||
-            (tabValue === 3 && row.endDate < newDate && row.status !== 'Không phê duyệt') ||
+            (tabValue === 1 && row.startDate < newDate && row.endDate > newDate && row.status !== 'Từ chối') ||
+            (tabValue === 2 && row.startDate > newDate && row.status !== 'Từ chối') ||
+            (tabValue === 3 && row.endDate < newDate && row.status !== 'Từ chối') ||
             (tabValue === 4 && row.status === 'Chờ phê duyệt') ||
-            (tabValue === 5 && row.status === 'Không phê duyệt');
+            (tabValue === 5 && row.status === 'Từ chối');
         return matchesSearchQuery && matchesTabValue;
     });
 
@@ -144,7 +144,7 @@ const ContestsTable = () => {
         handleCloseMenu();
         const response = await AdminService.rejectContest(contestId);
         if (response.status === 200) {
-            toast.success('Không phê duyệt cuộc thi thành công');
+            toast.success('Từ chối cuộc thi thành công');
             const updatedContests = contests?.map(contest => {
                 if (contest.id === contestId) {
                     contest.status = 'rejected';
@@ -246,7 +246,7 @@ const ContestsTable = () => {
                         disableRipple
                     />
                     <Tab
-                        label="Không phê duyệt"
+                        label="Từ chối"
                         sx={tabTextStyle}
                         icon={<BlockRounded sx={tabIconStyle} />}
                         iconPosition='start'
@@ -332,7 +332,7 @@ const ContestsTable = () => {
                 </MenuItem>
                 <MenuItem onClick={() => handleReject(selectedRow._id)} disabled={selectedRow?.status !== 'Chờ phê duyệt'}>
                     <BlockRounded fontSize='small' sx={{ mr: 1, color: dark[500] }} />
-                    <Typography sx={{ fontSize: '16px', color: dark[500] }}>Không phê duyệt</Typography>
+                    <Typography sx={{ fontSize: '16px', color: dark[500] }}>Từ chối</Typography>
                 </MenuItem>
             </Menu>
 

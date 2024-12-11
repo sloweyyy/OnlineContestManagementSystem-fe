@@ -82,6 +82,7 @@ const routes = [
     authRequired: true,
   },
 
+
   // Other routes
   {
     path: '*',

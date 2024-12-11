@@ -162,7 +162,7 @@ const ContestDetailModal = ({ open, onClose, contest, handleApprove, handleRejec
                         disabled={isDisabled || isLoading}
                         onClick={handleRejectContest}
                     >
-                        Không phê duyệt
+                        Từ chối
                     </Button>
 
                     <Button

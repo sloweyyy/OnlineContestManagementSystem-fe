@@ -1,27 +1,24 @@
 import { Box, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import NewsService from '../../services/news.service';
 
-const NewsCard = ({ news }) => {
-    const newsData = news || [
-        {
-            title: 'HEHE Thi Ảnh /Video Clip Trực Tuyến – Giải Pháp Tuyên Truyền Mới 2025',
-            image: 'https://picsum.photos/200/300',
-        },
-        {
-            title: 'HAHA Thi Ảnh /Video Clip Trực Tuyến – Giải Pháp Tuyên Truyền Mới 2025',
-            image: 'https://picsum.photos/200/300',
-        },
-        {
-            title: 'HOHO Thi Ảnh /Video Clip Trực Tuyến – Giải Pháp Tuyên Truyền Mới 2025',
-            image: 'https://picsum.photos/200/300',
-        },
-        {
-            title: 'HIHI Thi Ảnh /Video Clip Trực Tuyến – Giải Pháp Tuyên Truyền Mới 2025',
-            image: 'https://picsum.photos/200/300',
-        },
-    ];
+const NewsCard = () => {
+    const [newsData, setNewsData] = useState([]);
+
+    useEffect(() => {
+        const fetchNews = async () => {
+            try {
+                const data = await NewsService.getAllNews();
+                setNewsData(data);
+            } catch (error) {
+                console.error('Error fetching news:', error);
+            }
+        };
+
+        fetchNews();
+    }, []);
 
     return (
         <Box
@@ -39,8 +36,8 @@ const NewsCard = ({ news }) => {
                     <SwiperSlide key={index}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <img
-                                src={item.image}
-                                alt={item.title}
+                                src={item.imageUrl}
+                                alt={item.name}
                                 style={{ width: '90%', height: '150px', borderRadius: 2 }}
                             />
                             <Typography
@@ -56,7 +53,7 @@ const NewsCard = ({ news }) => {
                                     marginTop: 1,
                                 }}
                             >
-                                {item.title}
+                                {item.name}
                             </Typography>
                         </Box>
                     </SwiperSlide>
