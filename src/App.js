@@ -23,7 +23,7 @@ const Registration = lazy(() => import('./pages/user-role/registration/Registrat
 // Lazy Admin Page
 const AdminDashboard = lazy(() => import('./pages/admin-role/dashboard/Dashboard'));
 const AdminContest = lazy(() => import('./pages/admin-role/contests/Contests'));
-
+const NewsManagement = lazy(() => import('./pages/admin-role/news/NewsManagement'));
 // Lazy Landing Page
 const LandingPage = lazy(() => import('./pages/landing-page/LandingPage'));
 const Contact = lazy(() => import('./pages/landing-page/Contact'));
@@ -162,6 +162,7 @@ function AppContent() {
                 <Route path="/admin/home" element={<AdminDashboard />} />
                 <Route path="/admin/contests" element={<AdminContest />} />
                 <Route path="/admin/profile" element={<Profile />} />
+                <Route path="/admin/news" element={<NewsManagement />} />
               </Route>
 
               {/* Other Route */}

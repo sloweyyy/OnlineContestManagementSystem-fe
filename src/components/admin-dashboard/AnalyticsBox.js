@@ -39,7 +39,7 @@ const AnalyticsBox = ({ title, value, growth }) => {
                 <Typography sx={{ fontSize: 28, fontWeight: 600 }}>{formatValue(value)}</Typography>
                 <Typography sx={{ fontSize: 16, fontWeight: 600 }}>{title}</Typography>
             </Box>
-            <Typography sx={{ color: growth < 0 ? red[400] : green[400], fontSize: 12, fontWeight: 400 }}>{growth}% so với hôm qua</Typography>
+            <Typography sx={{ color: parseFloat(growth) < 0 ? red[400] : green[400], fontSize: 12, fontWeight: 400 }}>{parseFloat(growth).toFixed(2)}% so với hôm qua</Typography>
         </Box>
     )
 }

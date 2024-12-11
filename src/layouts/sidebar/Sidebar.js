@@ -67,6 +67,7 @@ const Sidebar = () => {
     const ADMIN = [
         { name: "Trang chủ", icon: <Home />, path: "/admin/home" },
         { name: "Quản lý cuộc thi", icon: <EmojiEvents />, path: "/admin/contests" },
+        { name: "Quản lý tin tức", icon: <AppRegistration />, path: "/admin/news" },
     ];
 
     const PARTICIPANT = [
