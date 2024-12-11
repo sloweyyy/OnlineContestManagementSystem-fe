@@ -36,7 +36,7 @@ const Home = () => {
             if (contests.message) {
                 console.log(contests);
             } else {
-                setContests(contests);
+                setContests(Array.isArray(contests) ? contests : []);
             }
         }
 

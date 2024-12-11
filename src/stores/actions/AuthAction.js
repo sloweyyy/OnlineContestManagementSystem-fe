@@ -21,19 +21,18 @@ export const userLogin = createAsyncThunk('Auth/signin', async ({ email, passwor
 });
 
 export const userLogout = createAsyncThunk('Auth/revoke-token', async (_, thunkAPI) => {
-    const refreshToken = Cookies.get('refreshToken');
-
-    if (!refreshToken) {
-        return thunkAPI.rejectWithValue('No refresh token found');
-    }
-
     try {
+        const refreshToken = Cookies.get('refreshToken');
+        if (!refreshToken) throw new Error('No refresh token found');
+
         await AuthService.signout(refreshToken);
         Cookies.remove('accessToken');
         Cookies.remove('refreshToken');
-        thunkAPI.dispatch(setUser({ user: null }));
+
+        thunkAPI.dispatch(setUser(null));
+
         return true;
-    } catch (status) {
-        return thunkAPI.rejectWithValue(status);
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
     }
 });

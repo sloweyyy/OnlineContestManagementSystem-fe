@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { userLogin } from '../actions/AuthAction';
+import { userLogin, userLogout } from '../actions/AuthAction';
 import Cookies from 'js-cookie';
 
 const accessToken = Cookies.get('accessToken');
@@ -19,6 +19,15 @@ const authSlice = createSlice({
             state.role = payload.user.role;
         });
         builder.addCase(userLogin.rejected, (state) => {
+            state.isAuthenticated = false;
+            state.role = '';
+        });
+
+        builder.addCase(userLogout.fulfilled, (state) => {
+            state.isAuthenticated = false;
+            state.role = '';
+        });
+        builder.addCase(userLogout.rejected, (state) => {
             state.isAuthenticated = false;
             state.role = '';
         });

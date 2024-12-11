@@ -44,9 +44,9 @@ const Profile = lazy(() => import('./pages/profile/Profile'));
 
 function AppContent() {
   const location = useLocation();
+  const { isAuthenticated } = useSelector((state) => state.auth);
+
   const hideLayout =
-    location.pathname === '/sign-in' ||
-    location.pathname === '/sign-up' ||
     location.pathname === '/forgot-password' ||
     location.pathname === '/otp' ||
     location.pathname === '/confirm-password' ||
@@ -54,13 +54,11 @@ function AppContent() {
     location.pathname === '/*' ||
     location.pathname === '/participant/detail-contest';
 
-  const { isAuthenticated } = useSelector((state) => state.auth);
-
   return (
     <Box display={'flex'}>
-      {!hideLayout && isAuthenticated && <Sidebar />}
+      {isAuthenticated && <Sidebar />}
       <Box flex={1}>
-        {!isAuthenticated && <Header />}
+        {!hideLayout && !isAuthenticated && <Header />}
         <Box display={'flex'}>
           <Box flex={1}>
             <Routes>
@@ -171,11 +169,11 @@ function AppContent() {
             </Routes>
           </Box>
         </Box>
-        {!isAuthenticated && <Footer />}
+        {!hideLayout && !isAuthenticated && <Footer />}
       </Box>
     </Box>
   );
-};
+}
 
 function Loading() {
   return (
