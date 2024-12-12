@@ -103,6 +103,7 @@ const NewsManagement = () => {
             color: black[100],
           },
           marginTop: 4,
+          alignSelf: 'flex-end',
         }}
         startIcon={<Add />}
         onClick={() => setOpenModal(true)}

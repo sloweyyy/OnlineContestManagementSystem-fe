@@ -100,7 +100,7 @@ const Sidebar = () => {
             <Box sx={{ display: "flex", flexDirection: "column", height: "100vh", p: 2, backgroundColor: white[50] }}>
                 <Box sx={{ display: "flex", alignItems: "center", mb: 4, justifyContent: openSideBar ? "flex-start" : "center" }}>
                     {openSideBar && (
-                        <Typography variant="h5" sx={{ flexGrow: 1, ml: 2.5, color: dark[700], fontWeight: 600 }}>
+                        <Typography variant="h5" sx={{ flexGrow: 1, ml: 2.5, color: dark[700], fontWeight: 600, cursor: 'pointer', userSelect: 'none' }}>
                             KONTEXT
                         </Typography>
                     )}
