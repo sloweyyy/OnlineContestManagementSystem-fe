@@ -15,6 +15,7 @@ import RankCard from '../../../components/contest/RankCard';
 import { ConfirmModal } from '../../../components/custom-components/CustomModal';
 import PaymentService from '../../../services/payment.service';
 import { toast } from 'react-toastify';
+import RulesModal from '../../../components/contest/RulesModal';
 
 const DetailContest = () => {
     const [contest, setContest] = useState(null);
@@ -142,10 +143,10 @@ const DetailContest = () => {
         setAnchorEl(null);
     };
 
-    const [opened, setOpened] = useState(false);
+    const [openParticipatingModal, setOpenParticipatingModal] = useState(false);
 
     const handleOnClose = () => {
-        setOpened(false);
+        setOpenParticipatingModal(false);
     }
 
 
@@ -180,6 +181,8 @@ const DetailContest = () => {
             toast.error('Không thể xác nhận thanh toán!');
         }
     }
+
+    const [openRulesModal, setOpenRulesModal] = useState(false);
 
     return (
         <Box display="flex" flexDirection="column" alignItems="center" width="100%">
@@ -304,7 +307,7 @@ const DetailContest = () => {
                             color: white[50],
                         },
                     }}
-                    onClick={() => setOpened(true)}
+                    onClick={() => setOpenParticipatingModal(true)}
                     disabled={isDisable}
                 >
                     <Typography fontWeight={600} fontSize={24} color={white[50]}>
@@ -325,6 +328,7 @@ const DetailContest = () => {
                         },
                         textTransform: 'none',
                     }}
+                    onClick={() => setOpenRulesModal(true)}
                 >
                     <Typography fontWeight={600} fontSize={24} color={red[500]}>
                         Thể lệ
@@ -388,7 +392,7 @@ const DetailContest = () => {
                         flexGrow={1}
                         my={3}
                     >
-                        {paginatedData.map((participant, index) => (
+                        {paginatedData?.map((participant, index) => (
                             <RankCard
                                 key={participant.id}
                                 index={participants.indexOf(participant) + 1}
@@ -475,9 +479,14 @@ const DetailContest = () => {
             </Box>
             <PaticipatingModal
                 contest={contest}
-                open={opened}
+                open={openParticipatingModal}
                 onClose={handleOnClose}
                 onSubmissionSuccess={() => setIsConfirmModalOpen(true)}
+            />
+            <RulesModal
+                open={openRulesModal}
+                onClose={() => setOpenRulesModal(false)}
+                rules={contest?.ruleDescription}
             />
             <ConfirmModal
                 open={isConfirmModalOpen}

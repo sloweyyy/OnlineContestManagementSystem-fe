@@ -1,5 +1,5 @@
 import { ArrowForwardIosRounded } from '@mui/icons-material';
-import { Box, Button, Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/material';
+import { Box, Button, Card, CardActionArea, CardContent, CardMedia, Divider, Typography } from '@mui/material';
 import React from 'react';
 import { black, gray, red, white } from '../../config/theme/themePrintives';
 
@@ -67,45 +67,32 @@ const RecentContestsCard = ({ contests }) => {
                 {contests && contests?.length > 0 && (
                     <Card
                         sx={{
+                            boxShadow: 1,
+                            bgcolor: white[50],
+                            borderRadius: 1,
                             flex: 1,
                             height: '100%',
-                            boxShadow: 'none',
-                            bgcolor: 'transparent',
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'space-between',
-                            borderRadius: '8px'
                         }}
                     >
                         <CardActionArea
-                            disableRipple
-                            href={`/participant/detail-contest?id=${contests[0]?.id}`}
-                            sx={{
-                                height: '100%',
-                                flexDirection: 'column',
-                                display: 'flex',
-                                alignItems: 'stretch',
-                            }}
+                            href={`/participant/detail-contest?id=${contests[0].id}`}
+                            disableTouchRipple
                         >
                             <CardMedia
                                 component="img"
-                                image={contests[0]?.imageUrl}
-                                alt={contests[0]?.name || 'Hình ảnh cuộc thi'}
+                                image={contests[0].imageUrl}
+                                alt={contests[0].name || 'Hình ảnh cuộc thi'}
                                 sx={{
-                                    borderRadius: '8px 8px 0 0',
+                                    height: 222,
                                     width: '100%',
-                                    height: 230,
                                     objectFit: 'cover',
+                                    borderRadius: '1px 1px 0 0',
                                 }}
                             />
-                            <CardContent
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    justifyContent: 'flex-start',
-                                    borderRadius: '0 0 8px 8px',
-                                }}
-                            >
+                            <CardContent sx={{ padding: 2 }}>
                                 <Typography
                                     sx={{
                                         display: '-webkit-box',
@@ -118,30 +105,42 @@ const RecentContestsCard = ({ contests }) => {
                                         color: black[900],
                                     }}
                                 >
-                                    {contests[0]?.name}
+                                    {contests[0].name}
                                 </Typography>
                                 <Typography
                                     sx={{
+                                        display: '-webkit-box',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        WebkitBoxOrient: 'vertical',
+                                        WebkitLineClamp: 1,
                                         fontSize: 14,
-                                        fontWeight: 500,
-                                        color: gray[500],
+                                        fontWeight: 400,
+                                        color: black[500],
                                         marginTop: 1,
                                     }}
                                 >
-                                    Bắt đầu: {new Date(contests[0]?.startDate).toLocaleDateString('vi-VN')}
+                                    Ngày bắt đầu: {new Date(contests[0]?.startDate).toLocaleString('vi-VN')}
                                 </Typography>
                                 <Box
                                     sx={{
-                                        marginTop: 2,
-                                        padding: '8px',
-                                        backgroundColor: red[500],
-                                        color: white[50],
-                                        borderRadius: '8px',
-                                        textAlign: 'center',
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        border: `1.5px solid ${black[500]}`,
+                                        borderRadius: "50px",
+                                        padding: "8px 16px",
+                                        marginTop: 3,
                                     }}
                                 >
-                                    <Typography fontWeight={'bold'} fontSize={14}>
-                                        {contests[0]?.organizationInformation?.orgName || 'Tổ chức không xác định'}
+                                    <Typography
+                                        sx={{
+                                            fontSize: 16,
+                                            fontWeight: 600,
+                                            color: black[500],
+                                        }}
+                                    >
+                                        {contests[0].organizationInformation?.orgName || 'Tổ chức không xác định'}
                                     </Typography>
                                 </Box>
                             </CardContent>
@@ -158,7 +157,7 @@ const RecentContestsCard = ({ contests }) => {
                     }}
                 >
                     {contests?.slice(1).map((contest, index) => (
-                        <Card key={contest?.id} sx={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
+                        <Card key={index} sx={{ backgroundColor: 'transparent', boxShadow: 1 }}>
                             <CardActionArea
                                 disableRipple
                                 sx={{
@@ -214,7 +213,7 @@ const RecentContestsCard = ({ contests }) => {
                                             color: gray[500],
                                         }}
                                     >
-                                        Bắt đầu: {new Date(contest?.startDate).toLocaleString('vi-VN')}
+                                        Ngày bắt đầu: {new Date(contest?.startDate).toLocaleString('vi-VN')}
                                     </Typography>
                                 </CardContent>
                             </CardActionArea>
@@ -222,7 +221,7 @@ const RecentContestsCard = ({ contests }) => {
                     ))}
                 </Box>
             </Box>
-        </Box>
+        </Box >
     );
 };
 

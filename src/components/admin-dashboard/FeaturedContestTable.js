@@ -78,7 +78,7 @@ const FeaturedContestTable = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {data.map((contest) => (
+                                {data?.map((contest) => (
                                     <React.Fragment key={contest.index}>
                                         <TableRow>
                                             <TableCell sx={{ fontSize: 18, fontWeight: 600 }}>{contest.index}</TableCell>

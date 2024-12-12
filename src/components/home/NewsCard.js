@@ -32,7 +32,7 @@ const NewsCard = () => {
         >
             <Typography sx={{ fontSize: 18, fontWeight: 600, paddingBottom: 2 }}>Tin tức mới</Typography>
             <Swiper loop={true}>
-                {newsData.map((item, index) => (
+                {newsData?.map((item, index) => (
                     <SwiperSlide key={index}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <img
