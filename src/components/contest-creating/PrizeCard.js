@@ -1,8 +1,8 @@
 import { Box, Divider, IconButton, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import CustomTextField from '../user-profile/CustomTextField'
-import { Clear, EmojiEvents, Star, Recommend } from '@mui/icons-material';
-import { brown, gray, yellow } from '../../config/theme/themePrintives';
+import { Clear, EmojiEvents, Star, Recommend, ImageSearch } from '@mui/icons-material';
+import { brown, gray, white, yellow } from '../../config/theme/themePrintives';
 import CloudinaryService from '../../services/cloudinary.service';
 
 const PrizeCard = ({
@@ -15,7 +15,7 @@ const PrizeCard = ({
     onChange,
     onDelete,
 }) => {
-    const [selectedImage, setSelectedImage] = useState(null);
+    const fileInputRef = useRef(null);
 
     const handleSetIconByName = () => {
         switch (name) {
@@ -37,7 +37,6 @@ const PrizeCard = ({
         if (file) {
             const uploadedImageUrl = await CloudinaryService.uploadImage(file);
             if (uploadedImageUrl) {
-                setSelectedImage(uploadedImageUrl);
                 onChange('imageUrl', uploadedImageUrl);
             }
         }
@@ -81,22 +80,70 @@ const PrizeCard = ({
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 4 }}>
                 {/* Image */}
-                <Box sx={{ flex: 1, height: '30vh', backgroundColor: gray[200], display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 2, borderRadius: 1 }}>
-                    {selectedImage ? (
-                        <img src={selectedImage} alt="uploaded" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                <Box
+                    sx={{
+                        flex: 1,
+                        height: '35vh',
+                        backgroundColor: gray[200],
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: 2,
+                        borderRadius: 1,
+                        position: 'relative',
+                        cursor: 'pointer',
+                        overflow: 'hidden',
+                    }}
+                    onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                >
+                    {imageUrl ? (
+                        <>
+                            <img
+                                src={imageUrl}
+                                alt="uploaded"
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'contain',
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                }}
+                            />
+                            <Box
+                                sx={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    width: '100%',
+                                    height: '100%',
+                                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    opacity: 0,
+                                    transition: 'opacity 0.3s',
+                                    '&:hover': {
+                                        opacity: 1,
+                                    },
+                                }}
+                            >
+                                <ImageSearch sx={{ color: white[50], fontSize: 50 }} />
+                            </Box>
+                        </>
                     ) : (
                         <>
-                            <Typography sx={{ color: gray[600], marginBottom: 2 }}>
-                                Chọn hình ảnh từ máy của bạn
-                            </Typography>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleImageChange}
-                                style={{ marginTop: 8 }}
-                            />
+                            <ImageSearch sx={{ color: gray[500], fontSize: 50 }} />
                         </>
                     )}
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        style={{ display: 'none' }}
+                    />
                 </Box>
                 {/* Prize Information */}
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -128,7 +175,7 @@ const PrizeCard = ({
                         value={description}
                         onChange={(e) => onChange('description', e.target.value)}
                         multiline
-                        rows={4}
+                        rows={5}
                         fullWidth
                         type='text'
                     />

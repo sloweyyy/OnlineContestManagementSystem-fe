@@ -15,7 +15,7 @@ const Guide = () => {
     const steps = [
         {
             title: "Đăng ký tài khoản",
-            description: `Để sử dụng dịch vụ tạo cuộc thi trực tuyến, bạn cần đăng nhập vào tài khoản của mình trên <a href="/" target="_blank" rel="noopener noreferrer" style="color: ${red[500]}; text-decoration: none;">kontext.online.vn</a><br/><br/>Bạn chưa có tài khoản? Đăng ký <a href="/sign-in" target="_blank" rel="noopener noreferrer" style="color: ${red[500]}; text-decoration: none;">tại đây</a>.`,
+            description: `Để sử dụng dịch vụ tạo cuộc thi trực tuyến, bạn cần đăng nhập vào tài khoản của mình trên <a href="/" target="_blank" rel="noopener noreferrer" style="color: ${red[500]}; text-decoration: none;">eventis.online.vn</a><br/><br/>Bạn chưa có tài khoản? Đăng ký <a href="/sign-in" target="_blank" rel="noopener noreferrer" style="color: ${red[500]}; text-decoration: none;">tại đây</a>.`,
             image: "Howitworks-signup.png",
             notice: 'Hãy chắc chắn rằng thông tin đăng ký của bạn là chính xác và đầy đủ.',
         },

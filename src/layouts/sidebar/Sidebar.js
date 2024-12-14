@@ -101,7 +101,7 @@ const Sidebar = () => {
                 <Box sx={{ display: "flex", alignItems: "center", mb: 4, justifyContent: openSideBar ? "flex-start" : "center" }}>
                     {openSideBar && (
                         <Typography variant="h5" sx={{ flexGrow: 1, ml: 2.5, color: dark[700], fontWeight: 600, cursor: 'pointer', userSelect: 'none' }}>
-                            KONTEXT
+                            EVENTIS
                         </Typography>
                     )}
                     <IconButton

@@ -6,7 +6,7 @@ const CONTEST_ENDPOINT = `${API_BASE_URL}/Contest`;
 const createContest = async (contest) => {
     try {
         const response = await axiosConfig.post(`${CONTEST_ENDPOINT}`, contest);
-        return response.data;
+        return response.status;
     } catch (error) {
         if (error.response) {
             return error.response.data;
@@ -30,7 +30,7 @@ const getContests = async () => {
 const getContestById = async (id) => {
     try {
         const response = await axiosConfig.get(`${CONTEST_ENDPOINT}/${id}`);
-        return response.data;
+        return response;
     } catch (error) {
         if (error.response) {
             return error.response.data;
@@ -63,12 +63,25 @@ const deleteContest = async (id) => {
     }
 }
 
+const updateContest = async (id, contest) => {
+    try {
+        const response = await axiosConfig.put(`${CONTEST_ENDPOINT}/${id}`, contest);
+        return response;
+    } catch (error) {
+        if (error.response) {
+            return error.response.data;
+        }
+        return error.message;
+    }
+}
+
 const ContestService = {
     createContest,
     getContests,
     getContestById,
     getContestByCreatorId,
     deleteContest,
+    updateContest,
 };
 
 export default ContestService;

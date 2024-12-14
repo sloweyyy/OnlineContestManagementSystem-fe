@@ -5,11 +5,13 @@ import { Menu, MenuItem, IconButton, Typography } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
 import { Skeleton } from '@mui/material';
 import DetailContestModal from './DetailContestModal';
+import { useNavigate } from 'react-router-dom';
 
 const ContestTable = ({ contests, handleDeleteSelected }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedContest, setSelectedContest] = useState([]);
     const [openDetailModal, setOpenDetailModal] = useState(false);
+    const navigate = useNavigate();
 
     const formatStatus = (status) => {
         switch (status) {
@@ -31,6 +33,7 @@ const ContestTable = ({ contests, handleDeleteSelected }) => {
 
     const handleCloseMenu = () => {
         setAnchorEl(null);
+        setSelectedContest([]);
     };
 
     const handleViewDetails = () => {
@@ -77,6 +80,11 @@ const ContestTable = ({ contests, handleDeleteSelected }) => {
     }));
 
     const paginationModel = { page: 0, pageSize: 5 };
+
+    const handleFixingContest = () => {
+        navigate(`/participant/contest-editing?id=${selectedContest._id}`);
+        handleCloseMenu();
+    }
 
     return (
         <>
@@ -176,8 +184,11 @@ const ContestTable = ({ contests, handleDeleteSelected }) => {
                     horizontal: 'left',
                 }}
             >
-                <MenuItem onClick={handleViewDetails} disabled={selectedContest?.status !== 'Đã duyệt'}>
+                <MenuItem onClick={handleViewDetails}>
                     <Typography sx={{ fontSize: 16, fontWeight: 500 }}>Xem chi tiết</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleFixingContest} disabled={selectedContest?.status == "Đã duyệt"}>
+                    <Typography sx={{ fontSize: 16, fontWeight: 500 }}>Sửa cuộc thi</Typography>
                 </MenuItem>
                 <MenuItem onClick={handleDelete}>
                     <Typography sx={{ fontSize: 16, fontWeight: 500 }}>Xóa</Typography>

@@ -74,7 +74,7 @@ const Header = () => {
                 >
                     <img src={require("../../assets/logo.svg").default} alt="logo" width={40} height={40} />
                     <Typography variant="h5" color={white[50]} sx={{ ml: 2 }}>
-                        KONTEXT
+                        EVENTIS
                     </Typography>
                 </Button>
 
@@ -158,9 +158,12 @@ const Header = () => {
                                     variant="body4"
                                     color={white[50]}
                                     sx={{
-                                        ml: 1,
-                                        mr: 4,
-                                        fontWeight: "600",
+                                        mx: 1,
+                                        fontWeight: "bold",
+                                        textDecoration: "none",
+                                        "&:hover": {
+                                            color: black[900],
+                                        },
                                     }}
                                 >
                                     Hướng dẫn

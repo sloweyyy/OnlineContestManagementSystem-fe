@@ -95,7 +95,7 @@ const SignUp = () => {
                     mb={4}
                 >
                     <Typography sx={{ color: black[900], fontSize: 32, fontWeight: 'bold' }}>
-                        Tạo tài khoản mới trên <Typography component="span" sx={{ color: red[500], fontSize: 38, fontWeight: 'bold' }}>Kontext</Typography>
+                        Tạo tài khoản mới trên <Typography component="span" sx={{ color: red[500], fontSize: 38, fontWeight: 'bold' }}>Eventis</Typography>
                     </Typography>
                 </Box>
 

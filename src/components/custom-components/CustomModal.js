@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Box, Typography, Button, IconButton } from '@mui/material';
-import { Check, Warning, Close } from '@mui/icons-material';
+import { Check, Warning, Close, Home } from '@mui/icons-material';
 import { black, gray, green, red, white } from '../../config/theme/themePrintives';
 
 const modalStyle = {
@@ -121,3 +121,55 @@ export const YesNoModal = ({ open, onClose, onConfirm, title, message }) => {
         </Modal>
     );
 };
+
+export const BackModal = ({ open, onConfirm, title, message, button }) => {
+    return (
+        <Modal open={open}>
+            <Box sx={modalStyle}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'flex-start',
+                        gap: 1,
+                    }}
+                >
+                    <Typography
+                        sx={{
+                            fontSize: 24,
+                            fontWeight: 600,
+                            color: black[900],
+                        }}
+                    >
+                        {title}
+                    </Typography>
+                    <Typography
+                        sx={{
+                            fontSize: 16,
+                            color: gray[500],
+                        }}
+                    >
+                        {message}
+                    </Typography>
+                </Box>
+
+                <Button
+                    startIcon={<Home />}
+                    sx={{
+                        color: white[50],
+                        textTransform: 'none',
+                        fontSize: 18,
+                        fontWeight: 600,
+                        bgcolor: red[500],
+                        width: '100%',
+                        mt: 8,
+                    }}
+                    onClick={onConfirm}
+                >
+                    {button}
+                </Button>
+            </Box>
+        </Modal>
+    );
+}

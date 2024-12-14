@@ -26,7 +26,7 @@ const ExperienceNow = () => {
                     lineHeight: 1.4
                 }}
             >
-                HÃY SỞ HỮU NGAY CÔNG CỤ TUYÊN<br />TRUYỀN MỚI VỚI KONTEXT
+                HÃY SỞ HỮU NGAY CÔNG CỤ TUYÊN<br />TRUYỀN MỚI VỚI EVENTIS
             </Typography>
 
             <Box sx={{
