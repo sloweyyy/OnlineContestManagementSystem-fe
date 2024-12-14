@@ -1,7 +1,7 @@
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, Button, IconButton, Modal, Typography } from "@mui/material";
 import React from "react";
-import { black, gray, white, red } from "../../config/theme/themePrintives";
+import { black, gray, white } from "../../config/theme/themePrintives";
 
 const RulesModal = ({ open, onClose, rules }) => {
     return (
@@ -62,6 +62,7 @@ const RulesModal = ({ open, onClose, rules }) => {
                                     color: black[100],
                                 }
                             }}
+                            onClick={onClose}
                         >
                             Xác nhận
                         </Button>

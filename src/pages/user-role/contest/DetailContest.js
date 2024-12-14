@@ -31,7 +31,7 @@ const DetailContest = () => {
     useEffect(() => {
         const fetchContest = async () => {
             const contest = await ContestService.getContestById(contestId);
-            setContest(contest);
+            setContest(contest.data);
         }
 
         fetchContest();
@@ -451,7 +451,7 @@ const DetailContest = () => {
                         Đơn vị lập trình
                     </Typography>
                     <Typography fontWeight={600} fontSize={22} color={white[50]} textTransform={'none'}>
-                        Công ty Cổ phần Kontext
+                        Công ty Cổ phần Eventis
                     </Typography>
                     <Typography fontWeight={400} fontSize={18} color={white[50]}>
                         <span style={{ fontWeight: 'bold' }}>Địa chỉ:</span> Khu phố 6, Phường Linh Trung, TP. Thủ Đức, Việt Nam
@@ -460,7 +460,7 @@ const DetailContest = () => {
                         <span style={{ fontWeight: 'bold' }}>Điện thoại:</span> 02837252002
                     </Typography>
                     <Typography fontWeight={400} fontSize={18} color={white[50]}>
-                        <span style={{ fontWeight: 'bold' }}>Email:</span> kontext.company@gmail.com
+                        <span style={{ fontWeight: 'bold' }}>Email:</span> eventis.company@gmail.com
                     </Typography>
                 </Box>
             </Box>
@@ -474,7 +474,7 @@ const DetailContest = () => {
                 bgcolor={gray[100]}
             >
                 <Typography fontWeight={600} fontSize={18} color={black[700]}>
-                    © 2021 Kontext. All rights reserved.
+                    © 2021 Eventis. All rights reserved.
                 </Typography>
             </Box>
             <PaticipatingModal

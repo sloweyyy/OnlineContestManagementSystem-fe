@@ -128,7 +128,7 @@ const DetailContestModal = ({ open, handleClose, contest }) => {
             if (response.message) {
                 console.log(response);
             } else {
-                setContestDetail(response);
+                setContestDetail(response.data);
             }
         }
 
@@ -162,27 +162,27 @@ const DetailContestModal = ({ open, handleClose, contest }) => {
     const handleExportExcel = async () => {
         try {
             const response = await RegistrationService.exportExcel(contest._id);
-    
+
             if (response && response.data) {
-                const blob = new Blob([response.data], { 
-                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+                const blob = new Blob([response.data], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 });
-    
+
                 if (blob.size === 0) {
                     toast.error('Tệp tin trống');
                     return;
                 }
-    
+
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
                 link.setAttribute('download', `${contestDetail?.name}_Registrations.xlsx`);
                 document.body.appendChild(link);
                 link.click();
-    
+
                 window.URL.revokeObjectURL(url);
                 document.body.removeChild(link);
-    
+
                 toast.success('Xuất file thành công');
             } else {
                 toast.error('Không thể tải file');
@@ -192,7 +192,7 @@ const DetailContestModal = ({ open, handleClose, contest }) => {
             toast.error('Lỗi xuất file');
         }
     }
-    
+
     return (
         <Modal
             open={open}
@@ -218,11 +218,11 @@ const DetailContestModal = ({ open, handleClose, contest }) => {
 
                     <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, justifyContent: 'flex-start' }}>
                         <CustomInfoSection title="Tên cuộc thi" value={contestDetail?.name} />
-                        <Box sx={{ flex: 1, overflow: 'auto', maxHeight: 300, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                        <Box sx={{ flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column', gap: 1 }}>
                             <Typography sx={{ color: black[900], fontWeight: 600, fontSize: 16 }}>
                                 Thể lệ cuộc thi
                             </Typography>
-                            <Typography sx={{ color: gray[400], fontSize: 16, fontWeight: 400, paddingX: 2, paddingY: 1.5, border: `1px solid ${gray[200]}`, borderRadius: '8px', overflowY: 'auto', scrollbarWidth: 'none' }}>
+                            <Typography sx={{ height: "100%", color: gray[400], fontSize: 16, fontWeight: 400, paddingX: 2, paddingY: 1.5, border: `1px solid ${gray[200]}`, borderRadius: '8px', overflowY: 'auto', scrollbarWidth: 'none' }}>
                                 {contestDetail?.ruleDescription}
                             </Typography>
                         </Box>
@@ -356,7 +356,7 @@ const DetailContestModal = ({ open, handleClose, contest }) => {
                     </Button>
                 </Box>
             </Box>
-        </Modal>
+        </Modal >
     )
 }
 

@@ -65,7 +65,7 @@ const ContactCard = () => {
                     animation: `${floatAnimation} 2s ease-in-out infinite`
                 }} />
                 <Typography sx={{ fontSize: 16, fontWeight: 600, color: gray[500] }}>Góp ý</Typography>
-                <Typography sx={{ fontSize: 12, fontWeight: 600 }}>cho KONTEXT</Typography>
+                <Typography sx={{ fontSize: 12, fontWeight: 600 }}>cho EVENTIS</Typography>
             </Box>
 
             {/* Chat Section */}

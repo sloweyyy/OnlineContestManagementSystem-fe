@@ -19,6 +19,7 @@ const ContestCreating = lazy(() => import('./pages/user-role/contest-creating/Co
 const DetailContest = lazy(() => import('./pages/user-role/contest/DetailContest'));
 const Search = lazy(() => import('./pages/user-role/home/Search'));
 const Registration = lazy(() => import('./pages/user-role/registration/Registration'));
+const ContestEditing = lazy(() => import('./pages/user-role/contest-editing/ContestEditing'));
 
 // Lazy Admin Page
 const AdminDashboard = lazy(() => import('./pages/admin-role/dashboard/Dashboard'));
@@ -155,6 +156,7 @@ function AppContent() {
                 <Route path="/participant/detail-contest" element={<DetailContest />} />
                 <Route path="/participant/search" element={<Search />} />
                 <Route path="/participant/registration" element={<Registration />} />
+                <Route path="/participant/contest-editing" element={<ContestEditing />} />
               </Route>
 
               {/* Admin Route */}
@@ -188,7 +190,7 @@ function Loading() {
     >
       <CircularProgress
         sx={{ '&.MuiCircularProgress-colorPrimary': { color: gray[400] } }}
-        size={100}
+        size={50}
       />
     </Box>
   );

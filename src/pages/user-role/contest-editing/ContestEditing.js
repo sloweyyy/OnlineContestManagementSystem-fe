@@ -12,8 +12,9 @@ import CloudinaryService from '../../../services/cloudinary.service';
 import useOrgAddress from '../../../hooks/useOrgAddress';
 import { ImageSearch } from '@mui/icons-material';
 import { BackModal } from '../../../components/custom-components/CustomModal';
+import { useLocation } from 'react-router-dom';
 
-const ContestCreating = () => {
+const ContestEditing = () => {
     const [provinces, setProvinces] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [communes, setCommunes] = useState([]);
@@ -22,6 +23,9 @@ const ContestCreating = () => {
     const [commune, setCommune] = useState(null);
     const [detailAddress, setDetailAddress] = useState(null);
     const [open, setOpen] = useState(false);
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const contestId = queryParams.get('id');
 
     const initialState = {
         name: null,
@@ -44,26 +48,7 @@ const ContestCreating = () => {
         entryFee: null,
     };
 
-    const [contest, setContest] = useState({
-        name: null,
-        ruleDescription: null,
-        startDate: null,
-        endDate: null,
-        minimumParticipant: null,
-        maximumParticipant: null,
-        prizes: [
-            { name: 'Giải nhất', description: null, value: null, imageUrl: null, amount: null }
-        ],
-        participantInformationRequirements: [],
-        organizationInformation: {
-            orgName: null,
-            orgPhoneNumber: null,
-            orgEmail: null,
-            orgAddress: null,
-        },
-        imageUrl: null,
-        entryFee: null,
-    });
+    const [contest, setContest] = useState(initialState);
 
     const orgAddress = useOrgAddress(province, district, commune, detailAddress);
 
@@ -74,21 +59,12 @@ const ContestCreating = () => {
         }));
     }, [orgAddress]);
 
-    const handleSubmitContest = async () => {
-        if (validateContestData()) {
-            try {
-                const response = await ContestService.createContest(contest);
-                if (response == 200) {
-                    setContest(initialState);
-                    setProvince(null);
-                    setDistrict(null);
-                    setCommune(null);
-                    setDetailAddress(null);
-                    setOpen(true);
-                }
-            } catch (error) {
-                toast.error('Tạo cuộc thi thất bại');
-            }
+    const handleEditContest = async () => {
+        const response = await ContestService.updateContest(contestId, contest);
+        if (response.status !== 200) {
+            toast.error("Sửa cuộc thi thất bại");
+        } else {
+            setOpen(true);
         }
     };
 
@@ -207,9 +183,35 @@ const ContestCreating = () => {
         return parseInt(cleanedValue);
     };
 
+    useEffect(() => {
+        const fetchContest = async () => {
+            if (contestId) {
+                try {
+                    const response = await ContestService.getContestById(contestId);
+                    if (response.status === 200) {
+                        const fetchedContest = response.data || {};
+                        setContest({
+                            ...initialState,
+                            ...fetchedContest,
+                            organizationInformation: {
+                                ...initialState.organizationInformation,
+                                ...fetchedContest.organizationInformation,
+                            },
+                        });
+                    }
+                } catch (error) {
+                    console.error("Lỗi khi lấy dữ liệu cuộc thi:", error);
+                    toast.error("Đã xảy ra lỗi khi tải dữ liệu.");
+                }
+            }
+        };
+
+        fetchContest();
+    }, [contestId]);
+
     return (
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 2 }}>
-            <Typography marginBottom={2} variant='h4'>Tạo cuộc thi</Typography>
+            <Typography marginBottom={2} variant='h4'>Sửa cuộc thi</Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', marginBottom: 4 }}>
                 {/* Contest Section */}
                 <Typography sx={{ fontSize: 18, fontWeight: 'bold', color: gray[500], marginBottom: 2 }}>
@@ -261,12 +263,12 @@ const ContestCreating = () => {
             </Typography>
 
             {/* Organiser Name */}
-            <CustomTextField label="Tên ban tổ chức" placeholder="Tên ban tổ chức" value={contest?.organizationInformation.orgName} onChange={(e) => setContest((prev) => ({ ...prev, organizationInformation: { ...prev.organizationInformation, orgName: e.target.value } }))} />
+            <CustomTextField label="Tên ban tổ chức" placeholder="Tên ban tổ chức" value={contest?.organizationInformation?.orgName} onChange={(e) => setContest((prev) => ({ ...prev, organizationInformation: { ...prev.organizationInformation, orgName: e.target.value } }))} />
 
             {/* Phone Number and Email */}
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, marginY: 2 }}>
-                <CustomTextField label="Số điện thoại" placeholder="Số điện thoại" value={contest?.organizationInformation.orgPhoneNumber} onChange={(e) => setContest((prev) => ({ ...prev, organizationInformation: { ...prev.organizationInformation, orgPhoneNumber: e.target.value } }))} />
-                <CustomTextField label="Email" placeholder="Email" value={contest?.organizationInformation.orgEmail} onChange={(e) => setContest((prev) => ({ ...prev, organizationInformation: { ...prev.organizationInformation, orgEmail: e.target.value } }))} />
+                <CustomTextField label="Số điện thoại" placeholder="Số điện thoại" value={contest?.organizationInformation?.orgPhoneNumber} onChange={(e) => setContest((prev) => ({ ...prev, organizationInformation: { ...prev.organizationInformation, orgPhoneNumber: e.target.value } }))} />
+                <CustomTextField label="Email" placeholder="Email" value={contest?.organizationInformation?.orgEmail} onChange={(e) => setContest((prev) => ({ ...prev, organizationInformation: { ...prev.organizationInformation, orgEmail: e.target.value } }))} />
             </Box>
 
             {/* Province District Commune */}
@@ -367,13 +369,13 @@ const ContestCreating = () => {
             {/* Button Section */}
             <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', width: '100%', marginTop: 4, gap: 2, marginBottom: 4 }}>
                 <Button sx={{ textTransform: 'none', paddingY: '8px', paddingX: '24px', backgroundColor: gray[200], color: black[900], fontSize: 16, fontWeight: 600, marginLeft: 2 }} onClick={() => window.location.href = '/participant/home'}>Hủy</Button>
-                <Button sx={{ textTransform: 'none', paddingY: '8px', paddingX: '24px', backgroundColor: red[500], color: white[50], fontSize: 16, fontWeight: 600, ":disabled": { backgroundColor: gray[200], color: gray[400] } }} onClick={handleSubmitContest} disabled={!validateContestData()}>Thêm cuộc thi</Button>
+                <Button sx={{ textTransform: 'none', paddingY: '8px', paddingX: '24px', backgroundColor: red[500], color: white[50], fontSize: 16, fontWeight: 600, ":disabled": { backgroundColor: gray[200], color: gray[400] } }} onClick={handleEditContest} disabled={!validateContestData()}>Sửa cuộc thi</Button>
             </Box>
 
             <BackModal
                 open={open}
                 onConfirm={handleConfirmModal}
-                title="Tạo cuộc thi thành công"
+                title="Sửa cuộc thi thành công"
                 message="Quay lại trang chủ"
                 button="Trang chủ"
             />
@@ -381,4 +383,4 @@ const ContestCreating = () => {
     );
 };
 
-export default ContestCreating;
+export default ContestEditing;
