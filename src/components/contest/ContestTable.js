@@ -17,7 +17,6 @@ const ContestTable = ({ contests, handleDeleteSelected }) => {
     const [openDetailModal, setOpenDetailModal] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const navigate = useNavigate();
-    const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
     const [contest, setContest] = useState([]);
     const [participants, setParticipants] = useState([]);
