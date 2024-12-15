@@ -62,23 +62,47 @@ const ContestsTable = () => {
             name: contest.name,
             status: formatContestStatus(contest.status),
             organizer: contest.organizationInformation.orgName,
-            startDate: new Date(contest.startDate).toLocaleDateString('vi-VN'),
-            endDate: new Date(contest.endDate).toLocaleDateString('vi-VN'),
+            startDate: new Date(contest.startDate).toLocaleString('vi-VN', {
+                hour: '2-digit',
+                minute: '2-digit',
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+            }),
+            endDate: new Date(contest.endDate).toLocaleString('vi-VN', {
+                hour: '2-digit',
+                minute: '2-digit',
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+            }),
             payment: 'Đã thanh toán',
             _id: contest.id,
         };
     });
 
+    const parseDate = (dateString) => {
+        const [time, date] = dateString.split(" ");
+        const [day, month, year] = date.split("/");
+        const [hours, minutes] = time.split(":");
+        return new Date(year, month - 1, day, hours, minutes);
+    };
+
     const filteredRows = rows?.filter(row => {
         const matchesSearchQuery = row?.name?.toLowerCase().includes(searchQuery.toLowerCase());
-        const newDate = new Date().toLocaleDateString('vi-VN');
+
+        const currentDate = new Date();
+        const rowStartDate = parseDate(row.startDate);
+        const rowEndDate = parseDate(row.endDate);
+
         const matchesTabValue =
             tabValue === 0 ||
-            (tabValue === 1 && row.startDate < newDate && row.endDate > newDate && row.status !== 'Từ chối') ||
-            (tabValue === 2 && row.startDate > newDate && row.status !== 'Từ chối') ||
-            (tabValue === 3 && row.endDate < newDate && row.status !== 'Từ chối') ||
+            (tabValue === 1 && rowStartDate <= currentDate && rowEndDate >= currentDate && row.status !== 'Từ chối') ||
+            (tabValue === 2 && rowStartDate > currentDate && row.status !== 'Từ chối') ||
+            (tabValue === 3 && rowEndDate < currentDate && row.status !== 'Từ chối') ||
             (tabValue === 4 && row.status === 'Chờ phê duyệt') ||
             (tabValue === 5 && row.status === 'Từ chối');
+
         return matchesSearchQuery && matchesTabValue;
     });
 
