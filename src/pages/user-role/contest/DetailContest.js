@@ -198,7 +198,7 @@ const DetailContest = () => {
                 {/* Header */}
                 <Box display="flex" justifyContent="space-between" width="100%" maxWidth="70%" alignItems={'center'}>
                     <img
-                        src={require("../../../assets/logo.svg").default}
+                        src={require("../../../assets/circle-logo.svg").default}
                         alt="logo"
                         width="60px"
                         height="70px"
