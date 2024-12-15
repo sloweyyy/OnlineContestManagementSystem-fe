@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { black, gray } from '../../config/theme/themePrintives';
 import { Menu, MenuItem, IconButton, Typography } from '@mui/material';
@@ -7,13 +7,20 @@ import { Skeleton } from '@mui/material';
 import DetailContestModal from './DetailContestModal';
 import { useNavigate } from 'react-router-dom';
 import { YesNoModal } from '../../components/custom-components/CustomModal';
+import ContestService from '../../services/contest.service'
+import RegistrationService from '../../services/registration.service'
+
 
 const ContestTable = ({ contests, handleDeleteSelected }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedContest, setSelectedContest] = useState([]);
     const [openDetailModal, setOpenDetailModal] = useState(false);
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const navigate = useNavigate();
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
+    const [contest, setContest] = useState([]);
+    const [participants, setParticipants] = useState([]);
 
     const formatStatus = (status) => {
         switch (status) {
@@ -35,13 +42,37 @@ const ContestTable = ({ contests, handleDeleteSelected }) => {
 
     const handleCloseMenu = () => {
         setAnchorEl(null);
-        setSelectedContest([]);
     };
 
-    const handleViewDetails = () => {
-        setOpenDetailModal(true);
-        handleCloseMenu();
+    const handleViewDetails = async () => {
+        try {
+            setOpenDetailModal(true);
+
+            const participantsResponse = await RegistrationService.getParticipantsByContestId(selectedContest._id);
+            if (participantsResponse.message) {
+                console.error("Error fetching participants:", participantsResponse.message);
+            } else {
+                setParticipants(participantsResponse);
+            }
+
+            const contestResponse = await ContestService.getContestById(selectedContest._id);
+            if (contestResponse.message) {
+                console.error("Error fetching contest details:", contestResponse.message);
+            } else {
+                setContest(contestResponse.data);
+            }
+        } catch (error) {
+            console.error("An error occurred while fetching details:", error);
+        } finally {
+            handleCloseMenu();
+        }
     };
+
+    const handleCloseDetailModal = () => {
+        setOpenDetailModal(false);
+        setContest([]);
+        setParticipants([]);
+    }
 
     const handleDelete = () => {
         handleDeleteSelected(selectedContest._id);
@@ -198,10 +229,10 @@ const ContestTable = ({ contests, handleDeleteSelected }) => {
             </Menu>
             <DetailContestModal
                 open={openDetailModal}
-                handleClose={() => setOpenDetailModal(false)}
-                contest={selectedContest}
+                handleClose={handleCloseDetailModal}
+                contest={contest}
+                participants={participants}
             />
-
             <YesNoModal
                 open={openDeleteModal}
                 onClose={() => setOpenDeleteModal(false)}
