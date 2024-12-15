@@ -144,7 +144,7 @@ const Search = () => {
                         color: blue[500],
                         padding: 1,
                         borderRadius: 10,
-                        animation: `${floatAnimation} 2s ease-in-out infinite` // Thêm animation cho icon
+                        animation: `${floatAnimation} 2s ease-in-out infinite`
                     }} />
                     <Typography sx={{ fontSize: 16, fontWeight: 600, color: gray[500] }}>Hotline</Typography>
                     <Typography sx={{ fontSize: 12, fontWeight: 600 }}>0123456789</Typography>
