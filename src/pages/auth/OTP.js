@@ -119,7 +119,7 @@ const OTP = () => {
                         fontSize: 18,
                         mt: 2,
                     }}
-                    href='/confirm-password'
+                    href='/reset-password'
                 >
                     Tiếp tục
                 </Button>

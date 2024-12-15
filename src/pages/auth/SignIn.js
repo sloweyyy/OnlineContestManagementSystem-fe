@@ -1,12 +1,16 @@
-import { Box, Button, Divider, FormControlLabel, Link, TextField, Typography } from '@mui/material';
+import { Box, Button, Divider, FormControlLabel, Link, TextField, Typography, InputAdornment, IconButton } from '@mui/material';
 import React, { useState } from 'react';
 import { black, gray, red, white } from '../../config/theme/themePrintives';
-import { Google } from '@mui/icons-material';
+import { Google, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Checkbox } from '@mui/material';
-import AuthServices from '../../services/auth.service';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { userLogin } from '../../stores/actions/AuthAction';
+
+const iconStyle = {
+    color: gray[400],
+    fontSize: 24,
+};
 
 const textFieldStyle = {
     '& .MuiOutlinedInput-root': {
@@ -47,6 +51,7 @@ const SignIn = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [remembered, setRemembered] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -125,12 +130,24 @@ const SignIn = () => {
                             Mật khẩu
                         </Typography>
                         <TextField
-                            type='password'
+                            type={showPassword ? 'text' : 'password'}
                             fullWidth
                             variant={'outlined'}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             sx={textFieldStyle}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            edge="end"
+                                        >
+                                            {showPassword ? <VisibilityOff sx={iconStyle} /> : <Visibility sx={iconStyle} />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
                         />
                     </Box>
 

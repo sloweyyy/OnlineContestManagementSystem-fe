@@ -1,8 +1,30 @@
-import { Box, Button, TextField, Typography } from '@mui/material'
-import React from 'react'
-import { gray, red } from '../../config/theme/themePrintives';
+import { Box, Button, CircularProgress, TextField, Typography } from '@mui/material'
+import React, { useState } from 'react'
+import { gray, red, white } from '../../config/theme/themePrintives';
+import AuthServices from '../../services/auth.service';
+import { toast } from 'react-toastify';
 
 const ForgotPasswordCard = () => {
+    const [email, setEmail] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const handleForgotPassword = async () => {
+        try {
+            setLoading(true);
+            await AuthServices.forgotPassword(email);
+            toast.success('Gửi email thành công, vui lòng kiểm tra email của bạn.');
+
+            setTimeout(() => {
+                window.location.href = '/sign-in';
+            }, 3000);
+        } catch (error) {
+            console.error('Error:', error);
+            toast.error(error.message || 'Gửi email thất bại');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <Box
             display="flex"
@@ -28,16 +50,16 @@ const ForgotPasswordCard = () => {
                     color={red[500]}
                     width={'100%'}
                     fontWeight="bold"
-                    mb={4}
+                    mb={2}
                 >
-                    Kon
+                    Event
                     <Typography
                         component="span"
                         variant="h1"
                         color={gray[400]}
                         fontWeight="bold"
                     >
-                        text
+                        is
                     </Typography>
                 </Typography>
 
@@ -58,7 +80,7 @@ const ForgotPasswordCard = () => {
                     fontWeight={400}
                     mb={3}
                 >
-                    Nhập email của bạn để tiếp tục, chúng tôi sẽ gửi mã 4 chữ số đến email của bạn.
+                    Nhập email của bạn để tiếp tục, chúng tôi sẽ gửi thông báo đến email của bạn.
                 </Typography>
 
                 <Box
@@ -91,6 +113,8 @@ const ForgotPasswordCard = () => {
                                 },
                             }
                         }}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                 </Box>
 
@@ -99,7 +123,7 @@ const ForgotPasswordCard = () => {
                     fullWidth
                     sx={{
                         backgroundColor: red[500],
-                        color: 'white',
+                        color: white[50],
                         borderRadius: '8px',
                         height: '50px',
                         fontWeight: 'bold',
@@ -108,9 +132,9 @@ const ForgotPasswordCard = () => {
                         fontSize: 18,
                         mt: 2,
                     }}
-                    href='/otp'
+                    onClick={handleForgotPassword}
                 >
-                    Tiếp tục
+                    {loading ? <CircularProgress size={24} color={white[50]} /> : 'Gửi email'}
                 </Button>
             </Box>
         </Box>
