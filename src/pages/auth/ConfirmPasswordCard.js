@@ -3,12 +3,19 @@ import React, { useState } from 'react';
 import { gray, red, white } from '../../config/theme/themePrintives';
 import AuthServices from '../../services/auth.service';
 import { toast } from 'react-toastify';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { FiberManualRecord, Visibility, VisibilityOff } from '@mui/icons-material';
 
 const iconStyle = {
     color: gray[400],
     fontSize: 24,
 };
+
+const passwordConditions = [
+    'Mật khẩu nhiều hơn 8 ký tự',
+    'Ít nhất một ký tự viết thường',
+    'Ít nhất một ký tự viết hoa',
+    'Ít nhất một ký tự đặc biệt',
+];
 
 const ConfirmPasswordCard = () => {
     const [newPassword, setNewPassword] = useState('');
@@ -56,7 +63,7 @@ const ConfirmPasswordCard = () => {
                 display="flex"
                 flexDirection="column"
                 justifyContent="center"
-                alignItems="center"
+                alignItems="flex-start"
                 width={{ xs: '90vw', sm: '70vw', md: '50vw' }}
                 px={6}
                 py={8}
@@ -68,7 +75,6 @@ const ConfirmPasswordCard = () => {
                     color={red[500]}
                     width={'100%'}
                     fontWeight="bold"
-                    mb={2}
                 >
                     Event
                     <Typography
@@ -86,7 +92,7 @@ const ConfirmPasswordCard = () => {
                     color={gray[400]}
                     fontSize={45}
                     fontWeight={600}
-                    mb={6}
+                    mb={3}
                 >
                     Mật khẩu mới
                 </Typography>
@@ -172,6 +178,32 @@ const ConfirmPasswordCard = () => {
                         }}
                     />
                 </Box>
+
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: 2,
+                        marginY: 2,
+                    }}
+                >
+                    {passwordConditions.map((condition, index) => (
+                        <Typography
+                            key={index}
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                fontSize: 12,
+                                fontWeight: 400,
+                                color: gray[400],
+                            }}
+                        >
+                            <FiberManualRecord sx={{ height: 8, width: 8, marginRight: 1 }} />
+                            {condition}
+                        </Typography>
+                    ))}
+                </Box>
+
 
                 <Button
                     variant="contained"
