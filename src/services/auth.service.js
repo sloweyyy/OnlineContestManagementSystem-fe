@@ -57,11 +57,48 @@ const signout = async (refreshToken) => {
   });
 };
 
+const forgotPassword = async (email) => {
+  try {
+    const response = await axios.post(`${AUTH_ENDPOINT}/forgot-password`, {
+      email,
+    });
+
+    return response;
+  } catch (error) {
+    if (error.response) {
+      console.error('Error response:', error.response);
+      throw error.response.data.message || 'Gửi email thất bại';
+    }
+    console.error('Error:', error);
+    throw new Error('Đã xảy ra lỗi khi gửi email.');
+  }
+};
+
+const resetPassword = async (resetToken, newPassword) => {
+  try {
+    const response = await axios.post(`${AUTH_ENDPOINT}/reset-password`, {
+      resetToken,
+      newPassword,
+    });
+
+    return response;
+  } catch (error) {
+    if (error.response) {
+      console.error('Error response:', error.response);
+      throw error.response.data.message || 'Đổi mật khẩu thất bại';
+    }
+    console.error('Error:', error);
+    throw new Error('Đã xảy ra lỗi khi đổi mật khẩu.');
+  }
+}
+
 const AuthServices = {
   signin,
   register,
   refreshToken,
   signout,
+  forgotPassword,
+  resetPassword,
 };
 
 export default AuthServices;

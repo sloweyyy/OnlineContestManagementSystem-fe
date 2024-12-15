@@ -56,7 +56,7 @@ const SearchingContestCard = ({ contest, isLoading }) => {
                             textAlign: 'flex-start',
                         }}
                     >
-                        Bắt đầu: {contest?.startDate}
+                        Bắt đầu: {new Date(contest?.startDate).toLocaleString("vi-VN")}
                     </Typography>
                 )}
                 {/* End Time */}
@@ -72,7 +72,7 @@ const SearchingContestCard = ({ contest, isLoading }) => {
                             textAlign: 'flex-start',
                         }}
                     >
-                        Kết thúc: {contest?.endDate}
+                        Kết thúc: {new Date(contest?.endDate).toLocaleString("vi-VN")}
                     </Typography>
                 )}
                 {/* Organizer */}

@@ -1,7 +1,7 @@
-import { Box, Button, Divider, FormControlLabel, Link, TextField, Typography, Checkbox } from '@mui/material';
+import { Box, Button, Divider, FormControlLabel, Link, TextField, Typography, Checkbox, InputAdornment, IconButton } from '@mui/material';
 import React, { useState } from 'react';
 import { black, gray, red, white } from '../../config/theme/themePrintives';
-import { Google } from '@mui/icons-material';
+import { Google, Visibility, VisibilityOff } from '@mui/icons-material';
 import AuthServices from '../../services/auth.service';
 import { toast } from 'react-toastify';
 
@@ -40,12 +40,19 @@ const typographyStyle = {
     fontWeight: 400
 };
 
+const iconStyle = {
+    color: gray[400],
+    fontSize: 24,
+};
+
 const SignUp = () => {
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [termsAccepted, setTermsAccepted] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const handleRegister = async () => {
         if (!fullName || !email || !password || !confirmPassword) {
@@ -137,12 +144,24 @@ const SignUp = () => {
                             Mật khẩu
                         </Typography>
                         <TextField
-                            type='password'
+                            type={showPassword ? 'text' : 'password'}
                             fullWidth
                             variant={'outlined'}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             sx={textFieldStyle}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            edge="end"
+                                        >
+                                            {showPassword ? <VisibilityOff sx={iconStyle} /> : <Visibility sx={iconStyle} />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
                         />
                     </Box>
                     <Box sx={boxStyle}>
@@ -150,12 +169,24 @@ const SignUp = () => {
                             Xác nhận mật khẩu
                         </Typography>
                         <TextField
-                            type='password'
+                            type={showConfirmPassword ? 'text' : 'password'}
                             fullWidth
                             variant={'outlined'}
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             sx={textFieldStyle}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                            edge="end"
+                                        >
+                                            {showConfirmPassword ? <VisibilityOff sx={iconStyle} /> : <Visibility sx={iconStyle} />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
                         />
                     </Box>
 

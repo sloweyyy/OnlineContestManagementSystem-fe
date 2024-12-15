@@ -1,12 +1,16 @@
-import { Box, Button, Divider, FormControlLabel, Link, TextField, Typography } from '@mui/material';
+import { Box, Button, Divider, FormControlLabel, Link, TextField, Typography, InputAdornment, IconButton, CircularProgress } from '@mui/material';
 import React, { useState } from 'react';
 import { black, gray, red, white } from '../../config/theme/themePrintives';
-import { Google } from '@mui/icons-material';
+import { Google, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Checkbox } from '@mui/material';
-import AuthServices from '../../services/auth.service';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { userLogin } from '../../stores/actions/AuthAction';
+
+const iconStyle = {
+    color: gray[400],
+    fontSize: 24,
+};
 
 const textFieldStyle = {
     '& .MuiOutlinedInput-root': {
@@ -47,20 +51,26 @@ const SignIn = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [remembered, setRemembered] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const dispatch = useDispatch();
 
     const handleSignIn = () => {
+        setLoading(true);
         dispatch(userLogin({ email, password }))
             .unwrap()
             .then((response) => {
                 if (response.user.role === 'Admin') {
+                    setLoading(false);
                     window.location.href = '/admin/home';
                 } else {
+                    setLoading(false);
                     window.location.href = '/participant/home';
                 }
             })
             .catch((error) => {
+                setLoading(false);
                 console.error('Error:', error);
                 toast.error('Đăng nhập thất bại');
             });
@@ -125,12 +135,24 @@ const SignIn = () => {
                             Mật khẩu
                         </Typography>
                         <TextField
-                            type='password'
+                            type={showPassword ? 'text' : 'password'}
                             fullWidth
                             variant={'outlined'}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             sx={textFieldStyle}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            edge="end"
+                                        >
+                                            {showPassword ? <VisibilityOff sx={iconStyle} /> : <Visibility sx={iconStyle} />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
                         />
                     </Box>
 
@@ -180,7 +202,7 @@ const SignIn = () => {
                         onClick={handleSignIn}
                         disabled={!email || !password}
                     >
-                        Đăng nhập
+                        {loading ? <CircularProgress size={24} color={white[50]} /> : 'Đăng nhập'}
                     </Button>
                 </Box>
 

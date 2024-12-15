@@ -48,10 +48,6 @@ function AppContent() {
   const { isAuthenticated } = useSelector((state) => state.auth);
 
   const hideLayout =
-    location.pathname === '/forgot-password' ||
-    location.pathname === '/otp' ||
-    location.pathname === '/confirm-password' ||
-    location.pathname === '/successfully' ||
     location.pathname === '/*' ||
     location.pathname === '/participant/detail-contest';
 
@@ -97,7 +93,7 @@ function AppContent() {
                 }
               />
               <Route
-                path="/confirm-password"
+                path="/reset-password"
                 element={
                   <PublicRoute>
                     <ConfirmPassword />

@@ -4,6 +4,7 @@ import NewsService from '../../services/news.service';
 import { toast } from 'react-toastify';
 import CloudinaryService from '../../services/cloudinary.service';
 import { gray, black, white } from '../../config/theme/themePrintives';
+import { ImageSearch } from '@mui/icons-material';
 
 const NewsModal = ({ open, onClose, news, setNews }) => {
   const [name, setName] = useState('');
@@ -95,43 +96,77 @@ const NewsModal = ({ open, onClose, news, setNews }) => {
           onChange={(e) => setName(e.target.value)}
           value={name}
         />
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+        <Box
+          sx={{
+            flex: 1,
+            height: 200,
+            backgroundColor: gray[200],
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 2,
+            borderRadius: 1,
+            position: 'relative',
+            cursor: 'pointer',
+            overflow: 'hidden',
+          }}
+          onClick={() => document.getElementById('imageInput-news').click()}
+        >
           {selectedImage ? (
             <>
-              <Box
-                sx={{
+              <img
+                src={selectedImage}
+                alt="uploaded"
+                style={{
                   width: '100%',
                   height: 200,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  border: `1px solid ${gray[200]}`,
-                  borderRadius: 1,
-                  overflow: 'hidden',
-                }}
-              >
-                <img src={selectedImage} alt="uploaded" style={{ width: 'auto', height: '100%', objectFit: 'contain' }} />
-              </Box>
-              <input type="file" accept="image/*" onChange={handleImageChange} style={{ marginTop: 8 }} />
-            </>
-          ) : (
-            <>
-              <Box
-                sx={{
-                  width: '100%',
-                  height: 200,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  border: `1px solid ${gray[200]}`,
-                  borderRadius: 1,
-                  overflow: 'hidden',
+                  objectFit: 'contain',
                 }}
               />
-              <input type="file" accept="image/*" onChange={handleImageChange} style={{ marginTop: 8 }} />
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  opacity: 0,
+                  transition: 'opacity 0.3s',
+                  gap: 1,
+                  '&:hover': { opacity: 1 },
+                }}
+              >
+                <ImageSearch sx={{ color: white[50], fontSize: 50 }} />
+              </Box>
             </>
+          ) : (
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                height: 200,
+                justifyContent: 'center',
+                gap: 1,
+              }}
+            >
+              <ImageSearch sx={{ color: gray[500], fontSize: 50 }} />
+            </Box>
           )}
+          <input
+            type="file"
+            accept="image/*"
+            id="imageInput-news"
+            style={{ display: 'none' }}
+            onChange={handleImageChange}
+          />
         </Box>
+
         <Button
           sx={{
             color: white[50],

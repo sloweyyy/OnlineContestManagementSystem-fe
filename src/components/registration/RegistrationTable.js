@@ -5,6 +5,7 @@ import { Skeleton, IconButton, MenuItem, Menu, Typography } from '@mui/material'
 import { black, gray } from '../../config/theme/themePrintives';
 import { MoreVert } from '@mui/icons-material';
 import { useSelector } from 'react-redux';
+import { YesNoModal } from '../../components/custom-components/CustomModal';
 
 const RegistrationTable = ({ registration, handleWithdraw }) => {
     const navigate = useNavigate();
@@ -12,6 +13,7 @@ const RegistrationTable = ({ registration, handleWithdraw }) => {
     const [selectedContest, setSelectedContest] = useState(null);
     const { user } = useSelector(state => state.user);
     const isDisabled = selectedContest?.status === 'Đã hủy' || selectedContest?.status === 'Đã thanh toán';
+    const [openWithdrawModal, setOpenWithdrawModal] = useState(false);
 
     const columns = [
         { field: 'id', headerName: '#', flex: 0.5 },
@@ -169,13 +171,19 @@ const RegistrationTable = ({ registration, handleWithdraw }) => {
                 <MenuItem onClick={() => navigate(`/participant/detail-contest?id=${selectedContest._id}`)}>
                     <Typography sx={{ fontSize: 16, fontWeight: 500 }}>Xem chi tiết</Typography>
                 </MenuItem>
-                <MenuItem onClick={handleWithdrawClick} disabled={isDisabled}>
+                <MenuItem onClick={() => setOpenWithdrawModal(true)} disabled={isDisabled}>
                     <Typography sx={{ fontSize: 16, fontWeight: 500 }}>Hủy đang ký</Typography>
                 </MenuItem>
                 <MenuItem disabled={isDisabled}>
                     <Typography sx={{ fontSize: 16, fontWeight: 500 }}>Thanh toán</Typography>
                 </MenuItem>
             </Menu>
+            <YesNoModal
+                open={openWithdrawModal}
+                handleClose={() => setOpenWithdrawModal(false)}
+                handleYes={handleWithdrawClick}
+                title="Hủy đăng ký"
+            />
         </>
     );
 };

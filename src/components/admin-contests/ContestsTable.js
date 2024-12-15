@@ -7,6 +7,7 @@ import ContestService from '../../services/contest.service';
 import AdminService from '../../services/admin.service';
 import { toast } from 'react-toastify';
 import ContestDetailModal from './ContestDetailModal';
+import { YesNoModal } from '../../components/custom-components/CustomModal';
 
 const tabTextStyle = {
     color: black[200],
@@ -30,6 +31,8 @@ const ContestsTable = () => {
     const [selectedRow, setSelectedRow] = useState(null);
     const [openModal, setOpenModal] = useState(false);
     const [selectedContest, setSelectedContest] = useState(null);
+    const [openApproveModal, setOpenApproveModal] = useState(false);
+    const [openRejectModal, setOpenRejectModal] = useState(false);
 
     useEffect(() => {
         const fetchContests = async () => {
@@ -326,17 +329,30 @@ const ContestsTable = () => {
                     <ManageSearchRounded fontSize='small' sx={{ mr: 1, color: dark[500] }} />
                     <Typography sx={{ fontSize: '16px', color: dark[500] }}>Xem chi tiết</Typography>
                 </MenuItem>
-                <MenuItem onClick={() => handleApprove(selectedRow?._id)} disabled={selectedRow?.status !== 'Chờ phê duyệt'}>
+                <MenuItem onClick={() => setOpenApproveModal(true)} disabled={selectedRow?.status !== 'Chờ phê duyệt'}>
                     <SlideshowRounded fontSize='small' sx={{ mr: 1, color: dark[500] }} />
                     <Typography sx={{ fontSize: '16px', color: dark[500] }}>Phê duyệt</Typography>
                 </MenuItem>
-                <MenuItem onClick={() => handleReject(selectedRow._id)} disabled={selectedRow?.status !== 'Chờ phê duyệt'}>
+                <MenuItem onClick={() => setOpenRejectModal(true)} disabled={selectedRow?.status !== 'Chờ phê duyệt'}>
                     <BlockRounded fontSize='small' sx={{ mr: 1, color: dark[500] }} />
                     <Typography sx={{ fontSize: '16px', color: dark[500] }}>Từ chối</Typography>
                 </MenuItem>
             </Menu>
 
             <ContestDetailModal open={openModal} onClose={handleCloseModal} contest={selectedContest} handleApprove={handleApprove} handleReject={handleReject} />
+            <YesNoModal
+                open={openApproveModal}
+                onClose={() => setOpenApproveModal(false)}
+                onConfirm={() => handleApprove(selectedRow?._id)}
+                title='Phê duyệt cuộc thi'
+            />
+
+            <YesNoModal
+                open={openRejectModal}
+                onClose={() => setOpenRejectModal(false)}
+                onConfirm={() => handleReject(selectedRow?._id)}
+                title='Từ chối cuộc thi'
+            />
         </Box>
     );
 };

@@ -10,12 +10,14 @@ import { YesNoModal } from '../../components/custom-components/CustomModal';
 import ContestService from '../../services/contest.service'
 import RegistrationService from '../../services/registration.service'
 
+
 const ContestTable = ({ contests, handleDeleteSelected }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedContest, setSelectedContest] = useState([]);
     const [openDetailModal, setOpenDetailModal] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const navigate = useNavigate();
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
     const [contest, setContest] = useState([]);
     const [participants, setParticipants] = useState([]);
@@ -221,7 +223,7 @@ const ContestTable = ({ contests, handleDeleteSelected }) => {
                 <MenuItem onClick={handleFixingContest} disabled={selectedContest?.status == "Đã duyệt"}>
                     <Typography sx={{ fontSize: 16, fontWeight: 500 }}>Sửa cuộc thi</Typography>
                 </MenuItem>
-                <MenuItem onClick={handleDelete}>
+                <MenuItem onClick={() => setOpenDeleteModal(true)}>
                     <Typography sx={{ fontSize: 16, fontWeight: 500 }}>Xóa</Typography>
                 </MenuItem>
             </Menu>
