@@ -23,7 +23,7 @@ const routes = [
     authRequired: false,
   },
   {
-    path: '/confirm-password',
+    path: '/reset-password',
     element: lazy(() => import('../pages/auth/ConfirmPasswordCard')),
     authRequired: false,
   },

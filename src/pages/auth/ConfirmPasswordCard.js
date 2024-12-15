@@ -1,8 +1,48 @@
-import { Box, Button, TextField, Typography } from '@mui/material'
-import React from 'react'
-import { gray, red } from '../../config/theme/themePrintives';
+import { Box, Button, CircularProgress, TextField, Typography, IconButton, InputAdornment } from '@mui/material';
+import React, { useState } from 'react';
+import { gray, red, white } from '../../config/theme/themePrintives';
+import AuthServices from '../../services/auth.service';
+import { toast } from 'react-toastify';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-const ConfirmPasswordCard = ({ handleConfirm }) => {
+const iconStyle = {
+    color: gray[400],
+    fontSize: 24,
+};
+
+const ConfirmPasswordCard = () => {
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const resetToken = new URLSearchParams(window.location.search).get('resetPassword');
+    const [loading, setLoading] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    const handleConfirmPassword = async () => {
+        if (newPassword === " " || confirmPassword === " ") {
+            toast.error('Vui lòng nhập mật khẩu mới và xác nhận mật khẩu.');
+            return;
+        } else if (newPassword !== confirmPassword) {
+            toast.error('Mật khẩu xác nhận không khớp.');
+            return;
+        }
+
+        try {
+            setLoading(true);
+            await AuthServices.resetPassword(resetToken, newPassword);
+            toast.success('Đổi mật khẩu thành công, vui lòng đăng nhập.');
+
+            setTimeout(() => {
+                window.location.href = '/sign-in';
+            }, 3000);
+        } catch (error) {
+            console.error('Error:', error);
+            toast.error(error.message || 'Đổi mật khẩu thất bại');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <Box
             display="flex"
@@ -30,14 +70,14 @@ const ConfirmPasswordCard = ({ handleConfirm }) => {
                     fontWeight="bold"
                     mb={2}
                 >
-                    Kon
+                    Event
                     <Typography
                         component="span"
                         variant="h1"
                         color={gray[400]}
                         fontWeight="bold"
                     >
-                        test
+                        is
                     </Typography>
                 </Typography>
 
@@ -51,20 +91,14 @@ const ConfirmPasswordCard = ({ handleConfirm }) => {
                     Mật khẩu mới
                 </Typography>
 
-                <Box
-                    display="flex"
-                    flexDirection="column"
-                    width="100%"
-                    gap={1}
-                    mb={3}
-                >
+                <Box display="flex" flexDirection="column" width="100%" gap={1} mb={3}>
                     <Typography sx={{ color: gray[400], fontSize: 16, fontWeight: 400 }}>
                         Nhập mật khẩu mới
                     </Typography>
                     <TextField
-                        type='password'
+                        type={showNewPassword ? 'text' : 'password'}
                         fullWidth
-                        variant={'outlined'}
+                        variant="outlined"
                         sx={{
                             '& .MuiOutlinedInput-root': {
                                 height: '50px',
@@ -79,25 +113,33 @@ const ConfirmPasswordCard = ({ handleConfirm }) => {
                                 '&.Mui-focused fieldset': {
                                     borderColor: gray[400],
                                 },
-                            }
+                            },
+                        }}
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        onClick={() => setShowNewPassword(!showNewPassword)}
+                                        edge="end"
+                                    >
+                                        {showNewPassword ? <VisibilityOff sx={iconStyle} /> : <Visibility sx={iconStyle} />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
                         }}
                     />
                 </Box>
 
-                <Box
-                    display="flex"
-                    flexDirection="column"
-                    width="100%"
-                    gap={1}
-                    mb={3}
-                >
+                <Box display="flex" flexDirection="column" width="100%" gap={1} mb={3}>
                     <Typography sx={{ color: gray[400], fontSize: 16, fontWeight: 400 }}>
                         Xác nhận mật khẩu
                     </Typography>
                     <TextField
-                        type='password'
+                        type={showConfirmPassword ? 'text' : 'password'}
                         fullWidth
-                        variant={'outlined'}
+                        variant="outlined"
                         sx={{
                             '& .MuiOutlinedInput-root': {
                                 height: '50px',
@@ -112,7 +154,21 @@ const ConfirmPasswordCard = ({ handleConfirm }) => {
                                 '&.Mui-focused fieldset': {
                                     borderColor: gray[400],
                                 },
-                            }
+                            },
+                        }}
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                        edge="end"
+                                    >
+                                        {showConfirmPassword ? <VisibilityOff sx={iconStyle} /> : <Visibility sx={iconStyle} />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
                         }}
                     />
                 </Box>
@@ -122,7 +178,7 @@ const ConfirmPasswordCard = ({ handleConfirm }) => {
                     fullWidth
                     sx={{
                         backgroundColor: red[500],
-                        color: 'white',
+                        color: white[50],
                         borderRadius: '8px',
                         height: '50px',
                         fontWeight: 'bold',
@@ -131,13 +187,13 @@ const ConfirmPasswordCard = ({ handleConfirm }) => {
                         fontSize: 18,
                         mt: 2,
                     }}
-                    href='/successfully'
+                    onClick={handleConfirmPassword}
                 >
-                    Xác nhận
+                    {loading ? <CircularProgress size={24} color={white[50]} /> : 'Xác nhận'}
                 </Button>
             </Box>
         </Box>
-    )
-}
+    );
+};
 
-export default ConfirmPasswordCard
+export default ConfirmPasswordCard;
