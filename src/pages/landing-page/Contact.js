@@ -1,7 +1,9 @@
-import { Box, Button, IconButton, TextField, Typography } from '@mui/material'
-import React from 'react'
+import { Box, Button, CircularProgress, IconButton, TextField, Typography } from '@mui/material'
+import React, { useState } from 'react'
 import { gray, red, white } from '../../config/theme/themePrintives'
 import { Email, Facebook, Instagram, LocationOn, Phone, Twitter } from '@mui/icons-material'
+import ContactService from '../../services/contact.service'
+import { toast } from 'react-toastify'
 
 const inputStyle = {
     '& .MuiInput-underline': {
@@ -12,6 +14,39 @@ const inputStyle = {
 };
 
 const Contact = () => {
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [email, setEmail] = useState('')
+    const [subject, setSubject] = useState('')
+    const [message, setMessage] = useState('')
+    const [loading, setLoading] = useState(false)
+
+    const resetForm = () => {
+        setFirstName('')
+        setLastName('')
+        setEmail('')
+        setSubject('')
+        setMessage('')
+    };
+
+    const handleSubmit = async () => {
+        if (!firstName || !lastName || !email || !subject || !message) {
+            toast.error('Vui lòng điền đầy đủ thông tin')
+            return
+        }
+
+        setLoading(true)
+        const response = await ContactService.submitContactForm(firstName, lastName, email, subject, message);
+
+        if (response.status === 200) {
+            toast.success('Gửi tin nhắn thành công')
+            resetForm();
+        } else {
+            toast.error('Gửi tin nhắn thất bại')
+        }
+        setLoading(false)
+    };
+
     return (
         <Box
             sx={{
@@ -88,7 +123,7 @@ const Contact = () => {
                         >
                             <Phone sx={{ color: white[50], fontSize: 20 }} />
                             <Typography fontSize={18} fontWeight={400} color={white[50]}>
-                                0123 456 789
+                                0346 333 346
                             </Typography>
                         </Box>
 
@@ -177,8 +212,11 @@ const Contact = () => {
                             <TextField
                                 id="first-name"
                                 variant="standard"
+                                type='text'
                                 fullWidth
                                 sx={inputStyle}
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
                             />
 
                         </Box>
@@ -195,13 +233,16 @@ const Contact = () => {
                             <TextField
                                 id="first-name"
                                 variant="standard"
+                                type='text'
                                 fullWidth
                                 sx={inputStyle}
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
                             />
                         </Box>
                     </Box>
 
-                    {/* Email & Phone Number */}
+                    {/* Email & Email Subject */}
                     <Box
                         display="flex"
                         flexDirection={'row'}
@@ -224,8 +265,11 @@ const Contact = () => {
                             <TextField
                                 id="first-name"
                                 variant="standard"
+                                type='email'
                                 fullWidth
                                 sx={inputStyle}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
 
                         </Box>
@@ -237,13 +281,16 @@ const Contact = () => {
                             width={'50%'}
                         >
                             <Typography fontSize={18} fontWeight={400} color={gray[500]} width={'100%'}>
-                                Số điện thoại
+                                Tiêu đề
                             </Typography>
                             <TextField
                                 id="first-name"
                                 variant="standard"
+                                type='text'
                                 fullWidth
                                 sx={inputStyle}
+                                value={subject}
+                                onChange={(e) => setSubject(e.target.value)}
                             />
                         </Box>
                     </Box>
@@ -263,10 +310,13 @@ const Contact = () => {
                         <TextField
                             id="first-name"
                             variant="standard"
+                            type='text'
                             fullWidth
                             multiline
                             rows={6}
                             sx={inputStyle}
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
                         />
                     </Box>
                     {/* Button */}
@@ -289,10 +339,12 @@ const Contact = () => {
                             alignSelf: 'flex-end',
                             textTransform: 'none',
                             color: white[50],
-                            padding: '4px 20px',
+                            width: 200,
+                            padding: '4px 0',
                         }}
+                        onClick={handleSubmit}
                     >
-                        Gửi tin nhắn
+                        {loading ? <CircularProgress size={26} color={white[50]} /> : 'Gửi tin nhắn'}
                     </Button>
                 </Box>
             </Box>
