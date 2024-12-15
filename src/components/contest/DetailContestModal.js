@@ -1,6 +1,5 @@
 import { Modal, Box, Typography, Button, IconButton } from '@mui/material'
-import React, { useEffect, useState } from 'react'
-import ContestService from '../../services/contest.service'
+import React from 'react'
 import { black, gray, white, red } from '../../config/theme/themePrintives'
 import { Cancel, CloudDownload, MoreVert } from '@mui/icons-material'
 import RegistrationService from '../../services/registration.service'
@@ -105,36 +104,7 @@ const CustomInfoSection = ({ title, value }) => {
     )
 }
 
-const DetailContestModal = ({ open, handleClose, contest }) => {
-    const [contestDetail, setContestDetail] = useState(null);
-    const [participants, setParticipants] = useState([]);
-
-    useEffect(() => {
-        const fetchParticipants = async () => {
-            const response = await RegistrationService.getParticipantsByContestId(contest._id);
-            if (response.message) {
-                console.log(response);
-            } else {
-                setParticipants(response);
-            }
-        }
-
-        fetchParticipants();
-    }, [contest]);
-
-    useEffect(() => {
-        const fetchContestDetail = async () => {
-            const response = await ContestService.getContestById(contest._id);
-            if (response.message) {
-                console.log(response);
-            } else {
-                setContestDetail(response.data);
-            }
-        }
-
-        fetchContestDetail();
-    }, [contest]);
-
+const DetailContestModal = ({ open, handleClose, contest, participants }) => {
     const formatStatus = (status) => {
         switch (status) {
             case 'Pending':
@@ -176,7 +146,7 @@ const DetailContestModal = ({ open, handleClose, contest }) => {
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', `${contestDetail?.name}_Registrations.xlsx`);
+                link.setAttribute('download', `${contest?.name}_Registrations.xlsx`);
                 document.body.appendChild(link);
                 link.click();
 
@@ -211,37 +181,37 @@ const DetailContestModal = ({ open, handleClose, contest }) => {
                 <Box sx={body}>
                     <Box
                         component="img"
-                        src={contestDetail?.imageUrl}
-                        alt={contestDetail?.name}
+                        src={contest?.imageUrl}
+                        alt={contest?.name}
                         sx={image}
                     />
 
                     <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, justifyContent: 'flex-start' }}>
-                        <CustomInfoSection title="Tên cuộc thi" value={contestDetail?.name} />
+                        <CustomInfoSection title="Tên cuộc thi" value={contest?.name} />
                         <Box sx={{ flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column', gap: 1 }}>
                             <Typography sx={{ color: black[900], fontWeight: 600, fontSize: 16 }}>
                                 Thể lệ cuộc thi
                             </Typography>
                             <Typography sx={{ height: "100%", color: gray[400], fontSize: 16, fontWeight: 400, paddingX: 2, paddingY: 1.5, border: `1px solid ${gray[200]}`, borderRadius: '8px', overflowY: 'auto', scrollbarWidth: 'none' }}>
-                                {contestDetail?.ruleDescription}
+                                {contest?.ruleDescription}
                             </Typography>
                         </Box>
                     </Box>
                 </Box>
 
                 <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', gap: 2, marginTop: 2 }}>
-                    <CustomInfoSection title="Tên ban tổ chức" value={contestDetail?.organizationInformation?.orgName} />
-                    <CustomInfoSection title="Email" value={contestDetail?.organizationInformation?.orgEmail} />
+                    <CustomInfoSection title="Tên ban tổ chức" value={contest?.organizationInformation?.orgName} />
+                    <CustomInfoSection title="Email" value={contest?.organizationInformation?.orgEmail} />
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', gap: 2 }}>
-                    <CustomInfoSection title="Số điện thoại" value={contestDetail?.organizationInformation?.orgPhoneNumber} />
+                    <CustomInfoSection title="Số điện thoại" value={contest?.organizationInformation?.orgPhoneNumber} />
                     <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', gap: 2 }}>
-                        <CustomInfoSection title="Thời gian bắt đầu" value={new Date(contestDetail?.startDate).toLocaleDateString('vi-VN')} />
-                        <CustomInfoSection title="Thời gian kết thúc" value={new Date(contestDetail?.endDate).toLocaleDateString('vi-VN')} />
+                        <CustomInfoSection title="Thời gian bắt đầu" value={new Date(contest?.startDate).toLocaleDateString('vi-VN')} />
+                        <CustomInfoSection title="Thời gian kết thúc" value={new Date(contest?.endDate).toLocaleDateString('vi-VN')} />
                     </Box>
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', gap: 2, marginBottom: 2 }}>
-                    <CustomInfoSection title="Địa chỉ chi tiết" value={contestDetail?.organizationInformation?.orgAddress} />
+                    <CustomInfoSection title="Địa chỉ chi tiết" value={contest?.organizationInformation?.orgAddress} />
                 </Box>
 
                 {/* Participants Table */}
