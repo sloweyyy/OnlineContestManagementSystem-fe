@@ -1,4 +1,4 @@
-import { Box, Button, Divider, FormControlLabel, Link, TextField, Typography, InputAdornment, IconButton } from '@mui/material';
+import { Box, Button, Divider, FormControlLabel, Link, TextField, Typography, InputAdornment, IconButton, CircularProgress } from '@mui/material';
 import React, { useState } from 'react';
 import { black, gray, red, white } from '../../config/theme/themePrintives';
 import { Google, Visibility, VisibilityOff } from '@mui/icons-material';
@@ -52,20 +52,25 @@ const SignIn = () => {
     const [password, setPassword] = useState('');
     const [remembered, setRemembered] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const dispatch = useDispatch();
 
     const handleSignIn = () => {
+        setLoading(true);
         dispatch(userLogin({ email, password }))
             .unwrap()
             .then((response) => {
                 if (response.user.role === 'Admin') {
+                    setLoading(false);
                     window.location.href = '/admin/home';
                 } else {
+                    setLoading(false);
                     window.location.href = '/participant/home';
                 }
             })
             .catch((error) => {
+                setLoading(false);
                 console.error('Error:', error);
                 toast.error('Đăng nhập thất bại');
             });
@@ -197,7 +202,7 @@ const SignIn = () => {
                         onClick={handleSignIn}
                         disabled={!email || !password}
                     >
-                        Đăng nhập
+                        {loading ? <CircularProgress size={24} color={white[50]} /> : 'Đăng nhập'}
                     </Button>
                 </Box>
 

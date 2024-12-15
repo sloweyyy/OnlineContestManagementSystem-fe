@@ -6,12 +6,14 @@ import { MoreVert } from '@mui/icons-material';
 import { Skeleton } from '@mui/material';
 import DetailContestModal from './DetailContestModal';
 import { useNavigate } from 'react-router-dom';
+import { YesNoModal } from '../../components/custom-components/CustomModal';
 
 const ContestTable = ({ contests, handleDeleteSelected }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedContest, setSelectedContest] = useState([]);
     const [openDetailModal, setOpenDetailModal] = useState(false);
     const navigate = useNavigate();
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
     const formatStatus = (status) => {
         switch (status) {
@@ -190,7 +192,7 @@ const ContestTable = ({ contests, handleDeleteSelected }) => {
                 <MenuItem onClick={handleFixingContest} disabled={selectedContest?.status == "Đã duyệt"}>
                     <Typography sx={{ fontSize: 16, fontWeight: 500 }}>Sửa cuộc thi</Typography>
                 </MenuItem>
-                <MenuItem onClick={handleDelete}>
+                <MenuItem onClick={() => setOpenDeleteModal(true)}>
                     <Typography sx={{ fontSize: 16, fontWeight: 500 }}>Xóa</Typography>
                 </MenuItem>
             </Menu>
@@ -198,6 +200,13 @@ const ContestTable = ({ contests, handleDeleteSelected }) => {
                 open={openDetailModal}
                 handleClose={() => setOpenDetailModal(false)}
                 contest={selectedContest}
+            />
+
+            <YesNoModal
+                open={openDeleteModal}
+                onClose={() => setOpenDeleteModal(false)}
+                onConfirm={handleDelete}
+                title={"Xóa cuộc thi"}
             />
         </>
     );
