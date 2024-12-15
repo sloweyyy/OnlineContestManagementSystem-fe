@@ -131,7 +131,7 @@ const DetailContestModal = ({ open, handleClose, contest, participants }) => {
 
     const handleExportExcel = async () => {
         try {
-            const response = await RegistrationService.exportExcel(contest._id);
+            const response = await RegistrationService.exportExcel(contest.id);
 
             if (response && response.data) {
                 const blob = new Blob([response.data], {
@@ -162,6 +162,8 @@ const DetailContestModal = ({ open, handleClose, contest, participants }) => {
             toast.error('Lỗi xuất file');
         }
     }
+
+    console.log('contest', contest);
 
     return (
         <Modal

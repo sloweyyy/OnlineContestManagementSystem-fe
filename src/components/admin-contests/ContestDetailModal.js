@@ -87,8 +87,10 @@ const ContestDetailModal = ({ open, onClose, contest, handleApprove, handleRejec
                         sx={{
                             flex: 1,
                             height: '100%',
-                            objectFit: 'cover',
+                            width: '50%',
+                            objectFit: 'contain',
                             borderRadius: 1,
+                            border: `1px solid ${gray[200]}`
                         }}
                     />
                     {/* Contest Detail Info */}
@@ -109,6 +111,8 @@ const ContestDetailModal = ({ open, onClose, contest, handleApprove, handleRejec
                             </Typography>
                             <Typography
                                 sx={{
+                                    flex: 1,
+                                    height: '100%',
                                     color: gray[400],
                                     fontSize: 16,
                                     fontWeight: 400,
