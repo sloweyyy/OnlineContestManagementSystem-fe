@@ -72,10 +72,15 @@ const Header = () => {
                         marginLeft: { xs: 1, sm: 5, md: 5, lg: 10, xl: 10 },
                     }}
                 >
-                    <img src={require("../../assets/logo.svg").default} alt="logo" width={40} height={40} />
+                    {/* <img src={require("../../assets/circle-logo.svg").default} alt="logo" width={40} height={40} />
                     <Typography variant="h5" color={white[50]} sx={{ ml: 2 }}>
                         EVENTIS
-                    </Typography>
+                    </Typography> */}
+                    <img
+                        src={require("../../assets/text-light-logo.svg").default}
+                        alt="logo"
+                        width={150}
+                    />
                 </Button>
 
                 {isMobile ? (
