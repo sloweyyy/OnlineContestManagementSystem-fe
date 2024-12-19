@@ -6,7 +6,7 @@ const NEWS_ENDPOINT = `${API_BASE_URL}/News`;
 const createNews = async (news) => {
   try {
     const response = await axiosConfig.post(`${NEWS_ENDPOINT}`, news);
-    return response.data;
+    return response;
   } catch (error) {
     if (error.response) {
       return error.response.data;
@@ -46,7 +46,7 @@ const updateNews = async (id, news) => {
         'Content-Type': 'application/json',
       },
     });
-    return response.data;
+    return response;
   } catch (error) {
     if (error.response) {
       return error.response.data;
