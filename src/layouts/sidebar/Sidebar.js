@@ -100,9 +100,24 @@ const Sidebar = () => {
             <Box sx={{ display: "flex", flexDirection: "column", height: "100vh", p: 2, backgroundColor: white[50] }}>
                 <Box sx={{ display: "flex", alignItems: "center", mb: 4, justifyContent: openSideBar ? "flex-start" : "center" }}>
                     {openSideBar && (
-                        <Typography variant="h5" sx={{ flexGrow: 1, ml: 2.5, color: dark[700], fontWeight: 600, cursor: 'pointer', userSelect: 'none' }}>
-                            EVENTIS
-                        </Typography>
+                        <Box
+                            sx={{
+                                flexGrow: 1,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "flex-start",
+                                cursor: "pointer",
+                                userSelect: "none",
+                                marginLeft: 1.5,
+                            }}
+                        >
+                            <img
+                                src={require("../../assets/text-logo.svg").default}
+                                alt="logo"
+                                style={{ width: "70%", height: "auto" }}
+                                onClick={() => setOpenSideBar(!openSideBar)}
+                            />
+                        </Box>
                     )}
                     <IconButton
                         onClick={() => setOpenSideBar(!openSideBar)}

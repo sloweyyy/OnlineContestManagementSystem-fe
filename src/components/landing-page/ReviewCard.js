@@ -1,13 +1,12 @@
-import { Star } from '@mui/icons-material'
-import { Avatar, Box, Typography } from '@mui/material'
+import { Star, StarHalf } from '@mui/icons-material'
+import { Avatar, Box } from '@mui/material'
 import React from 'react'
-import { gray, red, yellow } from '../../config/theme/themePrintives'
+import { black, gray, red } from '../../config/theme/themePrintives'
 
 const ReviewCard = ({ review }) => {
     return (
         <Box
-            width={'23vw'}
-            height={'20vh'}
+            flex={1}
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -15,21 +14,22 @@ const ReviewCard = ({ review }) => {
                 alignItems: 'center',
                 border: `2px solid ${gray[100]}`,
                 borderRadius: 1,
+                gap: 2,
                 padding: 4,
+                transition: 'transform 0.2s ease-in-out, box-shadow 0.5s ease-in-out',
                 ":hover": {
-                    borderColor: 'transparent',
-                    boxShadow: `0 0 4px 4px ${red[100]}`,
-                    transition: 'all 0.3s ease'
+                    transform: 'scale(1.05)',
+                    boxShadow: `0px 0px 12px ${black[50]}`,
                 }
             }}
         >
             <Box
-                flex={1}
                 display="flex"
-                flexDirection="row"
-                justifyContent="space-between"
-                alignItems="center"
+                flexDirection="column"
+                justifyContent="center"
+                alignItems="flex-start"
                 width={'100%'}
+                gap={2}
             >
                 <Box
                     display="flex"
@@ -57,20 +57,21 @@ const ReviewCard = ({ review }) => {
                     flexDirection="row"
                     justifyContent="center"
                     alignItems="center"
-                    padding={1}
                     gap={1}
                 >
-                    <Typography fontSize={16}>{5}</Typography>
-                    <Star sx={{ color: yellow[500] }} />
+                    <Star sx={{ color: red[500] }} />
+                    <Star sx={{ color: red[500] }} />
+                    <Star sx={{ color: red[500] }} />
+                    <Star sx={{ color: red[500] }} />
+                    <StarHalf sx={{ color: red[500] }} />
                 </Box>
             </Box>
             <Box
-                flex={2}
+                flex={1}
                 display="flex"
                 flexDirection="column"
                 justifyContent="flex-start"
                 alignItems="center"
-                paddingY={4}
                 color={gray[500]}
             >
                 <Box fontSize={16} textAlign="left">{review.review}</Box>

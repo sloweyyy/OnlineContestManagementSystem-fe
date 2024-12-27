@@ -31,19 +31,25 @@ const NewsModal = ({ open, onClose, news, setNews }) => {
   const handleSave = async () => {
     try {
       if (news) {
-        await NewsService.updateNews(news.id, { name, imageUrl });
-        setNews((prev) => prev.map((item) => (item.id === news.id ? { ...item, name, imageUrl } : item)));
-        toast.success('Cập nhật tin tức thành công');
+        const response = await NewsService.updateNews(news._id, { name, imageUrl });
+        if (response.status === 200) {
+          setNews((prev) => prev.map((item) => (item.id === news.id ? { ...item, name, imageUrl } : item)));
+          toast.success('Cập nhật tin tức thành công');
+        }
       } else {
         const newNews = await NewsService.createNews({ name, imageUrl });
-        setNews((prev) => [...prev, newNews]);
-        toast.success('Thêm tin tức thành công');
+        if (newNews.status === 200) {
+          setNews((prev) => [...prev, newNews.data]);
+          toast.success('Thêm tin tức thành công');
+        }
       }
       onClose();
     } catch (error) {
       toast.error('Lưu tin tức thất bại');
     }
   };
+
+  console.log('News:', news);
 
   return (
     <Modal open={open} onClose={onClose}>

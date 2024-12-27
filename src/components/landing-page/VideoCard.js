@@ -68,7 +68,7 @@ const VideoCard = () => {
                 }}
             >
                 <ReactPlayer
-                    url="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                    url="https://www.youtube.com/watch?v=Dm0_YB9WJWA"
                     width={400}
                     height={225}
                     controls

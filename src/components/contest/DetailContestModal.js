@@ -163,8 +163,6 @@ const DetailContestModal = ({ open, handleClose, contest, participants }) => {
         }
     }
 
-    console.log('contest', contest);
-
     return (
         <Modal
             open={open}

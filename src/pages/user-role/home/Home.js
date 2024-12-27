@@ -124,7 +124,7 @@ const Home = () => {
                     }}
                 >
                     <ReactPlayer
-                        url="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                        url="https://www.youtube.com/watch?v=WSyDUtG63kE"
                         width="100%"
                         height="100%"
                         controls
