@@ -1,70 +1,157 @@
-# Getting Started with Create React App
+# Online Contest Management System - Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is the **frontend** of the Online Contest Management System, built with React. It provides a user-friendly interface for managing and participating in online contests, allowing organizations and individuals to create, manage, and promote contests seamlessly.
 
-## Available Scripts
+## Table of Contents
 
-In the project directory, you can run:
+- [Product Overview](#product-overview)
+- [Key Features](#key-features)
+  - [For Contest Organizers](#for-contest-organizers)
+  - [For Users](#for-users)
+  - [For System Administrators](#for-system-administrators)
+- [Technologies](#technologies)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+  - [Running the Frontend](#running-the-frontend)
+- [API Documentation](#api-documentation)
+- [License](#license)
 
-### `npm start`
+## Product Overview
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The **Frontend** of the Online Contest Management System offers a comprehensive interface for users to interact with the backend API. It manages user authentication, contest creation, registration, payment processing, and provides dashboards for organizers and administrators to monitor contest activities.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Key Features
 
-### `npm test`
+### For Contest Organizers
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Create New Contests:** Define contest details such as name, description, dates, rules, skill requirements, and attachments (guides, images, videos). Set participation fees and configure online payment options.
+- **Manage Contests:** Access a registration dashboard to track participants, payment statuses, and personal details. Approve or reject contestant applications and send automated notifications.
+- **Analytics Tools:** Visualize registration statistics, analyze participant demographics (age, gender, location), and monitor revenue from paid contests.
 
-### `npm run build`
+### For Users
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Account Registration:** Register via email or social login (e.g., Facebook, Google).
+- **Browse and Register for Contests:** Search and filter contests by criteria (category, age, etc.). View contest details and register, making online payments if required.
+- **Profile Management:** Track registered contests, edit profiles, and update personal details.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### For System Administrators
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Contest Approval:** Review and approve new contests submitted by organizers.
+- **Registration Statistics:** Monitor the number of contests and registered users.
+- **Revenue Tracking:** Oversee overall system revenue and financial reports.
 
-### `npm run eject`
+## Technologies
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- **React**: JavaScript library for building user interfaces.
+- **Material-UI (MUI)**: React components for faster and easier web development.
+- **React Router**: Declarative routing for React applications.
+- **Axios**: Promise-based HTTP client for making API requests.
+- **React Toastify**: Notification library for React.
+- **Formik & Yup**: For form management and validation.
+- **Redux**: State management library.
+- **React Query**: Data fetching and caching.
+- **ESLint & Prettier**: Code linting and formatting tools.
+- **GitHub Actions**: CI/CD pipeline for automated testing and deployment.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Project Structure
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```
+frontend/
+├── .env
+├── .gitignore
+├── .prettierignore
+├── .prettierrc
+├── .prettierrc.json
+├── eslint.config.js
+├── eslint.config.mjs
+├── package.json
+├── public/
+│   ├── index.html
+│   ├── manifest.json
+│   └── robots.txt
+├── README.md
+├── src/
+│   ├── App.css
+│   ├── App.js
+│   ├── App.test.js
+│   ├── assets/
+│   ├── components/
+│   │   ├── admin-contests/
+│   │   ├── admin-dashboard/
+│   │   ├── contest/
+│   │   ├── contest-creating/
+│   │   ├── custom-components/
+│   │   ├── home/
+│   │   └── ...
+│   ├── config/
+│   │   └── theme/
+│   ├── constant/
+│   ├── features/
+│   ├── hooks/
+│   ├── index.css
+│   ├── index.js
+│   ├── layouts/
+│   ├── pages/
+│   ├── reportWebVitals.js
+│   ├── routes/
+│   ├── services/
+│   ├── setupTests.js
+│   ├── stores/
+│   └── utils/
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Getting Started
 
-## Learn More
+### Prerequisites
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **Node.js** (v14 or higher)
+- **npm** or **yarn**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Installation
 
-### Code Splitting
+1. **Clone the repository:**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+    ```bash
+    git clone https://github.com/sloweyyy/OnlineContestManagementSystem-FE.git
+    cd OnlineContestManagementSystem-FE
+    ```
 
-### Analyzing the Bundle Size
+2. **Install the dependencies:**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
 
-### Making a Progressive Web App
+3. **Configure environment variables:**
+    - Create a `.env` file in the root of the project.
+    - Add the following environment variables to the `.env` file:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+    ```bash
+    REACT_APP_API_BASE_URL=http://localhost:5210/api
+    REACT_APP_GOOGLE_CLIENT_ID=your-google-client-id
+    REACT_APP_CLOUDINARY_CLOUD_NAME=your-cloudinary-cloud-name
+    REACT_APP_CLOUDINARY_UPLOAD_PRESET=your-upload-preset
+    ```
 
-### Advanced Configuration
+## Usage
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Running the Frontend
 
-### Deployment
+1. **Start the development server:**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+    ```bash
+    npm start
+    # or
+    yarn start
+    ```
 
-### `npm run build` fails to minify
+2. **Open the app in your browser:** Navigate to <http://localhost:3000>.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
