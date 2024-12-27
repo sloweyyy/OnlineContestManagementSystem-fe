@@ -180,8 +180,8 @@ const RegistrationTable = ({ registration, handleWithdraw }) => {
             </Menu>
             <YesNoModal
                 open={openWithdrawModal}
-                handleClose={() => setOpenWithdrawModal(false)}
-                handleYes={handleWithdrawClick}
+                onClose={() => setOpenWithdrawModal(false)}
+                onConfirm={handleWithdrawClick}
                 title="Hủy đăng ký"
             />
         </>
